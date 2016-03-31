@@ -13,8 +13,11 @@ import FBSDKLoginKit
 class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     
-    var imageView : UIImageView!
-    var label: UILabel!
+    @IBOutlet var profilePicture: UIImageView!
+    
+    @IBOutlet var label: UILabel!
+    
+    @IBOutlet var loginButton: FBSDKLoginButton!
     
     override func viewDidLoad() {
         
@@ -24,26 +27,18 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         else {
             print("Logged in")
         }
-        
-        let loginButton = FBSDKLoginButton()
+
         loginButton.readPermissions = ["public_profile", "email", "user_friends"]
-        loginButton.center = self.view.center
-        
         loginButton.delegate = self
         
-        self.view.addSubview(loginButton)
         
+
+        profilePicture.image = UIImage(named: "Ryde Transparent.png")
+
         
-        imageView = UIImageView(frame: CGRectMake(0, 0, 100, 100))
-        imageView.center = CGPoint(x: view.center.x, y: 200)
-        imageView.image = UIImage(named: "Ryde Transparent.png")
-        view.addSubview(imageView)
-        
-        label = UILabel(frame: CGRectMake(0,0,200,30))
-        label.center = CGPoint(x: view.center.x, y: 300)
+
         label.text = "Not Logged In"
         label.textAlignment = NSTextAlignment.Center
-        view.addSubview(label)
 
         
     }
@@ -55,6 +50,8 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         if (error == nil) {
             print("Login complete")
+            
+            performSegueWithIdentifier("createAccount", sender: self)
             
             
             //print permissions, such as public_profile
@@ -68,7 +65,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
                 let FBid = result.valueForKey("id") as? String
                 
                 let url = NSURL(string: "https://graph.facebook.com/\(FBid!)/picture?type=large&return_ssl_resources=1")
-                self.imageView.image = UIImage(data: NSData(contentsOfURL: url!)!)
+                self.profilePicture.image = UIImage(data: NSData(contentsOfURL: url!)!)
             })
             
         }
@@ -81,11 +78,25 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         print("User logged out")
         
-        imageView.image = UIImage(named: "Ryde Transparent.png")
+        profilePicture.image = UIImage(named: "Ryde Transparent.png")
         
         label.text = "Not Logged In"
         
         
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        
+        if segue.identifier == "createAccount" {
+            
+            let createAccountViewController: CreateAccountViewController = segue.destinationViewController as! CreateAccountViewController
+            
+            
+            
+            
+            
+        }
     }
     
     
