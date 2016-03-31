@@ -12,7 +12,9 @@ import FBSDKLoginKit
 
 class CreateAccountViewController: UIViewController {
 
+    @IBOutlet var profileImage: UIImageView!
     
+    @IBOutlet var profileName: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,12 +27,12 @@ class CreateAccountViewController: UIViewController {
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
         graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
         
-//            self.label.text = result.valueForKey("name") as? String
+            self.profileName.text = result.valueForKey("name") as? String
         
-//            let FBid = result.valueForKey("id") as? String
+            let FBid = result.valueForKey("id") as? String
         
-//            let url = NSURL(string: "https://graph.facebook.com/\(FBid!)/picture?type=large&return_ssl_resources=1")
-//            self.profilePicture.image = UIImage(data: NSData(contentsOfURL: url!)!)
+            let url = NSURL(string: "https://graph.facebook.com/\(FBid!)/picture?type=large&return_ssl_resources=1")
+            self.profileImage.image = UIImage(data: NSData(contentsOfURL: url!)!)
         })
     }
 
