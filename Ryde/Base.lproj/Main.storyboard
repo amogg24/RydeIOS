@@ -79,10 +79,10 @@
             </objects>
             <point key="canvasLocation" x="-300" y="-259"/>
         </scene>
-        <!--View Controller-->
+        <!--Create Account View Controller-->
         <scene sceneID="5cD-Fb-Pp4">
             <objects>
-                <viewController id="HBv-Od-vUR" sceneMemberID="viewController">
+                <viewController id="HBv-Od-vUR" customClass="CreateAccountViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rSe-cP-QjG"/>
                         <viewControllerLayoutGuide type="bottom" id="pzg-cM-OBb"/>
