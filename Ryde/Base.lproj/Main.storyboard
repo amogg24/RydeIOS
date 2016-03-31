@@ -152,7 +152,11 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <items>
                                     <navigationItem title="Create Account" id="VTC-iT-AJd">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="fgy-bJ-4bA"/>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="fgy-bJ-4bA">
+                                            <connections>
+                                                <action selector="submitCreateAccount:" destination="HBv-Od-vUR" id="pO8-L3-gep"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -160,6 +164,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="carInfoColor" destination="zE0-tj-Y0d" id="AGt-OI-ZjY"/>
+                        <outlet property="carInfoMake" destination="ZXu-aZ-YxE" id="cy0-Am-dRX"/>
+                        <outlet property="carInfoModel" destination="DXO-o9-gMx" id="hCm-5M-QHX"/>
+                        <outlet property="phoneNumber" destination="Isf-fr-4jZ" id="edp-rT-Sdj"/>
                         <outlet property="profileImage" destination="iEU-oO-bV8" id="1MS-eQ-rFe"/>
                         <outlet property="profileName" destination="Zu8-fX-OtR" id="VRX-ly-Nkx"/>
                     </connections>
