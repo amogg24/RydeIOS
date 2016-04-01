@@ -12,9 +12,6 @@ import FBSDKLoginKit
 
 class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     
-    
-    @IBOutlet var profilePicture: UIImageView!
-    
     @IBOutlet var label: UILabel!
     
     @IBOutlet var loginButton: FBSDKLoginButton!
@@ -34,13 +31,6 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         loginButton.readPermissions = ["public_profile", "email", "user_friends"]
         loginButton.delegate = self
         
-        
-
-        profilePicture.image = UIImage(named: "Ryde Transparent.png")
-
-        
-
-        label.text = "Not Logged In"
         label.textAlignment = NSTextAlignment.Center
 
         
@@ -66,22 +56,17 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         print("User logged out")
         
-        profilePicture.image = UIImage(named: "Ryde Transparent.png")
-        
-        label.text = "Not Logged In"
-        
-        
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        
-        if segue.identifier == "createAccount" {
-            
-            let createAccountViewController: CreateAccountViewController = segue.destinationViewController as! CreateAccountViewController
-            
-        }
-    }
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        
+//        
+//        if segue.identifier == "createAccount" {
+//            
+//            let createAccountViewController: CreateAccountViewController = segue.destinationViewController as! CreateAccountViewController
+//            
+//        }
+//    }
     
     
     
