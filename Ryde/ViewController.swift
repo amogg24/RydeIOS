@@ -37,6 +37,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     func checkIfLoggedIn() {
         
+        
         if (FBSDKAccessToken.currentAccessToken() == nil) {
             print("No one has logged in")
         }

@@ -288,11 +288,11 @@
             </objects>
             <point key="canvasLocation" x="1160" y="-259"/>
         </scene>
-        <!--Item 1-->
+        <!--Home-->
         <scene sceneID="Dzv-eu-Dkn">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="o2p-at-fUd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item 1" id="SKF-z1-fTn"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="Home-25" id="SKF-z1-fTn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="G9b-yJ-6vK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -324,13 +324,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VJG-Gz-KV5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2886" y="-289"/>
+            <point key="canvasLocation" x="2782" y="-249"/>
         </scene>
-        <!--Item-->
+        <!--Groups-->
         <scene sceneID="brv-F7-czY">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MZ0-65-JAr" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="T7X-8o-7bV"/>
+                    <tabBarItem key="tabBarItem" title="Groups" image="User Groups-25" id="T7X-8o-7bV"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="m5Z-1a-EEj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -345,30 +345,11 @@
             </objects>
             <point key="canvasLocation" x="2022" y="-241"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="GAR-hC-M3U">
-            <objects>
-                <viewController id="knt-Gw-5eJ" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="p1k-Ya-5vm"/>
-                        <viewControllerLayoutGuide type="bottom" id="Bj1-Bd-Ygb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="s9b-nu-BUT">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="QU6-T3-5nZ"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nUe-lX-v62" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2866" y="629"/>
-        </scene>
-        <!--Item-->
+        <!--Profile-->
         <scene sceneID="Gfx-kn-LqS">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rdz-vV-2eY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="0Q4-r9-wOU"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="Circled User Male-25" id="0Q4-r9-wOU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Okw-TD-gcN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -376,15 +357,37 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="knt-Gw-5eJ" kind="relationship" relationship="rootViewController" id="N5w-GK-Wxg"/>
+                        <segue destination="P6M-uM-tci" kind="relationship" relationship="rootViewController" id="q3P-ht-Ffh"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CRj-Uy-GQY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2038" y="629"/>
         </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="wCu-s3-6zB">
+            <objects>
+                <viewController id="P6M-uM-tci" customClass="ProfileViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zr4-gT-4nU"/>
+                        <viewControllerLayoutGuide type="bottom" id="7Jg-GE-JVs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UtX-MU-JAu">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="js4-BX-Hhg"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x08-gC-A8J" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2718" y="629"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Circled User Male-25" width="25" height="25"/>
+        <image name="Home-25" width="25" height="25"/>
+        <image name="User Groups-25" width="25" height="25"/>
         <image name="loginBG" width="640" height="1136"/>
         <image name="r-logo-nobg-filled" width="800" height="600"/>
     </resources>
