@@ -21,18 +21,29 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     override func viewDidLoad() {
         
-        if (FBSDKAccessToken.currentAccessToken() == nil) {
-            print("No one has logged in")
-        }
-        else {
-            print("Logged in")
-        }
 
         loginButton.readPermissions = ["public_profile", "email", "user_friends"]
         loginButton.delegate = self
         
         label.textAlignment = NSTextAlignment.Center
-
+        
+        
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        checkIfLoggedIn()
+    }
+    
+    func checkIfLoggedIn() {
+        
+        if (FBSDKAccessToken.currentAccessToken() == nil) {
+            print("No one has logged in")
+        }
+        else {
+            print("Logged in")
+            performSegueWithIdentifier("createAccount", sender: self)
+        }
         
     }
     
@@ -57,17 +68,5 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         print("User logged out")
         
     }
-    
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        
-//        
-//        if segue.identifier == "createAccount" {
-//            
-//            let createAccountViewController: CreateAccountViewController = segue.destinationViewController as! CreateAccountViewController
-//            
-//        }
-//    }
-    
-    
     
 }
