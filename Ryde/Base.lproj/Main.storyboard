@@ -250,10 +250,10 @@
             </objects>
             <point key="canvasLocation" x="416" y="-259"/>
         </scene>
-        <!--View Controller-->
+        <!--Ryde-->
         <scene sceneID="F99-iw-OXq">
             <objects>
-                <viewController id="1pY-zf-QLY" sceneMemberID="viewController">
+                <viewController id="1pY-zf-QLY" customClass="RiderViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Nec-gx-agB"/>
                         <viewControllerLayoutGuide type="bottom" id="XG1-Lk-sit"/>
@@ -261,9 +261,66 @@
                     <view key="view" contentMode="scaleToFill" id="TkA-yz-6Y4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ebN-Mr-1f3">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                            </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mMm-Vr-egG">
+                                <rect key="frame" x="0.0" y="64" width="600" height="86"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1o7-do-hIX">
+                                <rect key="frame" x="0.0" y="488" width="600" height="63"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="63" id="MDr-ce-7yH"/>
+                                </constraints>
+                                <state key="normal" title="Request Ryde">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Marker Filled-50" translatesAutoresizingMaskIntoConstraints="NO" id="Kib-Vr-DeQ">
+                                <rect key="frame" x="278" y="277" width="45" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="f2A-bE-F8U"/>
+                                    <constraint firstAttribute="width" constant="45" id="xMP-oD-8bC"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1215 Progress St Blacksburg" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ykd-Tt-Fli">
+                                <rect key="frame" x="20" y="82" width="560" height="49"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="49" id="9hj-fy-JaO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="26"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Kib-Vr-DeQ" firstAttribute="centerY" secondItem="TkA-yz-6Y4" secondAttribute="centerY" id="HfR-Ba-ZiW"/>
+                            <constraint firstItem="Ykd-Tt-Fli" firstAttribute="leading" secondItem="TkA-yz-6Y4" secondAttribute="leadingMargin" id="Qci-vV-5VG"/>
+                            <constraint firstItem="ebN-Mr-1f3" firstAttribute="top" secondItem="Nec-gx-agB" secondAttribute="bottom" id="T4b-rJ-boC"/>
+                            <constraint firstItem="mMm-Vr-egG" firstAttribute="centerX" secondItem="Ykd-Tt-Fli" secondAttribute="centerX" id="UpX-7n-WSX"/>
+                            <constraint firstAttribute="trailing" secondItem="mMm-Vr-egG" secondAttribute="trailing" id="UvS-3L-8Tb"/>
+                            <constraint firstItem="ebN-Mr-1f3" firstAttribute="trailing" secondItem="mMm-Vr-egG" secondAttribute="trailing" id="YX3-QJ-PuL"/>
+                            <constraint firstItem="ebN-Mr-1f3" firstAttribute="leading" secondItem="1o7-do-hIX" secondAttribute="leading" id="Ywx-UC-cHB"/>
+                            <constraint firstItem="1o7-do-hIX" firstAttribute="bottom" secondItem="XG1-Lk-sit" secondAttribute="top" id="c1O-hF-tvv"/>
+                            <constraint firstItem="ebN-Mr-1f3" firstAttribute="top" secondItem="mMm-Vr-egG" secondAttribute="top" id="cbj-Kx-eOi"/>
+                            <constraint firstItem="mMm-Vr-egG" firstAttribute="trailing" secondItem="1o7-do-hIX" secondAttribute="trailing" id="ebE-vb-kom"/>
+                            <constraint firstItem="mMm-Vr-egG" firstAttribute="centerY" secondItem="Ykd-Tt-Fli" secondAttribute="centerY" id="jxl-KI-cHq"/>
+                            <constraint firstItem="mMm-Vr-egG" firstAttribute="leading" secondItem="1o7-do-hIX" secondAttribute="leading" id="lYA-Rf-wtM"/>
+                            <constraint firstItem="ebN-Mr-1f3" firstAttribute="bottom" secondItem="XG1-Lk-sit" secondAttribute="top" id="n2u-Op-dl9"/>
+                            <constraint firstItem="ebN-Mr-1f3" firstAttribute="leading" secondItem="TkA-yz-6Y4" secondAttribute="leading" id="qOF-qO-APk"/>
+                            <constraint firstItem="Ykd-Tt-Fli" firstAttribute="top" secondItem="Nec-gx-agB" secondAttribute="bottom" constant="18" id="uMP-bf-TgB"/>
+                            <constraint firstItem="Ykd-Tt-Fli" firstAttribute="centerX" secondItem="Kib-Vr-DeQ" secondAttribute="centerX" id="y3D-b0-tcI"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="7nw-SN-mAR"/>
+                    <navigationItem key="navigationItem" title="Ryde" id="7nw-SN-mAR"/>
+                    <connections>
+                        <outlet property="address" destination="Ykd-Tt-Fli" id="sop-zl-vbn"/>
+                        <outlet property="mapView" destination="ebN-Mr-1f3" id="Nmo-dE-wTS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JIC-Vv-HT9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -390,6 +447,7 @@
     <resources>
         <image name="Circled User Male-25" width="25" height="25"/>
         <image name="Home-25" width="25" height="25"/>
+        <image name="Marker Filled-50" width="50" height="50"/>
         <image name="User Groups-25" width="25" height="25"/>
         <image name="loginBG" width="640" height="1136"/>
         <image name="r-logo-nobg-filled" width="800" height="600"/>
