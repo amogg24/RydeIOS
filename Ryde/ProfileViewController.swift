@@ -10,10 +10,8 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class ProfileViewController: UIViewController  {
-    
+class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
 
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,11 +20,28 @@ class ProfileViewController: UIViewController  {
         let fbButton = FBSDKLoginButton()
         
         fbButton.center = self.view.center
+        
+        fbButton.delegate = self
 
         self.view.addSubview(fbButton)
         
     }
     
-
+    // MARK: - Facebook Login
+    
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        
+        print("This should never be called")
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        
+        print("User logged out")
+        
+        let loginManager = FBSDKLoginManager()
+        loginManager.logOut() // this is an instance function
+        
+        performSegueWithIdentifier("logOut", sender: self)
+    }
 
 }

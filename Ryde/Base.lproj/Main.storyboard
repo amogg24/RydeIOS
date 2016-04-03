@@ -98,7 +98,7 @@
                     <connections>
                         <outlet property="label" destination="SLv-8S-hEJ" id="GpG-1q-eK9"/>
                         <outlet property="loginButton" destination="iMj-YD-6HF" id="2pe-9m-JNp"/>
-                        <segue destination="HBv-Od-vUR" kind="presentation" identifier="createAccount" id="Png-pH-9ey"/>
+                        <segue destination="HBv-Od-vUR" kind="show" identifier="createAccount" id="Png-pH-9ey"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mrQ-bU-Vj2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -378,6 +378,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="js4-BX-Hhg"/>
+                    <connections>
+                        <segue destination="P6T-6r-ncU" kind="showDetail" identifier="logOut" id="SeK-C5-FWU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x08-gC-A8J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
