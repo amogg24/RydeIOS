@@ -121,17 +121,17 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
         let JSONObject: [String : String] = [
             
             "driverStatus" : "false",
-            "lastName"  : "Amjad",
-            "firstName" : "Shawn",
+            "lastName"  : "Gibson",
+            "firstName" : "Cameron",
             "fbTok"     : self.FBid,
             "phoneNumber" : "7034857174",
-            "carMake" : "Toyota",
-            "carModel" : "Camry",
-            "carColor" : "Silver"
+            "carMake" : "Audi",
+            "carModel" : "R8",
+            "carColor" : "Sexy Black"
         ]
         
         // Sends a POST to the specified URL with the JSON conent
-        self.post(JSONObject, url: "http://172.31.232.214:8080/Ryde/api/user")
+        self.post(JSONObject, url: "http://jupiter.cs.vt.edu/Ryde/api/user")
         
         
         performSegueWithIdentifier("Home", sender: self)
