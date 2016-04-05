@@ -26,6 +26,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
 
         //print permissions, such as public_profile
         print(FBSDKAccessToken.currentAccessToken().permissions)
@@ -43,7 +45,160 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
             // Set Image
             self.profileImage.image = UIImage(data: NSData(contentsOfURL: url!)!)
         })
+        
+        
+//        checkIfAccountCreated()
     }
+    
+    // Mark - Check if this user already has an account. If so, bypass this create account page.
+    
+    func checkIfAccountCreated() {
+        
+        
+        let url = NSURL(string: "https://IPADRESS:PORT/Ryde/api/user/validate/\(self.FBid)")
+
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url!);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Excute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            // Check for error
+            if error != nil
+            {
+                print("error=\(error)")
+                return
+            }
+            
+            // Print out response string
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("responseString = \(responseString)")
+            
+            
+            // If Response is TRUE => User exists
+            
+            
+            // Convert server json response to NSDictionary
+//            do {
+//                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+//                    
+//                    // Print out dictionary
+//                    print(convertedJsonIntoDict)
+//                    
+//                    // Get value by key
+//                    let firstNameValue = convertedJsonIntoDict["userName"] as? String
+//                    print(firstNameValue!)
+//                    
+//                }
+//            } catch let error as NSError {
+//                print(error.localizedDescription)
+//            }
+            
+        }
+        
+        task.resume()
+        
+//        performSegueWithIdentifier("Home", sender: self)
+        
+    }
+    
+    
+
+    
+    
+    // Mark - Package data to JSON and Submit to backend
+
+    
+    @IBAction func submitCreateAccount(sender: UIButton) {
+        
+        let JSONObject: [String : String] = [
+            
+            "driverStatus" : "false",
+            "lastName"  : "Amjad",
+            "firstName" : "Shawn",
+            "fbTok"     : self.FBid,
+            "phoneNumber" : "7034857174",
+            "carMake" : "Toyota",
+            "carModel" : "Camry",
+            "carColor" : "Silver"
+        ]
+        
+        // Sends a POST to the specified URL with the JSON conent
+        self.post(JSONObject, url: "http://172.31.232.214:8080/Ryde/api/user")
+        
+        
+        performSegueWithIdentifier("Home", sender: self)
+        
+    }
+
+    
+    // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
+    
+    
+    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
+    func post(params : Dictionary<String, String>, url : String) {
+        
+
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        
+        
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+        } catch {
+            print(error)
+            request.HTTPBody = nil
+        }
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            print("Response: \(response)")
+            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Body: \(strData)")
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                // return or throw?
+                return
+            }
+            
+           
+
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                    // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+                    let success = parseJSON["success"] as? Int
+                    print("Succes: \(success)")
+            }
+            else {
+                    // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                    let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                    print("Error could not parse JSON: \(jsonStr)")
+            }
+        })
+        
+        task.resume()
+    }
+    
     
     // Mark - Get Rid of Keyboard when Done Editing
     
@@ -111,94 +266,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
         {
             return true
         }
-    }
-    
-    
-    // Mark - Package data to JSON and Submit to backend
-
-    
-    @IBAction func submitCreateAccount(sender: UIButton) {
-        
-        let JSONObject: [String : String] = [
-            
-            "driverStatus" : "false",
-            "lastName"  : "Amjad",
-            "firstName" : "Shawn",
-            "fbTok"     : self.FBid,
-            "phoneNumber" : "7034857174",
-            "carMake" : "Toyota",
-            "carModel" : "Camry",
-            "carColor" : "Silver"
-        ]
-        
-        // Sends a POST to the specified URL with the JSON conent
-        self.post(JSONObject, url: "http://192.168.1.17:8080/Ryde/webresources/api")
-        
-        
-        performSegueWithIdentifier("Home", sender: self)
-        
-    }
-
-    
-    // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
-    
-    
-    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
-    func post(params : Dictionary<String, String>, url : String) {
-        
-
-        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        let session = NSURLSession.sharedSession()
-        request.HTTPMethod = "POST"
-        
-        
-        do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
-        } catch {
-            print(error)
-            request.HTTPBody = nil
-        }
-        
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            print("Response: \(response)")
-            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("Body: \(strData)")
-            
-//            let json: NSDictionary?
-//            
-//            do {
-//                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
-//            } catch let dataError{
-//                
-//                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-//                print(dataError)
-//                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//                print("Error could not parse JSON: '\(jsonStr)'")
-//                // return or throw?
-//                return
-//            }
-//            
-//           
-//
-//            // The JSONObjectWithData constructor didn't return an error. But, we should still
-//            // check and make sure that json has a value using optional binding.
-//            if let parseJSON = json {
-//                    // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-//                    let success = parseJSON["success"] as? Int
-//                    print("Succes: \(success)")
-//            }
-//            else {
-//                    // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-//                    let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//                    print("Error could not parse JSON: \(jsonStr)")
-//            }
-        })
-        
-        task.resume()
     }
     
 
