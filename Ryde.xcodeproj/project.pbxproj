@@ -19,6 +19,8 @@
 		7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7803889E1CB6E4B9004F5A69 /* DriverMainViewController.swift */; };
 		780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780388A01CB6E4C4004F5A69 /* DriverMapViewController.swift */; };
 		780388A41CB6E4D6004F5A69 /* maps.html in Resources */ = {isa = PBXBuildFile; fileRef = 780388A31CB6E4D6004F5A69 /* maps.html */; };
+		780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780388A51CB6E5A0004F5A69 /* DriverMenuViewController.swift */; };
+		780388A81CB6E5A0004F5A69 /* DriverBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780388A61CB6E5A0004F5A69 /* DriverBaseViewController.swift */; };
 		7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF56AD61CAAFCEF00FF779A /* AppDelegate.swift */; };
 		7EF56ADE1CAAFCEF00FF779A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADC1CAAFCEF00FF779A /* Main.storyboard */; };
 		7EF56AE01CAAFCEF00FF779A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */; };
@@ -41,6 +43,8 @@
 		7803889E1CB6E4B9004F5A69 /* DriverMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverMainViewController.swift; sourceTree = "<group>"; };
 		780388A01CB6E4C4004F5A69 /* DriverMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverMapViewController.swift; sourceTree = "<group>"; };
 		780388A31CB6E4D6004F5A69 /* maps.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = maps.html; sourceTree = "<group>"; };
+		780388A51CB6E5A0004F5A69 /* DriverMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverMenuViewController.swift; sourceTree = "<group>"; };
+		780388A61CB6E5A0004F5A69 /* DriverBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverBaseViewController.swift; sourceTree = "<group>"; };
 		7EF56AD31CAAFCEE00FF779A /* Ryde.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ryde.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF56AD61CAAFCEF00FF779A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EF56ADD1CAAFCEF00FF779A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -137,6 +141,8 @@
 			children = (
 				7803889E1CB6E4B9004F5A69 /* DriverMainViewController.swift */,
 				780388A01CB6E4C4004F5A69 /* DriverMapViewController.swift */,
+				780388A51CB6E5A0004F5A69 /* DriverMenuViewController.swift */,
+				780388A61CB6E5A0004F5A69 /* DriverBaseViewController.swift */,
 			);
 			name = Driver;
 			sourceTree = "<group>";
@@ -258,6 +264,7 @@
 				C3F548FB1CB39D5500A46A20 /* GroupTableViewCell.swift in Sources */,
 				5AB6F2921CB1AB8500E875D4 /* RiderViewController.swift in Sources */,
 				C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */,
+				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
 				5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */,
 				780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */,
@@ -265,6 +272,7 @@
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */,
 				C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */,
+				780388A81CB6E5A0004F5A69 /* DriverBaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

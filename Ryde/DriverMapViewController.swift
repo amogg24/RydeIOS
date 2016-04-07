@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DriverMapViewController: UIViewController, UIWebViewDelegate {
+class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
     
     //37.231200, -80.4102
     //37.234600, -80.4049
@@ -31,6 +31,8 @@ class DriverMapViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet var riderNameLabel: UILabel!
     @IBOutlet var driverButton: UIButton!
     @IBOutlet var webView: UIWebView!
+    @IBOutlet var cancelButton: UIButton!
+    @IBOutlet var callButton: UIButton!
     
     //google maps fields
     var mapsHtmlFilePath: String?
@@ -38,7 +40,7 @@ class DriverMapViewController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //hide back button
+        //hide back button and add slide menu
         self.navigationItem.setHidesBackButton(true, animated:true);
         
         riderNameLabel.text = riderName
@@ -82,6 +84,8 @@ class DriverMapViewController: UIViewController, UIWebViewDelegate {
         headerLabel.text = "Drop Off"
         driverButton.setTitle("Ride Over", forState: .Normal)
         hasRider = true
+        callButton.hidden = true
+        cancelButton.hidden = true
         
         //load new directions
         let tempDriverLat = String(riderLat)
@@ -100,6 +104,22 @@ class DriverMapViewController: UIViewController, UIWebViewDelegate {
         
         let request = NSURLRequest(URL: url!)
         webView.loadRequest(request)
+    }
+    
+    @IBAction func cancelButtonPressed(sender: UIButton) {
+        //confirm pickup
+        let alertController = UIAlertController(title: "Confirmation",
+            message: "Are you sure you would like to cancel pickup?",
+            preferredStyle: UIAlertControllerStyle.Alert)
+        
+        // Create a UIAlertAction object and add it to the alert controller
+        alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+            self.navigationController?.popViewControllerAnimated(true)
+        }))
+        alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: nil))
+        
+        // Present the alert controller by calling the presentViewController method
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
     @IBAction func pickupButtonPressed(sender: UIButton) {
@@ -138,8 +158,8 @@ class DriverMapViewController: UIViewController, UIWebViewDelegate {
         
     }
     
-    @IBAction func cancelPickupPressed(sender: UIBarButtonItem) {
-        self.navigationController?.popViewControllerAnimated(true)
+    @IBAction func phoneButtonPressed(sender: UIButton) {
+        
     }
     /*
     -------------------------
