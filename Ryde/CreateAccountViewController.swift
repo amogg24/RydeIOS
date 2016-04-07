@@ -24,6 +24,8 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     var FBid = ""
     
+    var baseURL = "172.30.161.24:8080"//"jupiter.cs.vt.edu"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,7 +40,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
         
             // Set Name
             self.profileName.text = result.valueForKey("name") as? String
-        
+            
             self.FBid = (result.valueForKey("id") as? String)!
         
             let url = NSURL(string: "https://graph.facebook.com/\(self.FBid)/picture?type=large&return_ssl_resources=1")
@@ -47,15 +49,18 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
         })
         
         
-//        checkIfAccountCreated()
+        checkIfAccountCreated()
     }
     
     // Mark - Check if this user already has an account. If so, bypass this create account page.
     
     func checkIfAccountCreated() {
         
+        print("CHECK IF ACCOUNT CREATED")
         
-        let url = NSURL(string: "https://IPADRESS:PORT/Ryde/api/user/validate/\(self.FBid)")
+        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/user/validateToken/\(self.FBid)")
+        
+        print(url)
 
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
@@ -120,9 +125,9 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
         
         let JSONObject: [String : String] = [
             
-            "driverStatus" : "false",
-            "lastName"  : "Gibson",
-            "firstName" : "Cameron",
+            "driverStatus" : "true",
+            "lastName"  : "Fletcher",
+            "firstName" : "Joe",
             "fbTok"     : self.FBid,
             "phoneNumber" : "7034857174",
             "carMake" : "Audi",
@@ -131,7 +136,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
         ]
         
         // Sends a POST to the specified URL with the JSON conent
-        self.post(JSONObject, url: "http://jupiter.cs.vt.edu/Ryde/api/user")
+        self.post(JSONObject, url: "http://\(self.baseURL)/Ryde/api/user")
         
         
         performSegueWithIdentifier("Home", sender: self)
@@ -145,6 +150,10 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
     func post(params : Dictionary<String, String>, url : String) {
         
+        
+        print("POSTING TO NEW ACCOUNT")
+        
+        print(url)
 
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()

@@ -29,6 +29,8 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //UINavigationBar.appearance().barTintColor = UIColor(red: 73, green: 181, blue: 138, alpha: 0)
 
         
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -78,7 +80,8 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             let loc: CLPlacemark = placeMarks[0]
             let addressDict : [NSString:NSObject] = loc.addressDictionary as! [NSString: NSObject]
             let addrList = addressDict["FormattedAddressLines"] as! [String]
-            let address = addrList.joinWithSeparator(", ")
+            
+            let address = addrList[0]
             print(address)
             self.address.text = address
             self.previousAddress = address

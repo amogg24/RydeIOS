@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P6T-6r-ncU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P6T-6r-ncU">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -274,7 +274,7 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1o7-do-hIX">
                                 <rect key="frame" x="0.0" y="488" width="600" height="63"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.001275770392" green="0.47094787890000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="63" id="MDr-ce-7yH"/>
                                 </constraints>
@@ -295,7 +295,7 @@
                                     <constraint firstAttribute="height" constant="49" id="9hj-fy-JaO"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="26"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -369,19 +369,19 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Start Time: 10:00 p.m." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BKs-N5-TQu">
                                         <rect key="frame" x="0.0" y="39" width="240" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="End Time: 1:00 a.m." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M9l-cH-QAc">
                                         <rect key="frame" x="0.0" y="99" width="240" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Queue Size = 5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="poA-tt-slr">
                                         <rect key="frame" x="0.0" y="162" width="240" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -398,7 +398,7 @@
                                     <constraint firstAttribute="width" constant="444" id="Wme-X7-v1E"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -432,6 +432,101 @@
             </objects>
             <point key="canvasLocation" x="3580" y="-1198"/>
         </scene>
+        <!--Driver-->
+        <scene sceneID="bfi-Zc-am9">
+            <objects>
+                <viewController id="wXE-aw-Gwv" customClass="DriverMapViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ERZ-QZ-9yu"/>
+                        <viewControllerLayoutGuide type="bottom" id="757-oZ-xKK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="m9C-GY-zlt">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundMain" translatesAutoresizingMaskIntoConstraints="NO" id="zBg-CZ-6ki">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RN7-Ga-Xsf">
+                                <rect key="frame" x="0.0" y="488" width="600" height="63"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="63" id="r9n-iC-8fG"/>
+                                </constraints>
+                                <state key="normal" title="Ride Picked Up">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="pickupButtonPressed:" destination="wXE-aw-Gwv" eventType="touchUpInside" id="dUd-TO-rX3"/>
+                                </connections>
+                            </button>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aVV-ht-0Oc">
+                                <rect key="frame" x="0.0" y="64" width="600" height="302"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="wXE-aw-Gwv" id="ay5-UY-6ym"/>
+                                </connections>
+                            </webView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pickup:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ic3-sC-kZe">
+                                <rect key="frame" x="216" y="392" width="169" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="169" id="u3v-tE-eT2"/>
+                                    <constraint firstAttribute="height" constant="21" id="uWF-af-Ez2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blake Duncan" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yKb-qs-Hvq">
+                                <rect key="frame" x="148" y="421" width="304" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="304" id="Iv0-aV-UkY"/>
+                                    <constraint firstAttribute="height" constant="31" id="NpP-Qd-dWZ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="31"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="yKb-qs-Hvq" firstAttribute="top" secondItem="Ic3-sC-kZe" secondAttribute="bottom" constant="8" symbolic="YES" id="16f-g2-i6S"/>
+                            <constraint firstItem="RN7-Ga-Xsf" firstAttribute="centerX" secondItem="m9C-GY-zlt" secondAttribute="centerX" id="2R7-r3-4Yy"/>
+                            <constraint firstItem="yKb-qs-Hvq" firstAttribute="centerX" secondItem="m9C-GY-zlt" secondAttribute="centerX" id="2T2-nh-D8w"/>
+                            <constraint firstItem="RN7-Ga-Xsf" firstAttribute="bottom" secondItem="757-oZ-xKK" secondAttribute="top" id="2cp-qu-PZM"/>
+                            <constraint firstItem="zBg-CZ-6ki" firstAttribute="top" secondItem="m9C-GY-zlt" secondAttribute="top" id="3bO-W9-trC"/>
+                            <constraint firstItem="aVV-ht-0Oc" firstAttribute="leading" secondItem="m9C-GY-zlt" secondAttribute="leading" id="4lk-1N-eVv"/>
+                            <constraint firstItem="aVV-ht-0Oc" firstAttribute="leading" secondItem="RN7-Ga-Xsf" secondAttribute="leading" id="86p-fa-hUE"/>
+                            <constraint firstItem="RN7-Ga-Xsf" firstAttribute="leading" secondItem="zBg-CZ-6ki" secondAttribute="leading" id="LMx-zs-XHb"/>
+                            <constraint firstItem="Ic3-sC-kZe" firstAttribute="top" secondItem="aVV-ht-0Oc" secondAttribute="bottom" constant="26" id="We3-e8-kec"/>
+                            <constraint firstItem="RN7-Ga-Xsf" firstAttribute="top" secondItem="yKb-qs-Hvq" secondAttribute="bottom" constant="36" id="Wgo-jJ-nAr"/>
+                            <constraint firstItem="RN7-Ga-Xsf" firstAttribute="trailing" secondItem="zBg-CZ-6ki" secondAttribute="trailing" id="ZM3-Eq-JMv"/>
+                            <constraint firstItem="aVV-ht-0Oc" firstAttribute="top" secondItem="ERZ-QZ-9yu" secondAttribute="bottom" id="bZd-tV-2Ou"/>
+                            <constraint firstItem="aVV-ht-0Oc" firstAttribute="centerX" secondItem="m9C-GY-zlt" secondAttribute="centerX" id="mV6-GZ-38w"/>
+                            <constraint firstItem="Ic3-sC-kZe" firstAttribute="centerX" secondItem="m9C-GY-zlt" secondAttribute="centerX" id="rS2-pD-bX0"/>
+                            <constraint firstAttribute="bottom" secondItem="zBg-CZ-6ki" secondAttribute="bottom" id="vYZ-sT-p2J"/>
+                            <constraint firstItem="zBg-CZ-6ki" firstAttribute="leading" secondItem="m9C-GY-zlt" secondAttribute="leading" id="vbB-7z-6he"/>
+                            <constraint firstAttribute="trailing" secondItem="zBg-CZ-6ki" secondAttribute="trailing" id="yV6-od-fp5"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Driver" id="ycV-Ar-zDT">
+                        <barButtonItem key="rightBarButtonItem" title="Cancel Pickup" id="THt-Vn-7jg">
+                            <connections>
+                                <action selector="cancelPickupPressed:" destination="wXE-aw-Gwv" id="ftw-8y-aio"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="driverButton" destination="RN7-Ga-Xsf" id="VGJ-vw-mfZ"/>
+                        <outlet property="headerLabel" destination="Ic3-sC-kZe" id="IiO-vp-wPp"/>
+                        <outlet property="riderNameLabel" destination="yKb-qs-Hvq" id="cRV-fi-ppB"/>
+                        <outlet property="webView" destination="aVV-ht-0Oc" id="5Zo-Rf-ffC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sqs-wn-OqA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4364" y="-1198"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="eiL-on-rI9">
             <objects>
@@ -457,9 +552,15 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="o2p-at-fUd" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" image="Home-25" id="SKF-z1-fTn"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="G9b-yJ-6vK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="G9b-yJ-6vK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0012757703922691155" green="0.47094787894179169" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -513,7 +614,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Beta Balci Beta" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Q1-V2-EjE">
                                             <rect key="frame" x="242" y="11" width="116" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
