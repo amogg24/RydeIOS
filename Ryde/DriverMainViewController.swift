@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DriverMainViewController: UIViewController {
+class DriverMainViewController: DriverBaseViewController {
     
     var driverName = "Blake Duncan"
     var startTime = "10:00 p.m."
@@ -24,13 +24,14 @@ class DriverMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //hide back button and add slide menu button
+        self.navigationItem.setHidesBackButton(true, animated:true);
+        self.addSlideMenuButton()
+        
         headerLabel.text = "Welcome " + driverName
         startLabel.text = "Start Time: " + startTime
         endLabel.text = "End Time: " + endTime
         queueLabel.text = "Queue Size: " + String(queueSize)
-        
-        //hide back button
-        self.navigationItem.setHidesBackButton(true, animated:true);
         
         // Do any additional setup after loading the view.
     }
