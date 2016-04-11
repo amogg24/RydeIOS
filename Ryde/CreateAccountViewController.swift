@@ -177,7 +177,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
             let json: NSDictionary?
             
             do {
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
             } catch let dataError{
                 
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console

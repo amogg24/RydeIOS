@@ -25,6 +25,8 @@
 		7EF56ADE1CAAFCEF00FF779A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADC1CAAFCEF00FF779A /* Main.storyboard */; };
 		7EF56AE01CAAFCEF00FF779A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */; };
 		7EF56AE31CAAFCEF00FF779A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */; };
+		C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
+		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
 		C3F548FB1CB39D5500A46A20 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */; };
 		C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */; };
@@ -51,6 +53,8 @@
 		7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EF56AE21CAAFCEF00FF779A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7EF56AE41CAAFCEF00FF779A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewCell.swift; sourceTree = "<group>"; };
+		C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
 		C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
 		C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +104,8 @@
 				C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */,
 				C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */,
 				C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */,
+				C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */,
+				C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */,
 			);
 			name = "Tab - Groups";
 			sourceTree = "<group>";
@@ -265,9 +271,11 @@
 				5AB6F2921CB1AB8500E875D4 /* RiderViewController.swift in Sources */,
 				C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */,
 				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
+				C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
 				5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */,
 				780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */,
+				C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */,
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */,
