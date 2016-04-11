@@ -148,11 +148,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
     func post(params : Dictionary<String, String>, url : String) {
-        
-        
-        print("POSTING TO NEW ACCOUNT")
-        
-        print(url)
 
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
