@@ -88,11 +88,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
     func post(params : Dictionary<String, String>, url : String) {
-        
-        
-        print("POSTING TO NEW ACCOUNT")
-        
-        print(url)
 
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
@@ -117,7 +112,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
             let json: NSDictionary?
             
             do {
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
             } catch let dataError{
                 
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console

@@ -16,11 +16,11 @@ class GroupTableViewController: UITableViewController {
     
     // Mark - Fields
         
-    var baseURL = "172.30.161.24:8080"//"jupiter.cs.vt.edu"
+    var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
     
-    var groupDictionary = Dictionary<Int, Dictionary<String, Dictionary<Int, String>>>()
+    var groupDictionary = [NSDictionary]()
     
-    var selectedGroupInfo: Dictionary<String, Dictionary<Int, String>>?
+    var selectedGroupInfo: NSDictionary?
     
     // Mark - IBActions
     
@@ -44,20 +44,14 @@ class GroupTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let groupNameDictionary : Dictionary<Int, String> = [0 : "Beta Balci Beta"]
-        let groupDescriptionDictionary : Dictionary<Int, String> = [0 : "The best group ever"]
-        let groupAdminDictionary : Dictionary<Int, String> = [0 : "Osman Balci"]
-        let groupDriverDictionary : Dictionary<Int, String> = [0 : "Jennifer Lawrence"]
-        let groupMemberDictionary : Dictionary<Int, String> = [0 : "Osman Balci", 1 : "Jennifer Lawrence"]
-        groupDictionary[0] = ["GroupName" : groupNameDictionary, "GroupDescription" : groupDescriptionDictionary, "Admins" : groupAdminDictionary, "Drivers" : groupDriverDictionary, "GroupMembers" : groupMemberDictionary]
-        //ask server what groups i am a part of and fill groupArray
-        
-        getUserGroups()
+
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        getUserGroups()
+
     }
     
     // Mark - Retrieve the users groups from the server
@@ -66,7 +60,7 @@ class GroupTableViewController: UITableViewController {
         
         print("RETRIEVE USER GROUPS")
         
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/user/1)")
+        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/user/1")
         
         print(url)
         
@@ -80,8 +74,7 @@ class GroupTableViewController: UITableViewController {
         //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
         
         // Execute HTTP Request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
             // Check for error
             if error != nil
@@ -92,29 +85,42 @@ class GroupTableViewController: UITableViewController {
             
             // Print out response string
             let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("responseString = \(responseString)")
+            //print("responseString = \(responseString!)")
             
             
-            // If Response is TRUE => User exists
+            let json: [NSDictionary]?
+
+            do {
+                
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr!)'")
+                // return or throw?
+                return
+            }
             
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                // Okay, the parsedJSON is here, lets store its values into an array
+                self.groupDictionary = parseJSON as [NSDictionary]
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.tableView.reloadData()
+                })
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr!)")
+            }
+
             
-            // Convert server json response to NSDictionary
-            //            do {
-            //                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
-            //
-            //                    // Print out dictionary
-            //                    print(convertedJsonIntoDict)
-            //
-            //                    // Get value by key
-            //                    let firstNameValue = convertedJsonIntoDict["userName"] as? String
-            //                    print(firstNameValue!)
-            //
-            //                }
-            //            } catch let error as NSError {
-            //                print(error.localizedDescription)
-            //            }
-            
-        }
+        })
         
         task.resume()
         
@@ -133,11 +139,9 @@ class GroupTableViewController: UITableViewController {
         let row = indexPath.row
         let cell = tableView.dequeueReusableCellWithIdentifier("groupCell") as! GroupTableViewCell
 
-        if let groupDictionary1 = groupDictionary[row] {
-            if let groupDictionary2 = groupDictionary1["GroupName"] {
-                cell.groupName.text = groupDictionary2[0]
-            }
-            
+        if let groupTitle = groupDictionary[row]["title"] as? String {
+            print(groupTitle)
+            cell.groupName.text = groupTitle
         }
         
         return cell
@@ -146,9 +150,7 @@ class GroupTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let row = indexPath.row
         
-        if let information = groupDictionary[row] {
-            selectedGroupInfo = information
-        }
+        selectedGroupInfo = groupDictionary[row]
         performSegueWithIdentifier("GroupSelected", sender: nil)
     }
     
