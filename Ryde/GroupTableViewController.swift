@@ -15,9 +15,11 @@ class GroupTableViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
     
     // Mark - Fields
+        
+    var baseURL = "172.30.161.24:8080"//"jupiter.cs.vt.edu"
     
     var groupDictionary = Dictionary<Int, Dictionary<String, Dictionary<Int, String>>>()
-
+    
     var selectedGroupInfo: Dictionary<String, Dictionary<Int, String>>?
     
     // Mark - IBActions
@@ -50,11 +52,76 @@ class GroupTableViewController: UITableViewController {
         let groupMemberDictionary : Dictionary<Int, String> = [0 : "Osman Balci", 1 : "Jennifer Lawrence"]
         groupDictionary[0] = ["GroupName" : groupNameDictionary, "GroupDescription" : groupDescriptionDictionary, "Admins" : groupAdminDictionary, "Drivers" : groupDriverDictionary, "GroupMembers" : groupMemberDictionary]
         //ask server what groups i am a part of and fill groupArray
+        
+        getUserGroups()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     }
+    
+    // Mark - Retrieve the users groups from the server
+    
+    func getUserGroups() {
+        
+        print("RETRIEVE USER GROUPS")
+        
+        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/user/1)")
+        
+        print(url)
+        
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url!);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Execute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            // Check for error
+            if error != nil
+            {
+                print("error=\(error)")
+                return
+            }
+            
+            // Print out response string
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("responseString = \(responseString)")
+            
+            
+            // If Response is TRUE => User exists
+            
+            
+            // Convert server json response to NSDictionary
+            //            do {
+            //                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+            //
+            //                    // Print out dictionary
+            //                    print(convertedJsonIntoDict)
+            //
+            //                    // Get value by key
+            //                    let firstNameValue = convertedJsonIntoDict["userName"] as? String
+            //                    print(firstNameValue!)
+            //
+            //                }
+            //            } catch let error as NSError {
+            //                print(error.localizedDescription)
+            //            }
+            
+        }
+        
+        task.resume()
+        
+        //        performSegueWithIdentifier("Home", sender: self)
+        
+    }
+    
     
     // Mark - TableView Delegates
     

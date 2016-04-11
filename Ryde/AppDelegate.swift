@@ -13,6 +13,8 @@ import FBSDKCoreKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var FBid = ""
+    
     var window: UIWindow?
 
 
