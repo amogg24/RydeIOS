@@ -26,9 +26,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("CREATE ACCOUNT VIEW")
-
+    
         //print permissions, such as public_profile
         print(FBSDKAccessToken.currentAccessToken().permissions)
         
@@ -54,7 +52,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
             }
             
         })
-
+      
     }
     
     // Mark - Package data to JSON and Submit to backend
@@ -62,16 +60,16 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     @IBAction func submitCreateAccount(sender: UIButton) {
         
+        let name = profileName.text
+        
+        let fullNameArr = name?.componentsSeparatedByString(" ")
+        
         let JSONObject: [String : String] = [
             
-            "driverStatus" : "true",
-            "lastName"  : "Fletcher",
-            "firstName" : "Joe",
+            "lastName"  : fullNameArr![(fullNameArr?.count)!-1],
+            "firstName" : fullNameArr![0],
             "fbTok"     : FBSDKAccessToken.currentAccessToken().userID,
-            "phoneNumber" : "7034857174",
-            "carMake" : "Audi",
-            "carModel" : "R8",
-            "carColor" : "Sexy Black"
+            "phoneNumber" : phoneNumber.text!
         ]
         
         // Sends a POST to the specified URL with the JSON conent
