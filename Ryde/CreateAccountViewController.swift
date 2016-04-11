@@ -42,7 +42,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
             self.profileName.text = result.valueForKey("name") as? String
             
             self.FBid = (result.valueForKey("id") as? String)!
-        
             let url = NSURL(string: "https://graph.facebook.com/\(self.FBid)/picture?type=large&return_ssl_resources=1")
             // Set Image
             self.profileImage.image = UIImage(data: NSData(contentsOfURL: url!)!)
