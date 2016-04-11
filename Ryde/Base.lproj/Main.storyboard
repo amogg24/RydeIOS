@@ -555,7 +555,7 @@
         <scene sceneID="Dzv-eu-Dkn">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="o2p-at-fUd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="Home-25" id="SKF-z1-fTn"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="Home" id="SKF-z1-fTn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="G9b-yJ-6vK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -580,7 +580,7 @@
         <scene sceneID="brv-F7-czY">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MZ0-65-JAr" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Groups" image="User Groups-25" id="T7X-8o-7bV"/>
+                    <tabBarItem key="tabBarItem" title="Groups" image="Group" id="T7X-8o-7bV"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="m5Z-1a-EEj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -813,7 +813,7 @@
         <scene sceneID="Gfx-kn-LqS">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Rdz-vV-2eY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="Circled User Male-25" id="0Q4-r9-wOU"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="Profile" id="0Q4-r9-wOU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Okw-TD-gcN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1083,7 +1083,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T4S-Fm-cGm" id="XJT-Q4-77B">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Beta Balci Beta" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ClM-iW-8Jz">
@@ -1139,10 +1139,10 @@
     </scenes>
     <resources>
         <image name="BackgroundMain" width="1040" height="1536"/>
-        <image name="Circled User Male-25" width="25" height="25"/>
-        <image name="Home-25" width="25" height="25"/>
+        <image name="Group" width="30" height="30"/>
+        <image name="Home" width="30" height="30"/>
         <image name="Marker Filled-50" width="50" height="50"/>
-        <image name="User Groups-25" width="25" height="25"/>
+        <image name="Profile" width="30" height="30"/>
         <image name="loginBG" width="640" height="1136"/>
         <image name="phoneIcon" width="128" height="128"/>
         <image name="r-logo-nobg-filled" width="800" height="600"/>
