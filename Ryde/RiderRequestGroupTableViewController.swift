@@ -67,7 +67,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
             self.FBid = (result.valueForKey("id") as? String)!
         })
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action: Selector(joinTAD()))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(RiderRequestGroupTableViewController.joinTAD))
     }
     
     override func viewWillAppear(animated: Bool) {
