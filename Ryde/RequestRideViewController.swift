@@ -12,6 +12,8 @@ class RequestRideViewController: UIViewController {
     
     var queueNum: String = ""
     
+    @IBOutlet var queueLabel: UILabel!
+    
     override func viewDidLoad() {
         // gets rid of back button in navigation
         let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: navigationController, action: nil)
@@ -21,6 +23,28 @@ class RequestRideViewController: UIViewController {
         
         super.viewDidLoad()
         
+        self.queueLabel.text = "2"
+        
+        let seconds = 4.0
+        let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        
+        dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+            
+            self.queueLabel.text = "1"
+            
+        })
+        
+        let seconds2 = 15.0
+        let delay2 = seconds2 * Double(NSEC_PER_SEC)  // nanoseconds per seconds
+        let dispatchTime2 = dispatch_time(DISPATCH_TIME_NOW, Int64(delay2))
+        
+        dispatch_after(dispatchTime2, dispatch_get_main_queue(), {
+            
+            self.queueLabel.text = "0"
+            self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
+            
+        })
         // Do any additional setup after loading the view.
     }
     
