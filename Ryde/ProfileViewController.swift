@@ -31,6 +31,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     var nameLabels = ["Cell Number"]
     var infoLabel = [String]()
     
+    let semaphore = dispatch_semaphore_create(0);
+    
     
     // Mark - Fields
     
@@ -74,7 +76,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             
             
             //Grab Data from API
-            self.getUserData(self.FBid)
+            //self.getUserData(self.FBid)
         })
         
         profileTableView.separatorColor = UIColor.darkGrayColor()
@@ -96,15 +98,17 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         // Configure the cell...
         let rowNumber = indexPath.row
         cell.typeLabel.text! = nameLabels[rowNumber]
-        cell.infoLabel.text! = phoneNumber
         
+        //Get the User data
+        getUserData(FBSDKAccessToken.currentAccessToken().userID)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        cell.infoLabel.text! = phoneNumber
         return cell
     }
     
     // Mark - Retrieve the users groups from the server
     
     func getUserData(token: String) {
-        
         print("RETRIEVE USER DATA")
         
         let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findByToken/\(token)")
@@ -122,7 +126,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         // Execute HTTP Request
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
-            print("Response: \(response)")
+            //print("Response: \(response)")
             let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
             print("Body: \(strData)")
             
@@ -140,6 +144,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
                 return
             }
             
+            
+            
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
@@ -151,7 +157,11 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
 //                infoLabel = ["\(self.)"]
 //                self.carInfoLabel.text = "\(self.carMakeString) \(self.carModelString) \(self.carColorString)"
                 
-                self.phoneNumber = (parseJSON["phoneNumber"] as? String)!
+                //Found data, signal semaphore
+                self.phoneNumber  = (parseJSON["phoneNumber"] as? String)!
+                dispatch_semaphore_signal(self.semaphore);
+                
+                
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?

@@ -23,8 +23,13 @@ class EditProfileViewController: UIViewController {
     
     var FBid = ""
 
+    @IBAction func saveButtonTapped(sender: UIButton) {
+        self.dismissViewControllerAnimated(true, completion: nil);
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationItem.backBarButtonItem?.title = "Back"
 
         // Grab data from FB
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
