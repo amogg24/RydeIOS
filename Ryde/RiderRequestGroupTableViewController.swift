@@ -57,7 +57,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         //Adds a navigation button to bring up alert to add TAD
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action: Selector(joinTAD()))
         
         self.title = "Select Group"
         super.viewDidLoad()
@@ -67,6 +66,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
         graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
             self.FBid = (result.valueForKey("id") as? String)!
         })
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(RiderRequestGroupTableViewController.joinTAD))
     }
     
     override func viewWillAppear(animated: Bool) {
