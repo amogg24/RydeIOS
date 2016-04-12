@@ -41,7 +41,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
     var tadID = ""
     
     // Section Titles
-    let section = ["Active Groups", "Active TADs"]
+    let section = ["Groups with Active Timeslots"]
     
     // Queue Position
     var queuePos:String! = "0"
@@ -49,7 +49,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // join TAD success/failure
     var success: Bool = true
     
-    var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
+    //var baseURL = "192.168.1.107:8080"
+    var baseURL = "jupiter.cs.vt.edu"
     
     var groupDictionary = [NSDictionary]()
     
@@ -57,7 +58,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         //Adds a navigation button to bring up alert to add TAD
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action: Selector(joinTAD()))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(RiderRequestGroupTableViewController.joinTAD))
         
         self.title = "Select Group"
         super.viewDidLoad()
@@ -71,16 +72,16 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        getUserGroups()
+        getUserTimeslots()
         /*
          get TAD list from server
- 
-        */
+         
+         */
     }
     
     // Mark - Retrieve the users groups from the server
     
-    func getUserGroups() {
+    func getUserTimeslots() {
         
         let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/user/1")
         
@@ -185,37 +186,43 @@ class RiderRequestGroupTableViewController: UITableViewController {
         selectedGroupInfo = groupDictionary[row]
         
         let JSONObject: [String : AnyObject] = [
-            "driverUserId" : 0,
-            "riderUserId" : 0,
-            "tsId" : 1,
-            "startLat" : 0,
-            "startLon" : 0,
-            "endLat"    : 0,
-            "endLon"   : 0
+            "driverUserId" : 1,
+            "riderUserId" : 2,
+            "tsId" : 3,
+            "startLat" : 4,
+            "startLon" : 5,
+            "endLat"    : 6,
+            "endLon"   : 7
         ]
         
         /*
- let JSONObject: [String : AnyObject] = [
- "fbTok" : self.FBid,
- "gID" : -1,
- "tID" : 1,
- "startLat" : 0,
- "startLon" : 0,
- "endLat"    : 0,
- "endLon"   : 0
- ]
- */
-        self.postRequest(JSONObject, url: "http://192.168.1.107:8080/Ryde/api/ride")
- 
-        //performSegueWithIdentifier("GroupSelected", sender: nil)
+         let JSONObject: [String : AnyObject] = [
+         "fbTok" : self.FBid,
+         "gID" : -1,
+         "tID" : 1,
+         "startLat" : 0,
+         "startLon" : 0,
+         "endLat"    : 0,
+         "endLon"   : 0
+         ]
+         */
+        //let postUrl = "http://\(self.baseURL)/Ryde/api/ride/request/" + self.FBid
+        let postUrl = "http://\(self.baseURL)/Ryde/api/ride/request/JohnFBTok"
+        //self.postRequest(JSONObject, url: postUrl)
+        
+        performSegueWithIdentifier("ShowRequestRide", sender: nil)
     }
     
     
     /*
-     TAD Functions
-     
+     -------------------------
+     MARK: - TAD Functions
+     -------------------------
      */
     
+    /*
+     Creates an alert box when join TAD is clicked.
+     */
     func joinTAD()
     {
         let alert = UIAlertController(title: "Enter TAD Passcode", message: "", preferredStyle: UIAlertControllerStyle.Alert)
@@ -226,7 +233,10 @@ class RiderRequestGroupTableViewController: UITableViewController {
         
         alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction!) in
             let textField = alert.textFields![0] as UITextField
-            self.generateTADRequest(textField.text!) }))
+            
+            self.passcodeError()
+            //self.generateTADRequest(textField.text!)
+        }))
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action: UIAlertAction!) in
             //do nothing
@@ -243,7 +253,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
             "TADPasscode" : passcode
         ]
         
-        self.postTAD(JSONObject, url: "http://192.168.1.107:8080/Ryde/api/timeslot/passcode")
+        self.postTAD(JSONObject, url: "http://\(self.baseURL)/Ryde/api/timeslot/passcode")
     }
     
     func passcodeError()
@@ -306,7 +316,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
                 let success = parseJSON["success"] as? Int
                 print("Succes: \(success)")
                 
-                self.tableView.reloadData()
+                self.getUserTimeslots()
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
@@ -320,14 +330,14 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
-    // Post Function for request 
+    // Post Function for request
     func postRequest(params : Dictionary<String, AnyObject>, url : String) {
         
         
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
-
+        
         do {
             request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
         } catch {

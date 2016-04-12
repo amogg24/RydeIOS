@@ -13,6 +13,12 @@ class RequestRideViewController: UIViewController {
     var queueNum: String = ""
     
     override func viewDidLoad() {
+        // gets rid of back button in navigation
+        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: navigationController, action: nil)
+        
+        self.title = "Ryde Requested"
+        navigationItem.leftBarButtonItem = backButton
+        
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
@@ -23,6 +29,10 @@ class RequestRideViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func cancelRideClicked(sender: UIButton) {
+        //post a cancellation
+        navigationController?.popToRootViewControllerAnimated(true)
+    }
     
     /*
      // MARK: - Navigation

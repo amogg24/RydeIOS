@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P6T-6r-ncU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P6T-6r-ncU">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -1272,32 +1272,12 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="sBw-H6-QFh" kind="show" identifier="ShowRequestRide" id="a2b-Pm-BoX">
-                            <nil key="action"/>
-                        </segue>
+                        <segue destination="xli-Bo-8GQ" kind="show" identifier="ShowRequestRide" id="VAh-7T-LTn"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8so-eD-uD5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2718" y="-1883"/>
-        </scene>
-        <!--Request Ride View Controller-->
-        <scene sceneID="cn9-b8-1eZ">
-            <objects>
-                <viewController id="sBw-H6-QFh" customClass="RequestRideViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="U8R-yw-E1D"/>
-                        <viewControllerLayoutGuide type="bottom" id="rrh-ID-l0n"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="goh-FQ-qIQ">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VPj-4c-JaR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2718" y="-2635"/>
         </scene>
         <!--Edit Profile View Controller-->
         <scene sceneID="ABQ-hy-lls">
@@ -1639,6 +1619,68 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F8g-LX-lqi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2004" y="611"/>
+        </scene>
+        <!--Request Ride View Controller-->
+        <scene sceneID="k8G-Pk-ldg">
+            <objects>
+                <viewController id="xli-Bo-8GQ" customClass="RequestRideViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6xs-AX-1Xz"/>
+                        <viewControllerLayoutGuide type="bottom" id="2Ot-XA-65u"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Wyr-Ba-Sy6">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Position in the Queue" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rrE-oI-ZeG">
+                                <rect key="frame" x="179" y="150" width="242" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="AWq-Jv-Lsp"/>
+                                    <constraint firstAttribute="width" constant="242" id="bkm-1x-N1t"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8V-hx-sjJ">
+                                <rect key="frame" x="295" y="187" width="11" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="11" id="Hbo-Bg-7vG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="au9-hp-m5d">
+                                <rect key="frame" x="207" y="366" width="187" height="49"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="187" id="Kh5-PU-MaY"/>
+                                    <constraint firstAttribute="height" constant="49" id="MMj-4b-z1x"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Cancel Ryde">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="cancelRideClicked:" destination="xli-Bo-8GQ" eventType="touchUpInside" id="pBT-tJ-DDB"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="c8V-hx-sjJ" firstAttribute="top" secondItem="rrE-oI-ZeG" secondAttribute="bottom" constant="16" id="3Zy-bE-kdC"/>
+                            <constraint firstItem="c8V-hx-sjJ" firstAttribute="centerX" secondItem="au9-hp-m5d" secondAttribute="centerX" id="MKA-P5-fR6"/>
+                            <constraint firstItem="rrE-oI-ZeG" firstAttribute="top" secondItem="6xs-AX-1Xz" secondAttribute="bottom" constant="130" id="cYL-DC-fw6"/>
+                            <constraint firstItem="rrE-oI-ZeG" firstAttribute="centerX" secondItem="c8V-hx-sjJ" secondAttribute="centerX" id="dpn-6q-A7l"/>
+                            <constraint firstItem="rrE-oI-ZeG" firstAttribute="centerX" secondItem="Wyr-Ba-Sy6" secondAttribute="centerX" id="p4I-fB-odM"/>
+                            <constraint firstItem="2Ot-XA-65u" firstAttribute="top" secondItem="au9-hp-m5d" secondAttribute="bottom" constant="185" id="s8q-gQ-xD1"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OVU-m1-qaW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2718" y="-2635"/>
         </scene>
     </scenes>
     <resources>
