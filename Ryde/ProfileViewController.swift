@@ -17,16 +17,21 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     @IBOutlet var profileImage: UIImageView!
     
     @IBOutlet var profileName: UILabel!
-    @IBOutlet var cellNumerLabel: UILabel!
-    @IBOutlet var carInfoLabel: UILabel!
     
     var carMakeString = ""
     var carModelString = ""
     var carColorString = ""
+    var phoneNumber = ""
     
     var groupDictionary = [NSDictionary]()
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
+    @IBOutlet var profileTableView: UITableView!
+    var nameLabels = ["Cell Number"]
+    var infoLabel = [String]()
+    
+    let semaphore = dispatch_semaphore_create(0);
     
     
     // Mark - Fields
@@ -37,17 +42,22 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Make the image a circle
+        profileImage.layer.borderWidth = 1
+        //profileImage.layer.masksToBounds = false
+        profileImage.layer.borderColor = UIColor.clearColor().CGColor
+        profileImage.layer.cornerRadius = profileImage.frame.height/2
+        profileImage.clipsToBounds = true
+        
+        
+        //Set FB button to bottom of screen
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         let screenWidth = screenSize.width * 0.5
         let screenHeight = screenSize.height * 0.9
-        
         let a = CGPointMake(screenWidth, screenHeight)
         let fbButton = FBSDKLoginButton()
-        
         fbButton.center = self.view.convertPoint(a, fromCoordinateSpace: self.view)
-        
         fbButton.delegate = self
-        
         self.view.addSubview(fbButton)
         
         // Grab data from FB
@@ -66,17 +76,39 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             
             
             //Grab Data from API
-            self.getUserData(self.FBid)
+            //self.getUserData(self.FBid)
         })
+        
+        profileTableView.separatorColor = UIColor.darkGrayColor()
+        profileTableView.tableFooterView = UIView()
         
         
         
     }
     
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return nameLabels.count
+    }
+    
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: ProfileTableViewCell = tableView.dequeueReusableCellWithIdentifier("ProfileTableView") as! ProfileTableViewCell
+        
+        // Configure the cell...
+        let rowNumber = indexPath.row
+        cell.typeLabel.text! = nameLabels[rowNumber]
+        
+        //Get the User data
+        getUserData(FBSDKAccessToken.currentAccessToken().userID)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        cell.infoLabel.text! = phoneNumber
+        return cell
+    }
+    
     // Mark - Retrieve the users groups from the server
     
     func getUserData(token: String) {
-        
         print("RETRIEVE USER DATA")
         
         let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findByToken/\(token)")
@@ -94,7 +126,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         // Execute HTTP Request
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
-            print("Response: \(response)")
+            //print("Response: \(response)")
             let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
             print("Body: \(strData)")
             
@@ -112,17 +144,24 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
                 return
             }
             
+            
+            
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
-                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                self.carMakeString = (parseJSON["carMake"] as? String)!
-                self.carModelString = (parseJSON["carModel"] as? String)!
-                self.carColorString = (parseJSON["carColor"] as? String)!
+                // Need to add check if these exists in user
+//                self.carMakeString = (parseJSON["carMake"] as? String)!
+//                self.carModelString = (parseJSON["carModel"] as? String)!
+//                self.carColorString = (parseJSON["carColor"] as? String)!
                 
-                self.carInfoLabel.text = "\(self.carMakeString) \(self.carModelString) \(self.carColorString)"
+//                infoLabel = ["\(self.)"]
+//                self.carInfoLabel.text = "\(self.carMakeString) \(self.carModelString) \(self.carColorString)"
                 
-                self.cellNumerLabel.text = (parseJSON["phoneNumber"] as? String)!
+                //Found data, signal semaphore
+                self.phoneNumber  = (parseJSON["phoneNumber"] as? String)!
+                dispatch_semaphore_signal(self.semaphore);
+                
+                
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
@@ -131,56 +170,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             }
         })
         
-        //            // Check for error
-        //            if error != nil
-        //            {
-        //                print("error=\(error)")
-        //                return
-        //            }
-        //
-        //            // Print out response string
-        //            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-        //           // print("responseString = \(responseString!)")
-        //
-        //
-        //            let json: [NSDictionary]?
-        //
-        //            do {
-        //
-        //                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
-        //
-        //            } catch let dataError{
-        //
-        //                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-        //                print(dataError)
-        //                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-        //                print("Error could not parse JSON: '\(jsonStr!)'")
-        //                // return or throw?
-        //                return
-        //            }
-        //
-        //            // The JSONObjectWithData constructor didn't return an error. But, we should still
-        //            // check and make sure that json has a value using optional binding.
-        //            if let parseJSON = json {
-        //                // Okay, the parsedJSON is here, lets store its values into an array
-        //                self.groupDictionary = parseJSON as [NSDictionary]
-        //                dispatch_async(dispatch_get_main_queue(), {
-        //
-        //                })
-        //                print(self.groupDictionary)
-        //            }
-        //            else {
-        //                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-        //                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-        //                print("Error couldn't parse JSON: \(jsonStr!)")
-        //            }
-        //
-        //
-        //        })
-        
         task.resume()
-        
-        //        performSegueWithIdentifier("Home", sender: self)
         
     }
     
