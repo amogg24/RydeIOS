@@ -13,7 +13,7 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate  {
     var driverName = "Blake Duncan"
     var startTime = "10:00 p.m."
     var endTime = "1:00 a.m."
-    var queueSize = 0
+    var queueSize = 1
     
     @IBOutlet var startLabel: UILabel!
     @IBOutlet var endLabel: UILabel!
