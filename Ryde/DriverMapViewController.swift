@@ -159,6 +159,8 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
     }
     
     @IBAction func phoneButtonPressed(sender: UIButton) {
+        let url:NSURL? = NSURL(string: "tel://\(4072573512)")
+        UIApplication.sharedApplication().openURL(url!)
         
     }
     /*
