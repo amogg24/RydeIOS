@@ -59,7 +59,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
                 print("home")
                 
                 appDelegate.FBid = FBSDKAccessToken.currentAccessToken().userID
-                                
+                
                 performSegueWithIdentifier("Home", sender: self)
                 
             }

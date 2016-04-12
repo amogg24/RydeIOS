@@ -14,7 +14,7 @@ import FBSDKCoreKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var FBid = ""
-    
+        
     var window: UIWindow?
 
     var baseURL = "jupiter.cs.vt.edu"

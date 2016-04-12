@@ -20,6 +20,9 @@ class GroupDetailsTableViewController: UITableViewController {
     
     var memberList = [NSDictionary]()
     
+    var currentUser : NSDictionary?
+    
+    var admin = false
 
     // Mark - IBActions
     
@@ -27,10 +30,21 @@ class GroupDetailsTableViewController: UITableViewController {
         
     }
     
+    // Mark - IBOutlet
+    
+    @IBOutlet var editGroupButton: UIBarButtonItem!
+    
     // Mark - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.tableFooterView = UIView()
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
         if let dict = groupInfo {
             if let groupTitle = dict["title"] as? String {
@@ -38,15 +52,11 @@ class GroupDetailsTableViewController: UITableViewController {
             }
         }
         
+        self.editGroupButton.enabled = false
+        self.editGroupButton.tintColor = UIColor.clearColor()
+        
         getGroupUsers()
         getGroupAdmins()
-        
-        
-        tableView.tableFooterView = UIView()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     func getGroupUsers() {
@@ -176,6 +186,23 @@ class GroupDetailsTableViewController: UITableViewController {
             if let parseJSON = json {
                 print(parseJSON)
                 self.adminList = parseJSON as [NSDictionary]
+                
+                let userID = String(self.currentUser!["id"]!)
+                
+                for admin in self.adminList {
+                    let adminID = String(admin["id"]!)
+                    
+                    if (userID == adminID) {
+                        self.admin = true
+                        break
+                    }
+                }
+                
+                if (self.admin) {
+                    self.editGroupButton.enabled = true
+                    self.editGroupButton.tintColor = nil
+                }
+                
                 // Okay, the parsedJSON is here, lets store its values into an array
                 dispatch_async(dispatch_get_main_queue(), {
                     self.tableView.reloadData()

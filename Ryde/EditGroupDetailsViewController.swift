@@ -22,6 +22,8 @@ class EditGroupDetailsViewController: UIViewController {
     
     // Mark - IBOutlets
     
+    
+    
     @IBOutlet var groupNameTextField: UITextField!
     
     @IBOutlet var groupDescriptionTextView: UITextView!
