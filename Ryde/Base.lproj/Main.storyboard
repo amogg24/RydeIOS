@@ -1497,7 +1497,6 @@
                     </view>
                     <connections>
                         <outlet property="queueLabel" destination="c8V-hx-sjJ" id="yWo-H0-H7r"/>
-                        <segue destination="FQi-aL-oti" kind="show" identifier="ShowCurrentRide" id="iix-PP-nfl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OVU-m1-qaW" userLabel="First Responder" sceneMemberID="firstResponder"/>

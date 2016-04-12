@@ -17,8 +17,6 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     @IBOutlet var profileImage: UIImageView!
     
     @IBOutlet var profileName: UILabel!
-    @IBOutlet var cellNumerLabel: UILabel!
-    @IBOutlet var carInfoLabel: UILabel!
     
     var carMakeString = ""
     var carModelString = ""
