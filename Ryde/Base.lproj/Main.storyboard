@@ -604,28 +604,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="groupCell" id="sOk-do-TpI" customClass="GroupTableViewCell" customModule="Ryde" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="groupCell" id="sOk-do-TpI">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sOk-do-TpI" id="SLk-kp-uqz">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Group Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Q1-V2-EjE">
-                                            <rect key="frame" x="252" y="11" width="97" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="2Q1-V2-EjE" firstAttribute="centerY" secondItem="SLk-kp-uqz" secondAttribute="centerY" id="rZg-fV-0Eu"/>
-                                        <constraint firstItem="2Q1-V2-EjE" firstAttribute="centerX" secondItem="SLk-kp-uqz" secondAttribute="centerX" id="rsL-eK-qt8"/>
-                                    </constraints>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="groupName" destination="2Q1-V2-EjE" id="Unc-c8-3MB"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -644,6 +629,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="search" id="Wdx-1y-oNj">
                             <connections>
                                 <action selector="searchForGroupPressed:" destination="cZN-HG-WqJ" id="eea-jx-Hqh"/>
+                                <segue destination="6kQ-7q-Y1K" kind="show" identifier="SearchForGroup" id="t4K-5t-ejC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -654,7 +640,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qoO-Wu-fyg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2718" y="-259"/>
+            <point key="canvasLocation" x="2767" y="-264"/>
         </scene>
         <!--Group Name-->
         <scene sceneID="6dO-5s-wFg">
@@ -665,28 +651,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="groupDetailCell" id="TNU-8Q-tbK" customClass="GroupDetailsTableViewCell" customModule="Ryde" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="groupDetailCell" id="TNU-8Q-tbK">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TNU-8Q-tbK" id="mEU-6m-0TZ">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ksm-yV-bbv">
-                                            <rect key="frame" x="8" y="11" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="Ksm-yV-bbv" firstAttribute="centerY" secondItem="mEU-6m-0TZ" secondAttribute="centerY" id="ZsO-Zv-Qev"/>
-                                        <constraint firstItem="Ksm-yV-bbv" firstAttribute="leading" secondItem="mEU-6m-0TZ" secondAttribute="leading" constant="8" id="nbM-aj-n29"/>
-                                    </constraints>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="groupDetailsCellText" destination="Ksm-yV-bbv" id="Hc2-m4-7er"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -695,12 +666,191 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Group Name" id="VaZ-Qu-d1n">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="brx-zJ-NW0"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="brx-zJ-NW0">
+                            <connections>
+                                <segue destination="vcr-NN-QIc" kind="show" identifier="EditGroup" id="eWe-lR-P7S"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKq-nC-3uz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3487" y="-259"/>
+            <point key="canvasLocation" x="3580" y="571"/>
+        </scene>
+        <!--Edit Group-->
+        <scene sceneID="ROZ-na-vIP">
+            <objects>
+                <viewController id="vcr-NN-QIc" customClass="EditGroupDetailsViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ne5-Nx-uoB"/>
+                        <viewControllerLayoutGuide type="bottom" id="EME-61-zPz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ooi-Hg-7zM">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundMain" translatesAutoresizingMaskIntoConstraints="NO" id="wYM-Wr-mpc">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MRm-Il-v9q">
+                                <rect key="frame" x="16" y="128" width="568" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name of group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aby-M5-FQf">
+                                <rect key="frame" x="233" y="96" width="134" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T54-wn-z4w">
+                                <rect key="frame" x="249" y="178" width="103" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="iBq-6l-S98">
+                                <rect key="frame" x="16" y="210" width="568" height="60"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="bkM-6C-xE7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Group Members" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WV3-xM-APh">
+                                <rect key="frame" x="228" y="286" width="145" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cM7-ui-Wsr">
+                                <rect key="frame" x="16" y="512" width="568" height="44"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="zWb-HQ-O2t"/>
+                                </constraints>
+                                <state key="normal" title="Delete Group">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteGroupPressed:" destination="vcr-NN-QIc" eventType="touchUpInside" id="LOu-h8-ZTT"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PKu-fg-CRB">
+                                <rect key="frame" x="16" y="318" width="568" height="178"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="memberCell" id="4CD-yd-HkK">
+                                        <rect key="frame" x="0.0" y="28" width="568" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4CD-yd-HkK" id="xPT-WO-1eg">
+                                            <rect key="frame" x="0.0" y="0.0" width="568" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="vcr-NN-QIc" id="iPh-nB-4Xq"/>
+                                    <outlet property="delegate" destination="vcr-NN-QIc" id="af1-FI-jd7"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="PKu-fg-CRB" firstAttribute="top" secondItem="WV3-xM-APh" secondAttribute="bottom" constant="8" id="1LK-4N-7VT"/>
+                            <constraint firstItem="aby-M5-FQf" firstAttribute="top" secondItem="ne5-Nx-uoB" secondAttribute="bottom" constant="32" id="81t-uN-vw1"/>
+                            <constraint firstItem="iBq-6l-S98" firstAttribute="top" secondItem="T54-wn-z4w" secondAttribute="bottom" constant="8" id="88K-or-EdZ"/>
+                            <constraint firstItem="wYM-Wr-mpc" firstAttribute="leading" secondItem="Ooi-Hg-7zM" secondAttribute="leading" id="Cxl-RV-ghw"/>
+                            <constraint firstItem="T54-wn-z4w" firstAttribute="centerX" secondItem="Ooi-Hg-7zM" secondAttribute="centerX" id="D5f-V2-Qy7"/>
+                            <constraint firstItem="cM7-ui-Wsr" firstAttribute="top" secondItem="PKu-fg-CRB" secondAttribute="bottom" constant="16" id="I7O-dN-f40"/>
+                            <constraint firstItem="MRm-Il-v9q" firstAttribute="top" secondItem="aby-M5-FQf" secondAttribute="bottom" constant="8" id="IdD-64-o00"/>
+                            <constraint firstAttribute="trailing" secondItem="MRm-Il-v9q" secondAttribute="trailing" constant="16" id="MA7-pP-hvg"/>
+                            <constraint firstItem="PKu-fg-CRB" firstAttribute="leading" secondItem="Ooi-Hg-7zM" secondAttribute="leading" constant="16" id="P4t-Hi-ZkU"/>
+                            <constraint firstAttribute="bottom" secondItem="wYM-Wr-mpc" secondAttribute="bottom" id="PK4-eP-RmL"/>
+                            <constraint firstItem="T54-wn-z4w" firstAttribute="top" secondItem="MRm-Il-v9q" secondAttribute="bottom" constant="20" id="VvR-4N-mk4"/>
+                            <constraint firstItem="WV3-xM-APh" firstAttribute="centerX" secondItem="Ooi-Hg-7zM" secondAttribute="centerX" id="XyO-Sn-zvZ"/>
+                            <constraint firstItem="iBq-6l-S98" firstAttribute="leading" secondItem="Ooi-Hg-7zM" secondAttribute="leading" constant="16" id="bEN-eA-vV2"/>
+                            <constraint firstAttribute="trailing" secondItem="iBq-6l-S98" secondAttribute="trailing" constant="16" id="bhM-QL-c7R"/>
+                            <constraint firstAttribute="trailing" secondItem="PKu-fg-CRB" secondAttribute="trailing" constant="16" id="e5A-tp-pas"/>
+                            <constraint firstItem="cM7-ui-Wsr" firstAttribute="leading" secondItem="Ooi-Hg-7zM" secondAttribute="leading" constant="16" id="fZL-ro-DuO"/>
+                            <constraint firstAttribute="trailing" secondItem="cM7-ui-Wsr" secondAttribute="trailing" constant="16" id="i8V-cH-edH"/>
+                            <constraint firstItem="wYM-Wr-mpc" firstAttribute="top" secondItem="Ooi-Hg-7zM" secondAttribute="top" id="jzf-6h-EN4"/>
+                            <constraint firstItem="aby-M5-FQf" firstAttribute="centerX" secondItem="Ooi-Hg-7zM" secondAttribute="centerX" id="kgV-nX-hUZ"/>
+                            <constraint firstItem="WV3-xM-APh" firstAttribute="top" secondItem="iBq-6l-S98" secondAttribute="bottom" constant="16" id="krr-AU-gB9"/>
+                            <constraint firstItem="EME-61-zPz" firstAttribute="top" secondItem="cM7-ui-Wsr" secondAttribute="bottom" id="pPm-gQ-frh"/>
+                            <constraint firstAttribute="trailing" secondItem="wYM-Wr-mpc" secondAttribute="trailing" id="qrk-wA-hhJ"/>
+                            <constraint firstItem="MRm-Il-v9q" firstAttribute="leading" secondItem="Ooi-Hg-7zM" secondAttribute="leading" constant="16" id="xz3-fR-F1y"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Edit Group" id="11D-Qd-ayK">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="9hH-NW-Ezj">
+                            <connections>
+                                <action selector="saveEditedGroupPressed:" destination="vcr-NN-QIc" id="gv4-r6-ASj"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="600"/>
+                    <connections>
+                        <outlet property="groupDescriptionTextView" destination="iBq-6l-S98" id="llg-jQ-II1"/>
+                        <outlet property="groupMemberTableView" destination="PKu-fg-CRB" id="nJR-1Y-Dfc"/>
+                        <outlet property="groupNameTextField" destination="MRm-Il-v9q" id="x0G-E6-cu1"/>
+                        <segue destination="Tl8-Ms-hhQ" kind="unwind" identifier="UnwindToDetails-Save" unwindAction="unwindToGroupDetailsViewController:" id="r1o-vP-PZ2"/>
+                        <segue destination="Tl8-Ms-hhQ" kind="unwind" identifier="UnwindToGroups-Delete" unwindAction="unwindToGroupsViewController:" id="0k4-Ng-CTZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MDI-vk-4GG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Tl8-Ms-hhQ" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="4305" y="571"/>
+        </scene>
+        <!--Search Groups-->
+        <scene sceneID="gdE-Yi-XXt">
+            <objects>
+                <tableViewController id="6kQ-7q-Y1K" customClass="SearchGroupsTableViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ehf-Db-I7i">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" id="KtT-Cm-EiW">
+                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="6kQ-7q-Y1K" id="SGJ-gU-yus"/>
+                            </connections>
+                        </searchBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="groupCell" id="WSZ-n3-Wqt">
+                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WSZ-n3-Wqt" id="C08-Mc-yin">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="6kQ-7q-Y1K" id="4gm-jG-ZtE"/>
+                            <outlet property="delegate" destination="6kQ-7q-Y1K" id="rof-Ba-uSx"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Search Groups" id="Z0L-K2-5IW">
+                        <barButtonItem key="rightBarButtonItem" title="Send Request" id="wCj-F1-END">
+                            <connections>
+                                <action selector="sendRequestToGroups:" destination="6kQ-7q-Y1K" id="ddB-m0-fSe"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="oWy-jj-6Hn" kind="unwind" identifier="UnwindToGroups-Search" unwindAction="unwindToGroupsViewController:" id="qFb-lg-etp"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IsT-96-m4U" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="oWy-jj-6Hn" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="3601" y="-494"/>
         </scene>
         <!--Add Group-->
         <scene sceneID="e1X-et-RyB">
@@ -814,11 +964,13 @@
                         <outlet property="groupMemberSearchBar" destination="paC-am-hWo" id="U9b-eU-nsZ"/>
                         <outlet property="groupMemberTableView" destination="hHD-eQ-Uzl" id="TQX-zk-sI8"/>
                         <outlet property="groupNameTextField" destination="cr2-tz-wIk" id="kbD-Wl-nAT"/>
+                        <segue destination="oNy-fj-1uc" kind="unwind" identifier="UnwindToGroups-Add" unwindAction="unwindToGroupsViewController:" id="9ZR-cP-AdB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UqB-Vs-a7a" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="oNy-fj-1uc" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3487" y="483"/>
+            <point key="canvasLocation" x="4305" y="-165"/>
         </scene>
         <!--Profile-->
         <scene sceneID="Gfx-kn-LqS">

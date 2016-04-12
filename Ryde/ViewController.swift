@@ -50,7 +50,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             checkIfAccountCreated()
             
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            //dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             
             print(self.responseString)
             
@@ -109,7 +109,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             // If Response is TRUE => User exists
             self.responseString = responseString
            
-            dispatch_semaphore_signal(self.semaphore);
+            //dispatch_semaphore_signal(self.semaphore);
             
         }
         

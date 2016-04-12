@@ -29,6 +29,8 @@
 		7EF56ADE1CAAFCEF00FF779A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADC1CAAFCEF00FF779A /* Main.storyboard */; };
 		7EF56AE01CAAFCEF00FF779A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */; };
 		7EF56AE31CAAFCEF00FF779A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */; };
+		C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
 		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
@@ -61,6 +63,8 @@
 		7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EF56AE21CAAFCEF00FF779A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7EF56AE41CAAFCEF00FF779A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchGroupsTableViewController.swift; sourceTree = "<group>"; };
+		C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditGroupDetailsViewController.swift; sourceTree = "<group>"; };
 		C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
 		C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 				C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */,
 				C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */,
 				C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */,
+				C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */,
+				C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */,
 			);
 			name = "Tab - Groups";
 			sourceTree = "<group>";
@@ -286,11 +292,13 @@
 				C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
 				101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */,
+				C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */,
 				5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */,
 				5A7243071CBC716F006AD877 /* EditProfileViewController.swift in Sources */,
 				780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */,
 				101BF3731CBC393900D5332D /* RiderRequestGroupTableViewController.swift in Sources */,
 				C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */,
+				C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */,
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */,

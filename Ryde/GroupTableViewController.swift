@@ -32,6 +32,10 @@ class GroupTableViewController: UITableViewController {
     @IBAction func searchForGroupPressed(sender: UIBarButtonItem) {
     }
     
+    @IBAction func unwindToGroupsViewController(sender: UIStoryboardSegue) {
+        
+    }
+    
     //INFO FROM SERVER THAT I NEED
     /**
     * List of groups the user is a member of
@@ -46,6 +50,8 @@ class GroupTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.tableFooterView = UIView()
 
     }
     
@@ -139,11 +145,11 @@ class GroupTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let row = indexPath.row
-        let cell = tableView.dequeueReusableCellWithIdentifier("groupCell") as! GroupTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("groupCell") as UITableViewCell!
 
         if let groupTitle = groupDictionary[row]["title"] as? String {
             print(groupTitle)
-            cell.groupName.text = groupTitle
+            cell.textLabel!.text = groupTitle
         }
         
         return cell

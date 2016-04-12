@@ -68,29 +68,33 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
             // Sends a POST to the specified URL with the JSON conent
             self.post(JSONGroupObject, url: "http://\(self.baseURL)/Ryde/api/group")
             
-//            let JSONGroupUserObject : [String : AnyObject] = [
-//                
-//                "admin": false,
-//                "groupId": {
-//                    "description": "Coolest kids",
-//                    "directoryPath": "none",
-//                    "id": 1,
-//                    "title": "Cool"
-//                },
-//                "id": 1,
-//                "userId": {
-//                    "carColor": "blue",
-//                    "carMake": "mazda",
-//                    "carModel": "3",
-//                    "driverStatus": false,
-//                    "fbId": "JohnFBID",
-//                    "fbTok": "JohnFBTok",
-//                    "firstName": "John",
-//                    "id": 1,
-//                    "lastName": "Johnson",
-//                    "phoneNumber": "JohnPhone"
-//                }
-//            ]
+            sleep(1)
+            //get the group id
+            let group = "10"
+            
+            //iterate over user ids and add
+            for member in selectedGroupMembers {
+                let groupDict = [ "id" : group ]
+                let memberDict = [ "id" : member ]
+                
+                let JSONGroupUserObject = [
+                    
+                    "admin": "0",
+                    "groupId": groupDict,
+                    "userId": memberDict
+                ]
+                
+                print(JSONGroupUserObject)
+                self.post(JSONGroupUserObject, url: "http://\(self.baseURL)/Ryde/api/groupuser")
+            }
+            
+            let alertController = UIAlertController(title: "Group Successfully Created!", message: "Your group \(title!) has been created!", preferredStyle: UIAlertControllerStyle.Alert)
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
+                self.performSegueWithIdentifier("UnwindToGroups-Add", sender: nil)
+            })
+            alertController.addAction(okAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
+            
         }
     }
     
@@ -98,7 +102,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
     
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
-    func post(params : Dictionary<String, String>, url : String) {
+    func post(params : NSDictionary, url : String) {
         
         
         print("POSTING TO GROUP/GROUPUSER")
@@ -177,6 +181,9 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
         })
         
         selectedGroupMembers.removeAll()
+        
+        groupMemberTableView.tableFooterView = UIView()
+
         
     }
     

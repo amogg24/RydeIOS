@@ -57,7 +57,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         //Adds a navigation button to bring up alert to add TAD
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(RiderRequestGroupTableViewController.joinTAD))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action: Selector(joinTAD()))
         
         self.title = "Select Group"
         super.viewDidLoad()
