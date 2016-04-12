@@ -7,10 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		101BF3731CBC393900D5332D /* RiderRequestGroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3721CBC393900D5332D /* RiderRequestGroupTableViewController.swift */; };
+		101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3741CBC399000D5332D /* RequestRideViewController.swift */; };
+		101BF3771CBC3B1C00D5332D /* RideGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */; };
 		5A295D051CAB6EFF006539F5 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D021CAB6EFF006539F5 /* FBSDKCoreKit.framework */; };
 		5A295D061CAB6EFF006539F5 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D031CAB6EFF006539F5 /* FBSDKLoginKit.framework */; };
 		5A295D071CAB6EFF006539F5 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D041CAB6EFF006539F5 /* FBSDKShareKit.framework */; };
 		5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A295D081CAB72FC006539F5 /* ViewController.swift */; };
+		5A7243071CBC716F006AD877 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7243061CBC716F006AD877 /* EditProfileViewController.swift */; };
 		5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A747B901CB07048009C3B41 /* ProfileViewController.swift */; };
 		5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA355381CADA59D0087B485 /* CreateAccountViewController.swift */; };
 		5AB6F2921CB1AB8500E875D4 /* RiderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6F2911CB1AB8500E875D4 /* RiderViewController.swift */; };
@@ -34,10 +38,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		101BF3721CBC393900D5332D /* RiderRequestGroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderRequestGroupTableViewController.swift; sourceTree = "<group>"; };
+		101BF3741CBC399000D5332D /* RequestRideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestRideViewController.swift; sourceTree = "<group>"; };
+		101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideGroupTableViewCell.swift; sourceTree = "<group>"; };
 		5A295D021CAB6EFF006539F5 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		5A295D031CAB6EFF006539F5 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		5A295D041CAB6EFF006539F5 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		5A295D081CAB72FC006539F5 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5A7243061CBC716F006AD877 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		5A747B901CB07048009C3B41 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5AA355381CADA59D0087B485 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		5AB6F2911CB1AB8500E875D4 /* RiderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +124,7 @@
 		5A747B8F1CB07018009C3B41 /* Tab - Profile */ = {
 			isa = PBXGroup;
 			children = (
+				5A7243061CBC716F006AD877 /* EditProfileViewController.swift */,
 				5A747B901CB07048009C3B41 /* ProfileViewController.swift */,
 			);
 			name = "Tab - Profile";
@@ -141,6 +150,9 @@
 			isa = PBXGroup;
 			children = (
 				5AB6F2911CB1AB8500E875D4 /* RiderViewController.swift */,
+				101BF3721CBC393900D5332D /* RiderRequestGroupTableViewController.swift */,
+				101BF3741CBC399000D5332D /* RequestRideViewController.swift */,
+				101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */,
 			);
 			name = Rider;
 			sourceTree = "<group>";
@@ -276,12 +288,16 @@
 				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
 				C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
+				101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */,
 				5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */,
+				5A7243071CBC716F006AD877 /* EditProfileViewController.swift in Sources */,
 				780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */,
+				101BF3731CBC393900D5332D /* RiderRequestGroupTableViewController.swift in Sources */,
 				C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */,
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */,
+				101BF3771CBC3B1C00D5332D /* RideGroupTableViewCell.swift in Sources */,
 				C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */,
 				C3A968111CBC62E600E3F3F1 /* AddGroupTableViewCell.swift in Sources */,
 				780388A81CB6E5A0004F5A69 /* DriverBaseViewController.swift in Sources */,

@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Home-25.png",
+      "filename" : "Home Filled-30.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "Home Filled-60.png",
       "scale" : "2x"
     },
     {

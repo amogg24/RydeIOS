@@ -22,116 +22,54 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     // Mark - Fields
     
-    var FBid = ""
-    
-    var baseURL = "172.30.161.24:8080"//"jupiter.cs.vt.edu"
+    var baseURL = "172.30.173.109:8080"//"jupiter.cs.vt.edu"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-
+    
         //print permissions, such as public_profile
         print(FBSDKAccessToken.currentAccessToken().permissions)
+        
         
         // Grab data from FB
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
         graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
         
-            // Set Name
-            self.profileName.text = result.valueForKey("name") as? String
-            
-            self.FBid = (result.valueForKey("id") as? String)!
-            let url = NSURL(string: "https://graph.facebook.com/\(self.FBid)/picture?type=large&return_ssl_resources=1")
-            // Set Image
-            self.profileImage.image = UIImage(data: NSData(contentsOfURL: url!)!)
-        })
-        
-        
-        checkIfAccountCreated()
-    }
-    
-    // Mark - Check if this user already has an account. If so, bypass this create account page.
-    
-    func checkIfAccountCreated() {
-        
-        print("CHECK IF ACCOUNT CREATED")
-        
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/user/validateToken/\(self.FBid)")
-        
-        print(url)
-
-        // Creaste URL Request
-        let request = NSMutableURLRequest(URL:url!);
-        
-        // Set request HTTP method to GET. It could be POST as well
-        request.HTTPMethod = "GET"
-        
-        // If needed you could add Authorization header value
-        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
-        
-        // Excute HTTP Request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            // Check for error
-            if error != nil
+            if ((error) != nil)
             {
-                print("error=\(error)")
-                return
+                // Process error
+                print("Error: \(error)")
+            }
+            else
+            {
+                // Set Name
+                self.profileName.text = result.valueForKey("name") as? String
+            
+                let url = NSURL(string: "https://graph.facebook.com/\(FBSDKAccessToken.currentAccessToken().userID)/picture?type=large&return_ssl_resources=1")
+                // Set Image
+                self.profileImage.image = UIImage(data: NSData(contentsOfURL: url!)!)
+                
             }
             
-            // Print out response string
-            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("responseString = \(responseString)")
-            
-            
-            // If Response is TRUE => User exists
-            
-            
-            // Convert server json response to NSDictionary
-//            do {
-//                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
-//                    
-//                    // Print out dictionary
-//                    print(convertedJsonIntoDict)
-//                    
-//                    // Get value by key
-//                    let firstNameValue = convertedJsonIntoDict["userName"] as? String
-//                    print(firstNameValue!)
-//                    
-//                }
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
-//            }
-            
-        }
-        
-        task.resume()
-        
-//        performSegueWithIdentifier("Home", sender: self)
-        
+        })
+      
     }
-    
-    
-
-    
     
     // Mark - Package data to JSON and Submit to backend
 
     
     @IBAction func submitCreateAccount(sender: UIButton) {
         
+        let name = profileName.text
+        
+        let fullNameArr = name?.componentsSeparatedByString(" ")
+        
         let JSONObject: [String : String] = [
             
-            "driverStatus" : "true",
-            "lastName"  : "Fletcher",
-            "firstName" : "Joe",
-            "fbTok"     : self.FBid,
-            "phoneNumber" : "7034857174",
-            "carMake" : "Audi",
-            "carModel" : "R8",
-            "carColor" : "Sexy Black"
+            "lastName"  : fullNameArr![(fullNameArr?.count)!-1],
+            "firstName" : fullNameArr![0],
+            "fbTok"     : FBSDKAccessToken.currentAccessToken().userID,
+            "phoneNumber" : phoneNumber.text!
         ]
         
         // Sends a POST to the specified URL with the JSON conent
@@ -148,11 +86,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
     func post(params : Dictionary<String, String>, url : String) {
-        
-        
-        print("POSTING TO NEW ACCOUNT")
-        
-        print(url)
 
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
@@ -165,7 +98,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
             print(error)
             request.HTTPBody = nil
         }
-        
+    
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
@@ -188,8 +121,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
                 return
             }
             
-           
-
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {

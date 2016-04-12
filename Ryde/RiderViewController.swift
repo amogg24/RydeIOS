@@ -27,6 +27,18 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Previous Address String
     var previousAddress: String!
     
+    //current user Latitude
+    var previousLat: Double = 0
+    
+    //current user Longitude
+    var previousLong: Double = 0
+    
+    // Destination Latitude
+    var destLat: Double = 0
+    
+    // Destination Longitude
+    var destLong: Double = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,12 +94,39 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             let addrList = addressDict["FormattedAddressLines"] as! [String]
             
             let address = addrList[0]
-            print(address)
             self.address.text = address
             self.previousAddress = address
+            self.previousLat = Double(location.coordinate.latitude)
+            self.previousLong = Double(location.coordinate.longitude)
         })
         
     }
 
-
+    @IBAction func RequestRydeClicked(sender: UIButton) {
+        performSegueWithIdentifier("ShowRiderRequestGroup", sender: self)
+    }
+    
+    /*
+     -------------------------
+     MARK: - Prepare For Segue
+     -------------------------
+     */
+    
+    // This method is called by the system whenever you invoke the method performSegueWithIdentifier:sender:
+    // You never call this method. It is invoked by the system.
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        
+        if segue.identifier == "ShowRiderRequestGroup" {
+            
+            // Obtain the object reference of the destination view controller
+            let riderRequestGroupTableViewController: RiderRequestGroupTableViewController = segue.destinationViewController as! RiderRequestGroupTableViewController
+            
+            riderRequestGroupTableViewController.address = self.previousAddress
+            riderRequestGroupTableViewController.startLatitude = self.previousLat
+            riderRequestGroupTableViewController.startLongitude = self.previousLong
+            riderRequestGroupTableViewController.destLat = self.destLat
+            riderRequestGroupTableViewController.destLong = self.destLong
+        }
+    }
 }
