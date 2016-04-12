@@ -16,7 +16,7 @@ import FBSDKCoreKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var FBid = ""
-    
+        
     var window: UIWindow?
     
     var locationManager: CLLocationManager?

@@ -692,6 +692,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="editGroupButton" destination="brx-zJ-NW0" id="01b-aH-c96"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKq-nC-3uz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
