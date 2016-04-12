@@ -55,7 +55,25 @@ class RequestRideViewController: UIViewController {
     
     @IBAction func cancelRideClicked(sender: UIButton) {
         //post a cancellation
-        navigationController?.popToRootViewControllerAnimated(true)
+        cancelRideAlert()
+    }
+    
+    /*
+     Creates an alert box cancel ride is clicked
+     */
+    func cancelRideAlert()
+    {
+        let alert = UIAlertController(title: "Are you sure you want to cancel ride?", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "No", style: .Default, handler: { (action: UIAlertAction!) in
+            //do nothing
+        }))
+        
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     /*
