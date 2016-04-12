@@ -39,6 +39,9 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Destination Longitude
     var destLong: Double = 0
     
+    // Last known current location of the user
+    var lastLocation = CLLocation()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,6 +52,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         self.locationManager.delegate = self
         self.locationManager.requestAlwaysAuthorization()
         self.locationManager.requestLocation()
+        self.locationManager.startUpdatingLocation()
         
         self.mapView.delegate = self
         
@@ -60,6 +64,9 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Mark - Location Delegate Methods
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        lastLocation = locations.last!
+        
         let location: CLLocation = locations.first!
         self.mapView.centerCoordinate = location.coordinate
         let reg = MKCoordinateRegionMakeWithDistance(location.coordinate, 1500, 1500)
@@ -101,7 +108,21 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         })
         
     }
+    
+    
+    // Mark - Re-set to current location
+    
+    @IBAction func resetToCurrentLocation(sender: UIButton) {
 
+        let userLocation = self.lastLocation
+        
+        let reg = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 1500, 1500)
+        self.mapView.setRegion(reg, animated: true)
+    }
+    
+    
+    // Mark - Request Ryde
+    
     @IBAction func RequestRydeClicked(sender: UIButton) {
         performSegueWithIdentifier("ShowRiderRequestGroup", sender: self)
     }
