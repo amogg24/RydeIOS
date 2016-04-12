@@ -31,10 +31,8 @@
 		7EF56AE31CAAFCEF00FF779A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */; };
 		C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
 		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
-		C3F548FB1CB39D5500A46A20 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */; };
 		C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,10 +63,8 @@
 		7EF56AE41CAAFCEF00FF779A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchGroupsTableViewController.swift; sourceTree = "<group>"; };
 		C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditGroupDetailsViewController.swift; sourceTree = "<group>"; };
-		C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
 		C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
-		C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,9 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */,
-				C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */,
 				C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */,
-				C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */,
 				C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */,
 				C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */,
 				C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */,
@@ -285,11 +279,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3F548FB1CB39D5500A46A20 /* GroupTableViewCell.swift in Sources */,
 				5AB6F2921CB1AB8500E875D4 /* RiderViewController.swift in Sources */,
 				C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */,
 				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
-				C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
 				101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */,
 				C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */,
