@@ -22,6 +22,8 @@ class GroupTableViewController: UITableViewController {
     
     var selectedGroupInfo: NSDictionary?
     
+    var currentUser: NSDictionary?
+    
     // Mark - IBActions
     
     @IBAction func addGroupPressed(sender: UIBarButtonItem) {
@@ -159,6 +161,10 @@ class GroupTableViewController: UITableViewController {
         if (segue.identifier == "GroupSelected") {
             let dest = segue.destinationViewController as! GroupDetailsTableViewController
             dest.groupInfo = selectedGroupInfo
+        }
+        else if (segue.identifier == "AddGroup") {
+            let dest = segue.destinationViewController as! AddGroupViewController
+            dest.currentUser = currentUser
         }
     }
 }

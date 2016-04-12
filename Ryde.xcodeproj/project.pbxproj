@@ -27,6 +27,7 @@
 		7EF56AE31CAAFCEF00FF779A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */; };
 		C3A9680B1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
 		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		C3A968111CBC62E600E3F3F1 /* AddGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A968101CBC62E600E3F3F1 /* AddGroupTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
 		C3F548FB1CB39D5500A46A20 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */; };
 		C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */; };
@@ -55,6 +56,7 @@
 		7EF56AE41CAAFCEF00FF779A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
+		C3A968101CBC62E600E3F3F1 /* AddGroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupTableViewCell.swift; sourceTree = "<group>"; };
 		C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
 		C3F548FA1CB39D5500A46A20 /* GroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */,
 				C3A9680A1CBC16D900E3F3F1 /* GroupDetailsTableViewCell.swift */,
 				C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */,
+				C3A968101CBC62E600E3F3F1 /* AddGroupTableViewCell.swift */,
 			);
 			name = "Tab - Groups";
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */,
 				C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */,
+				C3A968111CBC62E600E3F3F1 /* AddGroupTableViewCell.swift in Sources */,
 				780388A81CB6E5A0004F5A69 /* DriverBaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

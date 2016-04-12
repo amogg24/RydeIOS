@@ -16,6 +16,12 @@ class GroupDetailsTableViewController: UITableViewController {
     
     var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
     
+    var driverList = [NSDictionary]()
+    
+    var adminList = [NSDictionary]()
+    
+    var memberList = [NSDictionary]()
+    
     // Mark - Lifecycle Methods
     
     override func viewDidLoad() {
@@ -26,13 +32,15 @@ class GroupDetailsTableViewController: UITableViewController {
                 self.title = groupTitle
             }
         }
+        
+        getGroupUsers()
     }
     
     func getGroupUsers() {
         
         print("RETRIEVE GROUPS USERS")
         
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/user/1")
+        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/user/inGroup/1")
         
         print(url)
         
@@ -79,6 +87,7 @@ class GroupDetailsTableViewController: UITableViewController {
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
+                print(parseJSON)
                 // Okay, the parsedJSON is here, lets store its values into an array
                 dispatch_async(dispatch_get_main_queue(), {
                     self.tableView.reloadData()
@@ -105,6 +114,8 @@ class GroupDetailsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
     }
     
+    // Mark - TableView Delegates
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 4
     }
@@ -115,13 +126,13 @@ class GroupDetailsTableViewController: UITableViewController {
             return 1
         }
         else if (section == 1) {
-            return 1
+            return adminList.count
         }
         else if (section == 2) {
-            return 2
+            return driverList.count
         }
         else if (section == 3) {
-            return 3
+            return memberList.count
         }
         else {
             return 0
