@@ -41,6 +41,7 @@ class GroupDetailsTableViewController: UITableViewController {
         getGroupUsers()
         getGroupAdmins()
         
+        
         tableView.tableFooterView = UIView()
     }
     
