@@ -8,6 +8,8 @@
 
 import UIKit
 
+import CoreLocation
+
 import FBSDKCoreKit
 
 @UIApplicationMain
@@ -16,11 +18,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var FBid = ""
     
     var window: UIWindow?
+    
+    var locationManager: CLLocationManager?
 
     var baseURL = "jupiter.cs.vt.edu"
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        locationManager = CLLocationManager()
+        locationManager?.requestWhenInUseAuthorization()
+
+        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     

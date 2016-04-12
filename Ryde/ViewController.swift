@@ -56,17 +56,12 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             if (self.responseString == "true") {
                 
-                print("home")
-                
                 appDelegate.FBid = FBSDKAccessToken.currentAccessToken().userID
                                 
                 performSegueWithIdentifier("Home", sender: self)
                 
             }
             else {
-                
-                print("create")
-                
                 
                 performSegueWithIdentifier("createAccount", sender: self)
                 
@@ -77,8 +72,6 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     // Mark - Check if this user already has an account. If so, bypass this create account page.
     
     func checkIfAccountCreated() {
-        
-        print("CHECK IF ACCOUNT CREATED")
         
         let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/validateToken/\(FBSDKAccessToken.currentAccessToken().userID)")
         
@@ -105,8 +98,6 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             // Print out response string
             let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding) as! String
-            
-            print(responseString)
             
             // If Response is TRUE => User exists
             self.responseString = responseString
