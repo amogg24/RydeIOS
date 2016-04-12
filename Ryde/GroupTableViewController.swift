@@ -16,8 +16,8 @@ class GroupTableViewController: UITableViewController {
     
     // Mark - Fields
         
-    var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
-    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+
     var groupDictionary = [NSDictionary]()
     
     var selectedGroupInfo: NSDictionary?
@@ -68,7 +68,7 @@ class GroupTableViewController: UITableViewController {
         
         print("RETRIEVE USER GROUPS")
         
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/user/1")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/user/1")
         
         print(url)
         

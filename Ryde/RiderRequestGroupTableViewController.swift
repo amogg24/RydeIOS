@@ -49,16 +49,15 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // join TAD success/failure
     var success: Bool = true
     
-    //var baseURL = "192.168.1.107:8080"
-    var baseURL = "jupiter.cs.vt.edu"
-    
     var groupDictionary = [NSDictionary]()
     
     var selectedGroupInfo: NSDictionary?
     
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
     override func viewDidLoad() {
         //Adds a navigation button to bring up alert to add TAD
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(RiderRequestGroupTableViewController.joinTAD))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action: Selector(joinTAD()))
         
         self.title = "Select Group"
         super.viewDidLoad()
@@ -83,7 +82,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     func getUserTimeslots() {
         
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/user/1")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/user/1")
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
@@ -206,8 +205,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
          "endLon"   : 0
          ]
          */
-        //let postUrl = "http://\(self.baseURL)/Ryde/api/ride/request/" + self.FBid
-        let postUrl = "http://\(self.baseURL)/Ryde/api/ride/request/JohnFBTok"
+        //let postUrl = "http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/" + self.FBid
+        let postUrl = "http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/JohnFBTok"
         //self.postRequest(JSONObject, url: postUrl)
         
         performSegueWithIdentifier("ShowRequestRide", sender: nil)
@@ -253,7 +252,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
             "TADPasscode" : passcode
         ]
         
-        self.postTAD(JSONObject, url: "http://\(self.baseURL)/Ryde/api/timeslot/passcode")
+        self.postTAD(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/passcode")
     }
     
     func passcodeError()

@@ -10,6 +10,7 @@
 		101BF3731CBC393900D5332D /* RiderRequestGroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3721CBC393900D5332D /* RiderRequestGroupTableViewController.swift */; };
 		101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3741CBC399000D5332D /* RequestRideViewController.swift */; };
 		101BF3771CBC3B1C00D5332D /* RideGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */; };
+		101BF37D1CBD450200D5332D /* CurrentRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF37C1CBD450200D5332D /* CurrentRideViewController.swift */; };
 		5A295D051CAB6EFF006539F5 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D021CAB6EFF006539F5 /* FBSDKCoreKit.framework */; };
 		5A295D061CAB6EFF006539F5 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D031CAB6EFF006539F5 /* FBSDKLoginKit.framework */; };
 		5A295D071CAB6EFF006539F5 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D041CAB6EFF006539F5 /* FBSDKShareKit.framework */; };
@@ -29,9 +30,9 @@
 		7EF56ADE1CAAFCEF00FF779A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADC1CAAFCEF00FF779A /* Main.storyboard */; };
 		7EF56AE01CAAFCEF00FF779A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */; };
 		7EF56AE31CAAFCEF00FF779A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */; };
-		C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */; };
+		C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */; };
+		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
 		C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */; };
 /* End PBXBuildFile section */
@@ -40,6 +41,7 @@
 		101BF3721CBC393900D5332D /* RiderRequestGroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderRequestGroupTableViewController.swift; sourceTree = "<group>"; };
 		101BF3741CBC399000D5332D /* RequestRideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestRideViewController.swift; sourceTree = "<group>"; };
 		101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideGroupTableViewCell.swift; sourceTree = "<group>"; };
+		101BF37C1CBD450200D5332D /* CurrentRideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentRideViewController.swift; sourceTree = "<group>"; };
 		5A295D021CAB6EFF006539F5 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		5A295D031CAB6EFF006539F5 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		5A295D041CAB6EFF006539F5 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				101BF3721CBC393900D5332D /* RiderRequestGroupTableViewController.swift */,
 				101BF3741CBC399000D5332D /* RequestRideViewController.swift */,
 				101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */,
+				101BF37C1CBD450200D5332D /* CurrentRideViewController.swift */,
 			);
 			name = Rider;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */,
 				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
+				101BF37D1CBD450200D5332D /* CurrentRideViewController.swift in Sources */,
 				101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */,
 				C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */,
 				5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */,

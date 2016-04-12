@@ -85,7 +85,7 @@ class DriverBaseViewController: UIViewController, SlideMenuDelegate {
         return defaultMenuImage;
     }
     
-    func onSlideMenuButtonPressed(sender : UIButton){
+    func onSlideMenuButtonPressed(sender : UIBarButtonItem){
         if (sender.tag == 10)
         {
             // To Hide Menu If it already there

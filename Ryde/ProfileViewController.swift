@@ -27,8 +27,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     
     var groupDictionary = [NSDictionary]()
     
-    var baseURL = "172.31.239.239:8080"//"jupiter.cs.vt.edu"
-    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var profileTableView: UITableView!
     var nameLabels = ["Cell Number"]
@@ -110,7 +109,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         
         print("RETRIEVE USER DATA")
         
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/user/findByToken/\(token)")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findByToken/\(token)")
         print(url)
         
         // Creaste URL Request

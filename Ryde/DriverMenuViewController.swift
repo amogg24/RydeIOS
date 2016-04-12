@@ -32,7 +32,7 @@ class DriverMenuViewController: UIViewController, UITableViewDataSource, UITable
     /**
      *  Menu button which was tapped to display the menu
      */
-    var btnMenu : UIButton!
+    var btnMenu : UIBarButtonItem!
     
     /**
      *  Delegate of the MenuVC

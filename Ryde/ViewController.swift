@@ -15,12 +15,12 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet var label: UILabel!
     
     @IBOutlet var loginButton: FBSDKLoginButton!
-    
-    var baseURL = "172.30.173.109:8080"//"jupiter.cs.vt.edu"
 
     var responseString = ""
     
     let semaphore = dispatch_semaphore_create(0);
+    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     override func viewDidLoad() {
         
@@ -50,7 +50,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             checkIfAccountCreated()
             
-            //dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             
             print(self.responseString)
             
@@ -58,6 +58,8 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
                 print("home")
                 
+                appDelegate.FBid = FBSDKAccessToken.currentAccessToken().userID
+                                
                 performSegueWithIdentifier("Home", sender: self)
                 
             }
@@ -78,7 +80,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         print("CHECK IF ACCOUNT CREATED")
         
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/user/validateToken/\(FBSDKAccessToken.currentAccessToken().userID)")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/validateToken/\(FBSDKAccessToken.currentAccessToken().userID)")
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
@@ -109,7 +111,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             // If Response is TRUE => User exists
             self.responseString = responseString
            
-            //dispatch_semaphore_signal(self.semaphore);
+            dispatch_semaphore_signal(self.semaphore);
             
         }
         

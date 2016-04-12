@@ -22,7 +22,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     // Mark - Fields
     
-    var baseURL = "172.30.173.109:8080"//"jupiter.cs.vt.edu"
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +73,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
         ]
         
         // Sends a POST to the specified URL with the JSON conent
-        self.post(JSONObject, url: "http://\(self.baseURL)/Ryde/api/user")
+        self.post(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user")
         
         
         performSegueWithIdentifier("Home", sender: self)

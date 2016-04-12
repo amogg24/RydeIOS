@@ -12,7 +12,7 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
 
     // Mark - fields
     
-    var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var currentUser: NSDictionary?
     
@@ -86,7 +86,7 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
             
             let searchTextNoSpaces = searchText.stringByReplacingOccurrencesOfString(" ", withString: "+")
             
-            let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/title/\(searchTextNoSpaces)")
+            let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/title/\(searchTextNoSpaces)")
             
             print(url)
             
