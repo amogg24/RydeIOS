@@ -15,7 +15,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
     
     // Mark - Fields
     
-    var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     var currentUser: NSDictionary?
     
@@ -66,7 +66,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
             ]
             
             // Sends a POST to the specified URL with the JSON conent
-            self.post(JSONGroupObject, url: "http://\(self.baseURL)/Ryde/api/group")
+            self.post(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group")
             
             sleep(1)
             //get the group id
@@ -85,7 +85,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
                 ]
                 
                 print(JSONGroupUserObject)
-                self.post(JSONGroupUserObject, url: "http://\(self.baseURL)/Ryde/api/groupuser")
+                self.post(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
             }
             
             let alertController = UIAlertController(title: "Group Successfully Created!", message: "Your group \(title!) has been created!", preferredStyle: UIAlertControllerStyle.Alert)
@@ -221,7 +221,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
             
             let searchTextNoSpaces = searchText.stringByReplacingOccurrencesOfString(" ", withString: "+")
             
-            let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/user/name/\(searchTextNoSpaces)")
+            let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/name/\(searchTextNoSpaces)")
             
             print(url)
             

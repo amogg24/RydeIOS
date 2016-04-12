@@ -14,7 +14,7 @@ class EditGroupDetailsViewController: UIViewController {
     
     var groupInfo: NSDictionary?
     
-    var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var adminList = [NSDictionary]()
     
@@ -49,17 +49,18 @@ class EditGroupDetailsViewController: UIViewController {
             
             let description = groupDescriptionTextView.text
             let title = groupNameTextField.text
+            let id = String(groupInfo!["id"]!)
             
             let JSONGroupObject: [String : String] = [
                 
                 "description":  description!,
                 "directoryPath": "none",
+                "id" : id,
                 "title": title!
             ]
             
-            let id = groupInfo!["id"]!
             // Sends a POST to the specified URL with the JSON conent
-            self.put(JSONGroupObject, url: "http://\(self.baseURL)/Ryde/api/group/\(id)")
+            self.put(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group/\(id)")
             
             //get the group id
             
@@ -77,7 +78,7 @@ class EditGroupDetailsViewController: UIViewController {
         let alertController = UIAlertController(title: "Are you sure?", message: "Once a group is deleted, it cannot be recovered", preferredStyle: UIAlertControllerStyle.Alert)
         let okAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
             let id = self.groupInfo!["id"]!
-            self.deleteGroup("http://\(self.baseURL)/Ryde/api/group/\(id)")
+            self.deleteGroup("http://\(self.appDelegate.baseURL)/Ryde/api/group/\(id)")
             self.performSegueWithIdentifier("UnwindToGroups-Delete", sender: nil)
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in

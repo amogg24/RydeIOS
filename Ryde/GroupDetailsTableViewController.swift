@@ -14,8 +14,8 @@ class GroupDetailsTableViewController: UITableViewController {
 
     var groupInfo: NSDictionary?
     
-    var baseURL = "jupiter.cs.vt.edu"//"jupiter.cs.vt.edu"
-        
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+
     var adminList = [NSDictionary]()
     
     var memberList = [NSDictionary]()
@@ -54,7 +54,7 @@ class GroupDetailsTableViewController: UITableViewController {
         print("RETRIEVE GROUPS USERS")
         
         let id = groupInfo!["id"]!
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/user/inGroup/\(id)")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/inGroup/\(id)")
         
         print(url)
         
@@ -127,7 +127,7 @@ class GroupDetailsTableViewController: UITableViewController {
         print("RETRIEVE GROUPS ADMINS")
         
         let id = groupInfo!["id"]!
-        let url = NSURL(string: "http://\(self.baseURL)/Ryde/api/group/admin/\(id)")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/admin/\(id)")
         
         print(url)
         
