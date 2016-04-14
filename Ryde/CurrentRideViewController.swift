@@ -40,6 +40,7 @@ class CurrentRideViewController: UIViewController {
         let alert = UIAlertController(title: "Are you sure you want to cancel ride?", message: "", preferredStyle: UIAlertControllerStyle.Alert)
         
         alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+            self.tabBarController?.tabBar.hidden = false
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
         

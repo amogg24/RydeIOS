@@ -143,6 +143,8 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             // Obtain the object reference of the destination view controller
             let riderRequestGroupTableViewController: RiderRequestGroupTableViewController = segue.destinationViewController as! RiderRequestGroupTableViewController
             
+            self.tabBarController?.tabBar.hidden = true
+            
             riderRequestGroupTableViewController.address = self.previousAddress
             riderRequestGroupTableViewController.startLatitude = self.previousLat
             riderRequestGroupTableViewController.startLongitude = self.previousLong

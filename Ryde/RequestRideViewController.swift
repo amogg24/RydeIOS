@@ -28,7 +28,7 @@ class RequestRideViewController: UIViewController {
         
         self.queueLabel.text = "2"
         
-        let seconds = 4.0
+        let seconds = 2.0
         let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
         let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         
@@ -38,7 +38,7 @@ class RequestRideViewController: UIViewController {
             
         })
         
-        let seconds2 = 15.0
+        let seconds2 = 4.0
         let delay2 = seconds2 * Double(NSEC_PER_SEC)  // nanoseconds per seconds
         let dispatchTime2 = dispatch_time(DISPATCH_TIME_NOW, Int64(delay2))
         
@@ -75,6 +75,8 @@ class RequestRideViewController: UIViewController {
         let alert = UIAlertController(title: "Are you sure you want to cancel ride?", message: "", preferredStyle: UIAlertControllerStyle.Alert)
         
         alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+            self.tabBarController?.tabBar.hidden = false
+            
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
         
