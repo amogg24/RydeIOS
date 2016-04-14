@@ -51,7 +51,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.delegate = self
         self.locationManager.requestAlwaysAuthorization()
-        self.locationManager.requestLocation()
+//        self.locationManager.requestLocation()
         self.locationManager.startUpdatingLocation()
         
         self.mapView.delegate = self
@@ -64,6 +64,10 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Mark - Location Delegate Methods
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        print("location updated")
+        
+        self.locationManager.stopUpdatingLocation()
         
         lastLocation = locations.last!
         
