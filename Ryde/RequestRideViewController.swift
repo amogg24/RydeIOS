@@ -23,6 +23,9 @@ class RequestRideViewController: UIViewController {
         
         super.viewDidLoad()
         
+        // schedules task for every n second
+        var updateTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
+        
         self.queueLabel.text = "2"
         
         let seconds = 4.0
@@ -41,11 +44,17 @@ class RequestRideViewController: UIViewController {
         
         dispatch_after(dispatchTime2, dispatch_get_main_queue(), {
             
+            updateTimer.invalidate()     //stops updateTimer (put in the post request when queue = 0 later)
+            
             self.queueLabel.text = "0"
             self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
             
         })
         // Do any additional setup after loading the view.
+    }
+    
+    func updateQueue(){
+        print("function called")
     }
     
     override func didReceiveMemoryWarning() {
