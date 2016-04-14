@@ -25,6 +25,8 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tabBarController?.tabBar.hidden = true
+        
         //hide back button and add slide menu button
         self.navigationItem.setHidesBackButton(true, animated:true);
         
@@ -78,7 +80,10 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate  {
             
             // Create a UIAlertAction object and add it to the alert controller
             alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action: UIAlertAction!) in
+                
+                self.tabBarController?.tabBar.hidden = false;
                 self.navigationController?.popViewControllerAnimated(true)
+                
             }))
             alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
             
