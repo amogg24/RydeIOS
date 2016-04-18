@@ -67,7 +67,11 @@ class RiderRequestGroupTableViewController: UITableViewController {
             self.FBid = (result.valueForKey("id") as? String)!
         })
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(RiderRequestGroupTableViewController.joinTAD))
+        self.navigationItem.hidesBackButton = true
+        let newBackButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Bordered, target: self, action: "back:")
+        self.navigationItem.leftBarButtonItem = newBackButton;
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(self.joinTAD))
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -77,6 +81,11 @@ class RiderRequestGroupTableViewController: UITableViewController {
          get TAD list from server
          
          */
+    }
+    
+    func back(sender: UIBarButtonItem) {
+        self.tabBarController?.tabBar.hidden = false;
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     // Mark - Retrieve the users groups from the server

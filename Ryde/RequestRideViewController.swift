@@ -23,9 +23,12 @@ class RequestRideViewController: UIViewController {
         
         super.viewDidLoad()
         
+        // schedules task for every n second
+        var updateTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
+        
         self.queueLabel.text = "2"
         
-        let seconds = 4.0
+        let seconds = 2.0
         let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
         let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         
@@ -35,17 +38,23 @@ class RequestRideViewController: UIViewController {
             
         })
         
-        let seconds2 = 15.0
+        let seconds2 = 4.0
         let delay2 = seconds2 * Double(NSEC_PER_SEC)  // nanoseconds per seconds
         let dispatchTime2 = dispatch_time(DISPATCH_TIME_NOW, Int64(delay2))
         
         dispatch_after(dispatchTime2, dispatch_get_main_queue(), {
+            
+            updateTimer.invalidate()     //stops updateTimer (put in the post request when queue = 0 later)
             
             self.queueLabel.text = "0"
             self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
             
         })
         // Do any additional setup after loading the view.
+    }
+    
+    func updateQueue(){
+        print("function called")
     }
     
     override func didReceiveMemoryWarning() {
@@ -66,6 +75,8 @@ class RequestRideViewController: UIViewController {
         let alert = UIAlertController(title: "Are you sure you want to cancel ride?", message: "", preferredStyle: UIAlertControllerStyle.Alert)
         
         alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+            self.tabBarController?.tabBar.hidden = false
+            
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
         

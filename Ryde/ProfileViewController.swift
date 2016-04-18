@@ -21,15 +21,20 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     var carMakeString = ""
     var carModelString = ""
     var carColorString = ""
+    var carInfo = ""
     var phoneNumber = ""
+    var email = ""
     
     var groupDictionary = [NSDictionary]()
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var profileTableView: UITableView!
-    var nameLabels = ["Cell Number"]
-    var infoLabel = [String]()
+    var nameLabels = ["Cell Number", "Car Info"]
+    var infoLabel = ["Cell Number Data", "Car Model Data"]
+    var dataObjectPassed = ["Cell Number"]
+    var id = Int()
+    var flag = 0
     
     let semaphore = dispatch_semaphore_create(0);
     
@@ -102,7 +107,17 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         //Get the User data
         getUserData(FBSDKAccessToken.currentAccessToken().userID)
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        cell.infoLabel.text! = phoneNumber
+        
+//        if (flag == 0)
+//        {
+//            //print("info: \(infoLabel[rowNumber])")
+//            cell.typeLabel.hidden = true
+//        }
+//        else{
+         //   print("info:\(infoLabel[rowNumber])test")
+            cell.infoLabel.text! = infoLabel[rowNumber]
+       // }
+        
         return cell
     }
     
@@ -149,18 +164,22 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
-                // Need to add check if these exists in user
-//                self.carMakeString = (parseJSON["carMake"] as? String)!
-//                self.carModelString = (parseJSON["carModel"] as? String)!
-//                self.carColorString = (parseJSON["carColor"] as? String)!
+                self.flag = 0
+                //Check if the user has car data
+                if parseJSON["carMake"] != nil {
+                    self.carMakeString = (parseJSON["carMake"] as? String)!
+                    self.carModelString = (parseJSON["carModel"] as? String)!
+                    self.carColorString = (parseJSON["carColor"] as? String)!
+                    self.carInfo = "\(self.carMakeString) \(self.carModelString) \(self.carColorString)"
+                    self.infoLabel[1] = self.carInfo
+                    self.flag == 1
+
+                }
                 
-//                infoLabel = ["\(self.)"]
-//                self.carInfoLabel.text = "\(self.carMakeString) \(self.carModelString) \(self.carColorString)"
-                
-                //Found data, signal semaphore
-                self.phoneNumber  = (parseJSON["phoneNumber"] as? String)!
+                //This data should always be found, signal semaphore once found
+                self.infoLabel[0] = (parseJSON["phoneNumber"] as? String)!
+                self.id = (parseJSON["id"] as? Int)!
                 dispatch_semaphore_signal(self.semaphore);
-                
                 
             }
             else {
@@ -195,7 +214,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             let editProfileViewController: EditProfileViewController = segue.destinationViewController as! EditProfileViewController
             
             // Under the Delegation Design Pattern, set the addCityViewController's delegate to be self
-            //            editRecruitViewController.dataObjectPassed = dataObjectPassed
+            editProfileViewController.cellNumber = infoLabel[0]
+            editProfileViewController.id = id
         }
     }
     // MARK: - Facebook Login

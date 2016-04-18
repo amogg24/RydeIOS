@@ -10,7 +10,11 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+protocol HandleMapSearch {
+    func dropPinZoomIn(placemark:MKPlacemark)
+}
+
+class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, HandleMapSearch {
 
     // The label showcasing the current address of the User
     @IBOutlet var address: UILabel!
@@ -42,6 +46,15 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Last known current location of the user
     var lastLocation = CLLocation()
     
+    // View for pick up/ drop off adreesses
+    @IBOutlet var addressView: UIView!
+    
+    // Destination pin
+    var selectedPin:MKPlacemark? = nil
+    
+    // Search Controller
+    var resultSearchController:UISearchController? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,19 +64,69 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.delegate = self
         self.locationManager.requestAlwaysAuthorization()
-        self.locationManager.requestLocation()
+//        self.locationManager.requestLocation()
         self.locationManager.startUpdatingLocation()
-        
+        self.mapView.showsUserLocation = true
         self.mapView.delegate = self
         
         geoCoder = CLGeocoder()
         
+        
+        let locationSearchTable = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! LocationSearchTable
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable
+        let searchBar = resultSearchController!.searchBar
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Enter Destination"
+        
+       
+        addressView.addSubview((resultSearchController?.searchBar)!)
+
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        resultSearchController?.dimsBackgroundDuringPresentation = true
+        definesPresentationContext = true
+        locationSearchTable.mapView = mapView
+        
+        locationSearchTable.handleMapSearchDelegate = self
+        
+    }
+    
+    // Mark - Destination Pin Drop
+    
+    func dropPinZoomIn(placemark:MKPlacemark){
+        // cache the pin
+        selectedPin = placemark
+        // clear existing pins
+        mapView.removeAnnotations(mapView.annotations)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = placemark.coordinate
+        annotation.title = placemark.name
+        if let city = placemark.locality,
+            let state = placemark.administrativeArea {
+            annotation.subtitle = "\(city) \(state)"
+        }
+        mapView.addAnnotation(annotation)
+        
+        self.destLat = Double(placemark.coordinate.latitude)
+        self.destLong = Double(placemark.coordinate.longitude)
+        
+        
+        
+//        The following code drops a pin where the user searched but we dont want that. Just in case im leaving it here.
+        
+//        let span = MKCoordinateSpanMake(0.05, 0.05)
+//        let region = MKCoordinateRegionMake(placemark.coordinate, span)
+//        mapView.setRegion(region, animated: true)
     }
 
     
     // Mark - Location Delegate Methods
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        print("location updated")
+        
+        self.locationManager.stopUpdatingLocation()
         
         lastLocation = locations.last!
         
@@ -127,6 +190,24 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         performSegueWithIdentifier("ShowRiderRequestGroup", sender: self)
     }
     
+    // Mark - Get Rid of Keyboard when Done Editing
+    
+    /**
+     * Called when 'return' key pressed. return NO to ignore.
+     */
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
+    /**
+     * Called when the user click on the view (outside the UITextField).
+     */
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     /*
      -------------------------
      MARK: - Prepare For Segue
@@ -143,11 +224,16 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             // Obtain the object reference of the destination view controller
             let riderRequestGroupTableViewController: RiderRequestGroupTableViewController = segue.destinationViewController as! RiderRequestGroupTableViewController
             
+            self.tabBarController?.tabBar.hidden = true
+            
             riderRequestGroupTableViewController.address = self.previousAddress
             riderRequestGroupTableViewController.startLatitude = self.previousLat
             riderRequestGroupTableViewController.startLongitude = self.previousLong
             riderRequestGroupTableViewController.destLat = self.destLat
             riderRequestGroupTableViewController.destLong = self.destLong
+            
+            print("Ride Requested: Destination: \(self.previousLat) , \(self.previousLong)\t\(self.destLat) , \(self.destLong)")
         }
     }
+    
 }

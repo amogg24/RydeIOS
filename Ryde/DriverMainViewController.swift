@@ -13,7 +13,7 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate  {
     var driverName = "Blake Duncan"
     var startTime = "10:00 p.m."
     var endTime = "1:00 a.m."
-    var queueSize = 0
+    var queueSize = 1
     
     @IBOutlet var startLabel: UILabel!
     @IBOutlet var endLabel: UILabel!
@@ -24,6 +24,8 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tabBarController?.tabBar.hidden = true
         
         //hide back button and add slide menu button
         self.navigationItem.setHidesBackButton(true, animated:true);
@@ -78,7 +80,10 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate  {
             
             // Create a UIAlertAction object and add it to the alert controller
             alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action: UIAlertAction!) in
+                
+                self.tabBarController?.tabBar.hidden = false;
                 self.navigationController?.popViewControllerAnimated(true)
+                
             }))
             alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
             
