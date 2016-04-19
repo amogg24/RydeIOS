@@ -174,6 +174,12 @@ class RiderRequestGroupTableViewController: UITableViewController {
         if let groupTitle = groupDictionary[row]["groupName"] as? String {
             cell.rowName.text = groupTitle
         }
+        if let numDriver = groupDictionary[row]["numDrivers"] as? Int {
+            cell.numDriverLabel.text = "Number of Drivers: " + (String)(numDriver)
+        }
+        if let numQueue = groupDictionary[row]["queueSize"] as? Int {
+            cell.numQueueLabel.text = "People in Queue: " + (String)(numQueue)
+        }
         
         return cell
     }
