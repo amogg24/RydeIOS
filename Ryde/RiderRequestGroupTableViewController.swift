@@ -84,8 +84,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // Mark - Retrieve the user's active groups from the server
     
     func getUserTimeslots() {
-        let url = NSURL(string: (String)("http://172.30.42.7:8080/Ryde/api/timeslotuser/gettads/" + "JohnFBTok"))
-        //let url = NSURL(string: (String)("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/gettads/" + FBid))
+        //let url = NSURL(string: (String)("http://172.30.42.7:8080/Ryde/api/timeslotuser/gettads/" + "JohnFBTok"))
+        let url = NSURL(string: (String)("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/gettads/" + FBid))
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
@@ -200,8 +200,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
             "endLon"   : self.destLong
         ]
         
-        //let postUrl = "http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/JamesFBTok"
-        let postUrl = ("http://172.30.42.7:8080/Ryde/api/ride/request/JamesFBTok/" + (String)(self.selectedTID))
+        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/" + self.FBid + "/" + (String)(self.selectedTID))
+        //let postUrl = ("http://172.30.42.7:8080/Ryde/api/ride/request/JohnFBTok/" + (String)(self.selectedTID))
         self.postRequest(JSONObject, url: postUrl)
         
         performSegueWithIdentifier("ShowRequestRide", sender: nil)
@@ -245,8 +245,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
             "TADPasscode" : passcode
         ]
         
-        //self.postTAD(JSONObject, url: ("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/jointad/" + FBid + "/" + passcode))
-        self.postTAD(JSONObject, url: ("http://172.30.42.7:8080/Ryde/api/timeslotuser/jointad/" + "JohnFBTok" + "/" + passcode))
+        self.postTAD(JSONObject, url: ("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/jointad/" + FBid + "/" + passcode))
+        //self.postTAD(JSONObject, url: ("http://172.30.42.7:8080/Ryde/api/timeslotuser/jointad/" + "JohnFBTok" + "/" + passcode))
     }
     
     func passcodeError()
