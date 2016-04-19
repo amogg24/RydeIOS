@@ -60,6 +60,20 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     @IBOutlet var destinationButton: UIButton!
     
+    // Dictionary to store the drivers timeslot
+    var timeslotDictionary = [NSDictionary]()
+    
+    // Store the timeslot id once retrieved
+    var timeslotID = "1"
+    
+    var fbToken = ""
+    
+    var driverStatus: Bool!
+    
+    let semaphore = dispatch_semaphore_create(0);
+    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -75,6 +89,8 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         self.mapView.delegate = self
         
         geoCoder = CLGeocoder()
+        
+        fbToken = self.appDelegate.FBid
         
     }
     
@@ -237,6 +253,100 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         self.view.endEditing(true)
     }
     
+    // Mark - Retrieve the driver's timeslot from the server
+    
+    func getDriverTimeslot() {
+        
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/driver/JakeFBTok")
+        
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url!);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Execute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            // Check for error
+            if error != nil
+            {
+                print("error=\(error)")
+                return
+            }
+            
+            // Print out response string
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            //print("responseString = \(responseString!)")
+            
+            
+            let json: [NSDictionary]?
+            
+            do {
+                
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr!)'")
+                // return or throw?
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                // Okay, the parsedJSON is here, lets store its values into an array
+                self.timeslotDictionary = parseJSON as [NSDictionary]
+                
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr!)")
+            }
+            dispatch_semaphore_signal(self.semaphore);
+            
+        })
+        
+        task.resume()
+        
+        //        performSegueWithIdentifier("Home", sender: self)
+        
+    }
+    
+
+    // First get user datat to check if driver status is true. If it is
+    // then get timeslot data and queue data before performing segue
+    // to driver view
+    @IBAction func driverLoginBtnPressed(sender: UIBarButtonItem) {
+        self.getDriverTimeslot()
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        print(timeslotDictionary)
+        
+        
+        if (timeslotDictionary.isEmpty == false){         // login successful, user is currently a driver
+            self.performSegueWithIdentifier("DriverLogin", sender: self)
+            
+            
+        } else {                                //login failed, user is not currently a driver
+            let alertController = UIAlertController(title: "Driver Login Failed",
+                                                    message: "You are not currently registered as a driver for a group.",
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
+            
+            // Present the alert controller by calling the presentViewController method
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        
+    }
+    
     /*
      -------------------------
      MARK: - Prepare For Segue
@@ -262,6 +372,22 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             riderRequestGroupTableViewController.destLong = self.destLong
             
             print("Ride Requested: Destination: \(self.previousLat) , \(self.previousLong)\t\(self.destLat) , \(self.destLong)")
+        } else if segue.identifier == "DriverLogin" {
+            
+            // Obtain the object reference of the destination view controller
+            let driverMainViewController: DriverMainViewController = segue.destinationViewController as! DriverMainViewController
+            //TODO: store timeslot id
+            
+            
+            let startTime = timeslotDictionary[0]["startTime"] as! String
+            let endTime = timeslotDictionary[0]["endTime"] as! String
+            let tsID = timeslotDictionary[0]["id"] as! Int
+            
+            driverMainViewController.startTime = startTime
+            driverMainViewController.endTime = endTime
+            driverMainViewController.timeSlotID = tsID
+            
+            timeslotDictionary.removeAll() //Clear dictionary so it must be reloaded if the user logs out
         }
     }
     

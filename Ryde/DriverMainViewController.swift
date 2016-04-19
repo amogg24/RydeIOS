@@ -48,10 +48,10 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
         startLabel.text = "Start Time: " + startTime
         endLabel.text = "End Time: " + endTime
         queueLabel.text = "Queue Size: " + String(queueSize)
-        getUserData("JohnFBTok")
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        //getUserData("JohnFBTok")
+        //dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         let status = true
-        
+        id = 1
         
         //Update the driver status to True (logged in)
         let JSONObject: [String : AnyObject] = [
@@ -294,13 +294,13 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
                 
                 //This data should always be found, signal semaphore once found
                 self.id = (parseJSON["id"] as? Int)!
-                dispatch_semaphore_signal(self.semaphore);
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 print("Error could not parse JSON: \(jsonStr)")
             }
+            dispatch_semaphore_signal(self.semaphore);
         })
         
         task.resume()
