@@ -92,6 +92,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     
     // Mark - Destination Pin Drop
+    // Link: http://www.thorntech.com/2016/01/how-to-search-for-location-using-apples-mapkit/
     
     func dropPinZoomIn(placemark:MKPlacemark, destination:String){
         
