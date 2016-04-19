@@ -56,6 +56,7 @@ class DriverMenuViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func updateArrayMenuOptions(){
+        arrayMenuOptions.removeAll()
         arrayMenuOptions.append(["title":"Log Off", "icon":"HomeIcon"])
         arrayMenuOptions.append(["title":"Car Info", "icon":"CameraIcon"])
         
