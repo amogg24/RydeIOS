@@ -11,6 +11,8 @@
 		101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3741CBC399000D5332D /* RequestRideViewController.swift */; };
 		101BF3771CBC3B1C00D5332D /* RideGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */; };
 		101BF37D1CBD450200D5332D /* CurrentRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BF37C1CBD450200D5332D /* CurrentRideViewController.swift */; };
+		29E816A31CC5CCC2008BF982 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E816A21CC5CCC2008BF982 /* UIView.swift */; };
+		5A1362AE1CC50C380003DB2D /* LocationSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1362AD1CC50C380003DB2D /* LocationSearchTableViewController.swift */; };
 		5A295D051CAB6EFF006539F5 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D021CAB6EFF006539F5 /* FBSDKCoreKit.framework */; };
 		5A295D061CAB6EFF006539F5 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D031CAB6EFF006539F5 /* FBSDKLoginKit.framework */; };
 		5A295D071CAB6EFF006539F5 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A295D041CAB6EFF006539F5 /* FBSDKShareKit.framework */; };
@@ -31,6 +33,7 @@
 		7EF56AE01CAAFCEF00FF779A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */; };
 		7EF56AE31CAAFCEF00FF779A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */; };
 		C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */; };
+		C38581D11CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38581D01CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift */; };
 		C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */; };
 		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
@@ -43,6 +46,8 @@
 		101BF3741CBC399000D5332D /* RequestRideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestRideViewController.swift; sourceTree = "<group>"; };
 		101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RideGroupTableViewCell.swift; sourceTree = "<group>"; };
 		101BF37C1CBD450200D5332D /* CurrentRideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentRideViewController.swift; sourceTree = "<group>"; };
+		29E816A21CC5CCC2008BF982 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		5A1362AD1CC50C380003DB2D /* LocationSearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSearchTableViewController.swift; sourceTree = "<group>"; };
 		5A295D021CAB6EFF006539F5 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		5A295D031CAB6EFF006539F5 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		5A295D041CAB6EFF006539F5 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -65,6 +70,7 @@
 		7EF56AE21CAAFCEF00FF779A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7EF56AE41CAAFCEF00FF779A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchGroupsTableViewController.swift; sourceTree = "<group>"; };
+		C38581D01CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditGroupDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditGroupDetailsViewController.swift; sourceTree = "<group>"; };
 		C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
 		C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +124,7 @@
 				C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */,
 				C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */,
 				C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */,
+				C38581D01CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift */,
 			);
 			name = "Tab - Groups";
 			sourceTree = "<group>";
@@ -156,6 +163,7 @@
 				101BF3741CBC399000D5332D /* RequestRideViewController.swift */,
 				101BF3761CBC3B1C00D5332D /* RideGroupTableViewCell.swift */,
 				101BF37C1CBD450200D5332D /* CurrentRideViewController.swift */,
+				5A1362AD1CC50C380003DB2D /* LocationSearchTableViewController.swift */,
 			);
 			name = Rider;
 			sourceTree = "<group>";
@@ -209,6 +217,7 @@
 				7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */,
 				7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */,
 				7EF56AE41CAAFCEF00FF779A /* Info.plist */,
+				29E816A21CC5CCC2008BF982 /* UIView.swift */,
 			);
 			path = Ryde;
 			sourceTree = "<group>";
@@ -244,7 +253,7 @@
 				TargetAttributes = {
 					7EF56AD21CAAFCEE00FF779A = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = K6PZBNADL6;
+						DevelopmentTeam = U3465V32BF;
 					};
 				};
 			};
@@ -287,8 +296,10 @@
 			files = (
 				5AB6F2921CB1AB8500E875D4 /* RiderViewController.swift in Sources */,
 				C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */,
+				29E816A31CC5CCC2008BF982 /* UIView.swift in Sources */,
 				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
+				5A1362AE1CC50C380003DB2D /* LocationSearchTableViewController.swift in Sources */,
 				101BF37D1CBD450200D5332D /* CurrentRideViewController.swift in Sources */,
 				101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */,
 				C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */,
@@ -302,6 +313,7 @@
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */,
+				C38581D11CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift in Sources */,
 				101BF3771CBC3B1C00D5332D /* RideGroupTableViewCell.swift in Sources */,
 				C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */,
 				780388A81CB6E5A0004F5A69 /* DriverBaseViewController.swift in Sources */,

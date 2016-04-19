@@ -12,4 +12,6 @@ class RideGroupTableViewCell: UITableViewCell {
     
     @IBOutlet var rowName: UILabel!
 
+    @IBOutlet var numDriverLabel: UILabel!
+    @IBOutlet var numQueueLabel: UILabel!
 }

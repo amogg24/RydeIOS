@@ -250,6 +250,9 @@ class GroupDetailsTableViewController: UITableViewController {
         if (section == 0) {
             if let dict = groupInfo {
                 print(dict)
+                
+                cell.textLabel?.numberOfLines = 0
+                cell.textLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
                 if let groupDescription = dict["description"] as? String {
                     cell.textLabel!.text = groupDescription
                 }

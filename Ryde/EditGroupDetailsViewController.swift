@@ -20,6 +20,10 @@ class EditGroupDetailsViewController: UIViewController {
     
     var memberList = [NSDictionary]()
     
+    var initialMemberList = [NSDictionary]()
+    
+    var initialAdminList = [NSDictionary]()
+    
     // Mark - IBOutlets
     
     
@@ -47,12 +51,21 @@ class EditGroupDetailsViewController: UIViewController {
             alertController.addAction(okAction)
             self.presentViewController(alertController, animated: true, completion: nil)
         }
+        else if (adminList.count == 0) {
+            let alertController = UIAlertController(title: "No Admins", message: "You must select at least one member to be the administrator of the group!", preferredStyle: UIAlertControllerStyle.Alert)
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
+            })
+            alertController.addAction(okAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
+            //We have all of the fields ready, now we need to save the group and update the groupuser table
         else {
             
             let description = groupDescriptionTextView.text
             let title = groupNameTextField.text
             let id = String(groupInfo!["id"]!)
             
+            //Make the group object
             let JSONGroupObject: [String : String] = [
                 
                 "description":  description!,
@@ -61,10 +74,103 @@ class EditGroupDetailsViewController: UIViewController {
                 "title": title!
             ]
             
-            // Sends a POST to the specified URL with the JSON conent
-            self.put(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group/\(id)")
+            // Sends a PUT to the specified URL with the JSON conent
+            self.putGroup(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group/\(id)")
             
-            //get the group id
+            let adminSet = Set(adminList)
+            let initialAdminSet = Set(initialAdminList)
+            
+            let memberSet = Set(memberList)
+            let initialMemberSet = Set(initialMemberList)
+            
+            //gets all of the old admins that are no longer admins
+            let removeAdminStatusSet = initialAdminSet.subtract(adminSet)
+            
+            print("Admins removed from group: \(removeAdminStatusSet)")
+            
+            //gets all of the new admins that were not admins before
+            let addAdminStatusSet = adminSet.subtract(initialAdminSet)
+            
+            print("Admins added to group: \(addAdminStatusSet)")
+            
+            //gets all of the old members that are no longer members
+            let removeMemberStatusSet = initialMemberSet.subtract(memberSet)
+            
+            print("Members removed from group: \(removeMemberStatusSet)")
+            
+            //gets all of the new members that were not members before
+            let addMemberStatusSet = memberSet.subtract(initialMemberSet)
+            
+            print("Members added to group: \(addMemberStatusSet)")
+            
+            //set the group ID to the group we just updated
+            let groupDict = [ "id" : id ]
+            
+            //add all of the members that were added to the group to the database
+            //Do this first so that updates to the admin aren't affected
+            for newMember in addMemberStatusSet {
+                
+                if let memberID = newMember["id"] {
+                    let memberIDString = String(memberID)
+                    let memberDict = [ "id" : memberIDString ]
+                    
+                    let JSONGroupUserObject = [
+                        
+                        "admin": "0",
+                        "groupId": groupDict,
+                        "userId": memberDict
+                    ]
+                    
+                    //self.postGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+                }
+            }
+            
+            //update all of the admin priviledges in the database that were revoked in the group
+            //Do this second so that removing members isn't affected
+            for initialAdmin in removeAdminStatusSet {
+                
+                if let memberID = initialAdmin["id"] {
+                    let memberIDString = String(memberID)
+                    let memberDict = [ "id" : memberIDString ]
+                    
+                    let JSONGroupUserObject = [
+                        
+                        "admin": "0",
+                        "groupId": groupDict,
+                        "userId": memberDict
+                    ]
+                    
+                    //self.putGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+                }
+            }
+            
+            //update all of the admin priviledges in the database that were added in the group
+            for newAdmin in addAdminStatusSet {
+                
+                if let memberID = newAdmin["id"] {
+                    let memberIDString = String(memberID)
+                    let memberDict = [ "id" : memberIDString ]
+                    
+                    let JSONGroupUserObject = [
+                        
+                        "admin": "1",
+                        "groupId": groupDict,
+                        "userId": memberDict
+                    ]
+                    
+                    //self.putGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+                }
+            }
+            
+            //remove all of the members from the database that were removed from the group
+            for initialMember in removeMemberStatusSet {
+                
+                if let memberID = initialMember["id"] {
+                    
+                    //self.deleteGroupUser("http://\(self.appDelegate.baseURL)/Ryde/api/groupuser/\(memberID)")
+                }
+            }
+            
             
             let alertController = UIAlertController(title: "Group Successfully Updated!", message: "Your group \(title!) has been updated!", preferredStyle: UIAlertControllerStyle.Alert)
             let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
@@ -72,7 +178,6 @@ class EditGroupDetailsViewController: UIViewController {
             })
             alertController.addAction(okAction)
             self.presentViewController(alertController, animated: true, completion: nil)
-
         }
     }
     
@@ -91,15 +196,10 @@ class EditGroupDetailsViewController: UIViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    //MARK: - HTTP request methods
     
-    // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
-    
-    
-    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
-    func post(params : NSDictionary, url : String) {
-        
-        
-        print("POSTING TO UPDATE GROUP")
+    func postGroupUser(params : NSDictionary, url : String) {
+        print("POSTING TO GROUPUSER")
         
         print(url)
         
@@ -119,9 +219,6 @@ class EditGroupDetailsViewController: UIViewController {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            print("Response: \(response)")
-            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("Body: \(strData)")
             
             let json: NSDictionary?
             
@@ -130,36 +227,31 @@ class EditGroupDetailsViewController: UIViewController {
             } catch let dataError{
                 
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                print(dataError)
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: '\(jsonStr)'")
-                // return or throw?
+                print("error: \(dataError)")
                 return
             }
-            
-            
             
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
-                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                let success = parseJSON["success"] as? Int
-                print("Succes: \(success)")
-            }
-            else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: \(jsonStr)")
+                // Okay, the parsedJSON is here, let's see what we sent
+                print("parseJSON \(parseJSON)")
             }
         })
         
         task.resume()
     }
     
-    func put(params : NSDictionary, url : String) {
+    func putGroupUser(params : NSDictionary, url : String) {
+        
+    }
+    
+    func putGroup(params : NSDictionary, url : String) {
         print("PUTTING UPDATE TO GROUP")
         
         print(url)
+        
+        self.groupInfo = params
         
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
@@ -177,37 +269,13 @@ class EditGroupDetailsViewController: UIViewController {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            print("Response: \(response)")
-            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("Body: \(strData)")
             
-            let json: NSDictionary?
-            
-            do {
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
-            } catch let dataError{
-                
-                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                print(dataError)
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: '\(jsonStr)'")
-                // return or throw?
-                return
-            }
-            
-            
-            
-            // The JSONObjectWithData constructor didn't return an error. But, we should still
-            // check and make sure that json has a value using optional binding.
-            if let parseJSON = json {
-                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                let success = parseJSON["success"] as? Int
-                print("Succes: \(success)")
+            if(error != nil) {
+                //do nothing
+                print("updated group")
             }
             else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: \(jsonStr)")
+                print(error)
             }
         })
         
@@ -233,6 +301,27 @@ class EditGroupDetailsViewController: UIViewController {
         })
         task.resume()
     }
+    
+    func deleteGroupUser(url: String) {
+        print("DELETING GROUP USER")
+        
+        print(url)
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "DELETE"
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {(data, response, error) in
+            guard let _ = data
+                else {
+                    print("error calling DELETE on group user")
+                    return
+            }
+        })
+        task.resume()
+
+    }
+    
     // Mark - Lifecycle Methods
     
     override func viewDidLoad() {
@@ -248,6 +337,9 @@ class EditGroupDetailsViewController: UIViewController {
                 groupDescriptionTextView.text = description
             }
         }
+        
+        initialAdminList = adminList
+        initialMemberList = memberList
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -264,7 +356,7 @@ class EditGroupDetailsViewController: UIViewController {
         
         let row = indexPath.row
         
-        let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as UITableViewCell!
+        let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as! EditGroupDetailsTableViewCell!
         
         cell.selectionStyle = .None
         
@@ -272,32 +364,92 @@ class EditGroupDetailsViewController: UIViewController {
         
         if let memberFirstName = memberRow["firstName"] as? String {
             if let memberLastName = memberRow["lastName"] as? String {
-                cell.textLabel!.text = memberFirstName + " " + memberLastName
+                cell.memberNameLabel.text = memberFirstName + " " + memberLastName
+            }
+        }
+        cell.removeMember.tag = row
+        cell.removeMember.addTarget(self, action: #selector(EditGroupDetailsViewController.removeMember(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        cell.changeAdminStatusButton.setTitle("Make Admin", forState: UIControlState.Normal)
+        
+        if let memberID = memberRow["id"] {
+            for admin in adminList {
+                if let adminID = admin["id"] {
+                    if String(memberID) == String(adminID) {
+                        cell.changeAdminStatusButton.setTitle("Revoke Admin", forState: UIControlState.Normal)
+                        break
+                    }
+                }
             }
         }
         
+        cell.changeAdminStatusButton.tag = row
+        cell.changeAdminStatusButton.addTarget(self, action: #selector(EditGroupDetailsViewController.changeAdminStatus(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        
         return cell
     }
-    
-//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        let row = indexPath.row
-//        
-//        let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as UITableViewCell!
-//        
-//        let memberRow = searchBarResults[row]
-//        let memberID = String(memberRow["id"]!)
-//        
-//        if let foundIndex = selectedGroupMembers.indexOf(memberID) {
-//            //remove the item at the found index
-//            cell.accessoryType = UITableViewCellAccessoryType.None
-//            selectedGroupMembers.removeAtIndex(foundIndex)
-//        }
-//        else {
-//            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-//            selectedGroupMembers.append(memberID)
-//        }
-//        
-//        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-//    }
 
+    //MARK: - Tableview button method
+    
+    func removeMember(sender: UIButton) {
+        let row = sender.tag
+        let memberRow = memberList[row]
+        if let memberID = memberRow["id"] {
+            if let currentUser = appDelegate.currentUser {
+                if let currentID = currentUser["id"] {
+                    //check to see if the user is current user. if so, do nothing
+                    if String(currentID) != String(memberID) {
+                        
+                        //check to see if the member being removed is admin, if so, remove from admin list as well
+                        for (index, admin) in adminList.enumerate() {
+                            if let adminID = admin["id"] {
+                                if String(memberID) == String(adminID) {
+                                    adminList.removeAtIndex(index)
+                                    break
+                                }
+                            }
+                        }
+                        //now remove user from memberlist and update the tableview
+                        memberList.removeAtIndex(row)
+                        groupMemberTableView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+    
+    //Method to revoke or grant admin status to a member
+    func changeAdminStatus(sender: UIButton) {
+        let row = sender.tag
+        let memberRow = memberList[row]
+        if (sender.titleLabel!.text == "Make Admin") {
+            adminList.append(memberRow)
+            groupMemberTableView.reloadData()
+        }
+        else if (sender.titleLabel?.text == "Revoke Admin") {
+            if let memberID = memberRow["id"] {
+                for (index, admin) in adminList.enumerate() {
+                    if let adminID = admin["id"] {
+                        if String(memberID) == String(adminID) {
+                            adminList.removeAtIndex(index)
+                            groupMemberTableView.reloadData()
+                            break
+                        }
+                    }
+                }
+
+            }
+            
+        }
+    }
+    
+    //MARK: - prepare for segue
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "UnwindToDetails-Save") {
+            let dest = segue.destinationViewController as! GroupDetailsTableViewController
+            dest.groupInfo = self.groupInfo
+        }
+    }
+    
 }

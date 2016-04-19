@@ -8,11 +8,11 @@
 
 import UIKit
 import FBSDKCoreKit
+import FBSDKLoginKit
 
 class EditProfileViewController: UIViewController {
-    
+    // Mark - Fields
     @IBOutlet var profileImage: UIImageView!
-    
     @IBOutlet var profileName: UILabel!
         
     @IBOutlet var cellNumberTextField: UITextField!
@@ -22,15 +22,31 @@ class EditProfileViewController: UIViewController {
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var cellNumber = ""
-    // Mark - Fields
+    var carMake = ""
+    var carModel = ""
+    var carColor = ""
+    
     
     var FBid = ""
     var id = Int()
+    let loginManager = FBSDKLoginManager()
 
     override func viewDidLoad() {
+        
+        //Make the image a circle
+        profileImage.layer.borderWidth = 1
+        //profileImage.layer.masksToBounds = false
+        profileImage.layer.borderColor = UIColor.clearColor().CGColor
+        profileImage.layer.cornerRadius = profileImage.frame.height/2
+        profileImage.clipsToBounds = true
+        
         super.viewDidLoad()
         
         cellNumberTextField.text! = cellNumber
+        carMakeTextField.text! = carMake
+        carModelTextField.text! = carModel
+        carColorTextField.text! = carColor
+        
 
         // Grab data from FB
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
@@ -50,6 +66,51 @@ class EditProfileViewController: UIViewController {
     }
     
     
+    @IBAction func deleteButtonTapped(sender: UIButton) {
+        // Sends a POST to the specified URL with the JSON conent
+        
+        
+        //Confirm Delete Account
+        let alertController = UIAlertController(title: "Confirmation",
+                                                message: "Are you sure you would like to delete your account?",
+                                                preferredStyle: UIAlertControllerStyle.Alert)
+        
+        // Create a UIAlertAction object and add it to the alert controller
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action: UIAlertAction!) in
+            
+            //Delete account from the server and logout of Facebook
+             self.deleteUser("http://\(self.appDelegate.baseURL)/Ryde/api/user/\(self.id)")
+             self.loginManager.logOut()
+             self.performSegueWithIdentifier("Delete", sender: self)
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+        
+        // Present the alert controller by calling the presentViewController method
+        presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
+    //Delete the user from the server
+    func deleteUser(url: String){
+        
+        print("DELETING User")
+        
+        print(url)
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "DELETE"
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {(data, response, error) in
+            guard let _ = data
+                else {
+                    print("error calling DELETE on group")
+                    return
+            }
+        })
+        task.resume()
+    }
+
     @IBAction func saveButtonTapped(sender: UIButton) {
         let name = profileName.text
         
@@ -68,19 +129,14 @@ class EditProfileViewController: UIViewController {
         ]
         
         // Sends a POST to the specified URL with the JSON conent
-        self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")
-        //self.dismissViewControllerAnimated(true, completion: nil);
-//
-//        
-        performSegueWithIdentifier("Edit", sender: self)
+        self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")      
+        performSegueWithIdentifier("Save", sender: self)
         
     }
     
     
-    // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
     
-    
-    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
+    // Put the new user data to the server
     func put(params : Dictionary<String, AnyObject>, url : String) {
         
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)

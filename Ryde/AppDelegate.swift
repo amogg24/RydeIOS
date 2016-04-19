@@ -16,6 +16,8 @@ import FBSDKCoreKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var FBid = ""
+    
+    var currentUser: NSDictionary?
         
     var window: UIWindow?
     
