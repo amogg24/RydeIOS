@@ -43,9 +43,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // Queue Position
     var queuePos:Int = 0
     
-    // join TAD success/failure
-    var success: Bool = true
-    
     var groupDictionary = [NSDictionary]()
     
     var selectedGroupInfo: NSDictionary?
@@ -87,11 +84,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // Mark - Retrieve the user's active groups from the server
     
     func getUserTimeslots() {
-        
-        //let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/user/1")
-        
-        let url = NSURL(string: (String)("http://192.168.1.145:8080/Ryde/api/timeslotuser/gettads/" + "JamesFBTok"))
-        //let url = NSURL(string: (String)("http://192.168.1.145:8080/Ryde/api/timeslotuser/gettads/" + FBid))
+        let url = NSURL(string: (String)("http://172.30.42.7:8080/Ryde/api/timeslotuser/gettads/" + "JohnFBTok"))
+        //let url = NSURL(string: (String)("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/gettads/" + FBid))
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
@@ -201,7 +195,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
         ]
         
         //let postUrl = "http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/JamesFBTok"
-        let postUrl = ("http://192.168.1.145:8080/Ryde/api/ride/request/JamesFBTok/" + (String)(self.selectedTID))
+        let postUrl = ("http://172.30.42.7:8080/Ryde/api/ride/request/JamesFBTok/" + (String)(self.selectedTID))
         self.postRequest(JSONObject, url: postUrl)
         
         performSegueWithIdentifier("ShowRequestRide", sender: nil)
@@ -227,8 +221,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
         
         alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction!) in
             let textField = alert.textFields![0] as UITextField
-            
-            self.passcodeError()
             self.generateTADRequest(textField.text!)
         }))
         
@@ -248,7 +240,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
         ]
         
         //self.postTAD(JSONObject, url: ("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/jointad/" + FBid + "/" + passcode))
-        self.postTAD(JSONObject, url: ("http://192.168.1.145:8080/Ryde/api/timeslotuser/jointad/" + FBid + "/" + passcode))
+        self.postTAD(JSONObject, url: ("http://172.30.42.7:8080/Ryde/api/timeslotuser/jointad/" + "JohnFBTok" + "/" + passcode))
     }
     
     func passcodeError()
@@ -300,17 +292,18 @@ class RiderRequestGroupTableViewController: UITableViewController {
                 self.passcodeError()
                 return
             }
-            
-            
-            
+
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
                 // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                let success = parseJSON["success"] as? Int
-                print("Succes: \(success)")
-                
-                self.getUserTimeslots()
+                if let succ = parseJSON["joinTADSuccess"] as? Bool
+                {
+                    if (succ == true)
+                    {
+                        self.getUserTimeslots()
+                    }
+                }
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
