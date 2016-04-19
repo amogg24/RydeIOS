@@ -15,9 +15,9 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     
     @IBOutlet var editButton: UIButton!
     @IBOutlet var profileImage: UIImageView!
-    
     @IBOutlet var profileName: UILabel!
     
+    //Global Strings
     var carMakeString = ""
     var carModelString = ""
     var carColorString = ""
@@ -26,12 +26,11 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     var email = ""
     
     var groupDictionary = [NSDictionary]()
-    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var profileTableView: UITableView!
     var nameLabels = ["Cell Number", "Car Info"]
-    var infoLabel = ["Cell Number Data", "Car Model Data"]
+    var infoLabel = ["Cell Number Data", ""]
     var dataObjectPassed = ["Cell Number"]
     var id = Int()
     var flag = 0
@@ -86,9 +85,6 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         
         profileTableView.separatorColor = UIColor.darkGrayColor()
         profileTableView.tableFooterView = UIView()
-        
-        
-        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
