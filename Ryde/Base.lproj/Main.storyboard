@@ -844,7 +844,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cM7-ui-Wsr">
-                                <rect key="frame" x="16" y="512" width="568" height="44"/>
+                                <rect key="frame" x="16" y="492" width="568" height="44"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="zWb-HQ-O2t"/>
@@ -857,7 +857,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PKu-fg-CRB">
-                                <rect key="frame" x="16" y="318" width="568" height="178"/>
+                                <rect key="frame" x="16" y="318" width="568" height="158"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -880,17 +880,24 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yEI-Aj-Zjb">
+                                                    <rect key="frame" x="412" y="7" width="85" height="30"/>
+                                                    <state key="normal" title="Make Admin"/>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="fGW-Pk-xur" firstAttribute="centerY" secondItem="xPT-WO-1eg" secondAttribute="centerY" id="9EU-fl-gdf"/>
                                                 <constraint firstItem="fGW-Pk-xur" firstAttribute="leading" secondItem="xPT-WO-1eg" secondAttribute="leading" constant="8" id="Juw-iV-dFy"/>
                                                 <constraint firstAttribute="trailing" secondItem="NIZ-lf-8lD" secondAttribute="trailing" constant="8" id="Ozr-NQ-1MJ"/>
-                                                <constraint firstItem="NIZ-lf-8lD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fGW-Pk-xur" secondAttribute="trailing" constant="8" id="Ude-oO-sca"/>
+                                                <constraint firstItem="yEI-Aj-Zjb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fGW-Pk-xur" secondAttribute="trailing" constant="8" id="PNc-ix-xvY"/>
+                                                <constraint firstItem="NIZ-lf-8lD" firstAttribute="leading" secondItem="yEI-Aj-Zjb" secondAttribute="trailing" constant="8" id="Qba-fC-2S3"/>
+                                                <constraint firstItem="yEI-Aj-Zjb" firstAttribute="centerY" secondItem="xPT-WO-1eg" secondAttribute="centerY" id="m0T-5b-g4G"/>
                                                 <constraint firstItem="NIZ-lf-8lD" firstAttribute="centerY" secondItem="xPT-WO-1eg" secondAttribute="centerY" id="y3q-py-jrR"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
                                         <connections>
+                                            <outlet property="changeAdminStatusButton" destination="yEI-Aj-Zjb" id="MNC-rj-DKQ"/>
                                             <outlet property="memberNameLabel" destination="fGW-Pk-xur" id="rOW-Ay-abh"/>
                                             <outlet property="removeMember" destination="NIZ-lf-8lD" id="KL0-rD-OPw"/>
                                         </connections>
@@ -924,7 +931,7 @@
                             <constraint firstItem="wYM-Wr-mpc" firstAttribute="top" secondItem="Ooi-Hg-7zM" secondAttribute="top" id="jzf-6h-EN4"/>
                             <constraint firstItem="aby-M5-FQf" firstAttribute="centerX" secondItem="Ooi-Hg-7zM" secondAttribute="centerX" id="kgV-nX-hUZ"/>
                             <constraint firstItem="WV3-xM-APh" firstAttribute="top" secondItem="iBq-6l-S98" secondAttribute="bottom" constant="16" id="krr-AU-gB9"/>
-                            <constraint firstItem="EME-61-zPz" firstAttribute="top" secondItem="cM7-ui-Wsr" secondAttribute="bottom" id="pPm-gQ-frh"/>
+                            <constraint firstItem="EME-61-zPz" firstAttribute="top" secondItem="cM7-ui-Wsr" secondAttribute="bottom" constant="20" id="pPm-gQ-frh"/>
                             <constraint firstAttribute="trailing" secondItem="wYM-Wr-mpc" secondAttribute="trailing" id="qrk-wA-hhJ"/>
                             <constraint firstItem="MRm-Il-v9q" firstAttribute="leading" secondItem="Ooi-Hg-7zM" secondAttribute="leading" constant="16" id="xz3-fR-F1y"/>
                         </constraints>

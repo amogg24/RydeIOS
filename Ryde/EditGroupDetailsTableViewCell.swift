@@ -13,6 +13,8 @@ class EditGroupDetailsTableViewCell: UITableViewCell {
     
     @IBOutlet var memberNameLabel: UILabel!
     
+    @IBOutlet var changeAdminStatusButton: UIButton!
+    
     @IBOutlet var removeMember: UIButton!
     
 }
