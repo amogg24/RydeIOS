@@ -1727,7 +1727,6 @@
                                 </variation>
                                 <connections>
                                     <action selector="saveButtonTapped:" destination="SmI-kv-lsB" eventType="touchUpInside" id="vLd-Am-9Pk"/>
-                                    <segue destination="NMU-m6-DMJ" kind="showDetail" identifier="Delete" id="rjy-ED-TYS"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jqH-LP-obc">
@@ -1807,7 +1806,8 @@
                         <outlet property="cellNumberTextField" destination="kNw-qK-Zbw" id="1qn-Se-2p2"/>
                         <outlet property="profileImage" destination="ssT-18-m7M" id="Kdo-hG-qmV"/>
                         <outlet property="profileName" destination="hXH-9y-TPr" id="TdF-3i-gor"/>
-                        <segue destination="P6T-6r-ncU" kind="showDetail" identifier="Save" id="RWb-O0-Ce0"/>
+                        <segue destination="P6T-6r-ncU" kind="showDetail" identifier="Delete" id="3ui-dR-XQn"/>
+                        <segue destination="NMU-m6-DMJ" kind="showDetail" identifier="Save" id="aAn-to-k47"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Se2-av-I1Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2206,8 +2206,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="loginBG" translatesAutoresizingMaskIntoConstraints="NO" id="7bw-jI-3D6">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginBG" translatesAutoresizingMaskIntoConstraints="NO" id="7bw-jI-3D6">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NFy-5o-TWv">
                                 <rect key="frame" x="0.0" y="311" width="600" height="219"/>
@@ -2239,9 +2239,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2yJ-az-dTL">
                                         <rect key="frame" x="8" y="141" width="584" height="1"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="muW-2w-8hS"/>
-                                        </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvg-NC-Fgj">
                                         <rect key="frame" x="180" y="187" width="240" height="18"/>
@@ -2294,36 +2291,10 @@
                                         </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOT-be-UGA">
-                                        <rect key="frame" x="352" y="47" width="240" height="18"/>
-                                        <attributedString key="attributedText">
-                                            <fragment content="RYDES TAKEN">
-                                                <attributes>
-                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <font key="NSFont" size="17" name="Copperplate-Light"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qU0-oz-TYr">
-                                        <rect key="frame" x="8" y="47" width="240" height="18"/>
-                                        <attributedString key="attributedText">
-                                            <fragment content="RYDES GIVEN">
-                                                <attributes>
-                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <font key="NSFont" size="17" name="Copperplate-Light"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDn-w6-diD">
-                                        <rect key="frame" x="8" y="26" width="240" height="18"/>
+                                        <rect key="frame" x="30" y="21" width="142" height="18"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="240" id="2fW-BC-I2K"/>
+                                            <constraint firstAttribute="width" constant="142" id="NkW-OE-312"/>
                                         </constraints>
                                         <attributedString key="attributedText">
                                             <fragment content="15">
@@ -2336,10 +2307,36 @@
                                         </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOT-be-UGA">
+                                        <rect key="frame" x="424" y="42" width="142" height="18"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="RYDES TAKEN">
+                                                <attributes>
+                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <font key="NSFont" size="17" name="Copperplate-Light"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbw-pV-thZ">
+                                        <rect key="frame" x="30" y="42" width="142" height="18"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="RYDES GIVEN">
+                                                <attributes>
+                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <font key="NSFont" size="17" name="Copperplate-Light"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yyZ-Yb-i0F">
-                                        <rect key="frame" x="352" y="26" width="240" height="18"/>
+                                        <rect key="frame" x="424" y="21" width="142" height="18"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="240" id="p6h-2B-CYK"/>
+                                            <constraint firstAttribute="width" constant="142" id="pww-zv-5wq"/>
                                         </constraints>
                                         <attributedString key="attributedText">
                                             <fragment content="10">
@@ -2355,29 +2352,31 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="wDn-w6-diD" firstAttribute="trailing" secondItem="qU0-oz-TYr" secondAttribute="trailing" id="3qA-i3-1hj"/>
+                                    <constraint firstItem="2yJ-az-dTL" firstAttribute="leading" secondItem="3z9-9B-CrL" secondAttribute="leading" id="0Kg-sd-jWY"/>
+                                    <constraint firstItem="2yJ-az-dTL" firstAttribute="top" secondItem="NFy-5o-TWv" secondAttribute="top" constant="141" id="1Tf-ev-PRE"/>
+                                    <constraint firstAttribute="bottom" secondItem="2yJ-az-dTL" secondAttribute="bottom" constant="77" id="7j5-eO-iS1"/>
                                     <constraint firstItem="F8S-zW-Xcc" firstAttribute="top" secondItem="OHA-Nq-ocP" secondAttribute="bottom" constant="8" id="BBr-w9-Kzo"/>
-                                    <constraint firstItem="qU0-oz-TYr" firstAttribute="leading" secondItem="3z9-9B-CrL" secondAttribute="leading" id="BEa-7G-tzl"/>
                                     <constraint firstItem="OHA-Nq-ocP" firstAttribute="top" secondItem="3z9-9B-CrL" secondAttribute="bottom" constant="8" id="Cq3-Em-d1D"/>
                                     <constraint firstItem="3z9-9B-CrL" firstAttribute="centerX" secondItem="OHA-Nq-ocP" secondAttribute="centerX" id="D2R-dC-s92"/>
-                                    <constraint firstItem="wDn-w6-diD" firstAttribute="baseline" secondItem="yyZ-Yb-i0F" secondAttribute="baseline" id="HGZ-Pm-8OA"/>
-                                    <constraint firstItem="uYr-HK-s8m" firstAttribute="top" secondItem="2yJ-az-dTL" secondAttribute="bottom" constant="19" id="HMZ-s6-2jy"/>
-                                    <constraint firstItem="2yJ-az-dTL" firstAttribute="top" secondItem="F8S-zW-Xcc" secondAttribute="bottom" constant="8" symbolic="YES" id="I1y-6F-hSr"/>
-                                    <constraint firstItem="wDn-w6-diD" firstAttribute="top" secondItem="NFy-5o-TWv" secondAttribute="top" constant="26" id="JYJ-Vv-670"/>
-                                    <constraint firstItem="3z9-9B-CrL" firstAttribute="top" secondItem="qU0-oz-TYr" secondAttribute="bottom" constant="15" id="NX5-a0-xej"/>
+                                    <constraint firstItem="cbw-pV-thZ" firstAttribute="top" secondItem="wDn-w6-diD" secondAttribute="bottom" constant="3" id="JVx-lr-mlw"/>
+                                    <constraint firstItem="yyZ-Yb-i0F" firstAttribute="trailing" secondItem="iOT-be-UGA" secondAttribute="trailing" id="NwH-Qw-Ko8"/>
                                     <constraint firstItem="uYr-HK-s8m" firstAttribute="centerX" secondItem="NFy-5o-TWv" secondAttribute="centerX" id="PqF-Aj-87D"/>
+                                    <constraint firstItem="cbw-pV-thZ" firstAttribute="top" secondItem="wDn-w6-diD" secondAttribute="bottom" constant="3" id="R9m-d5-uYW"/>
                                     <constraint firstAttribute="height" constant="219" id="UYd-Tb-3Ly"/>
-                                    <constraint firstItem="qU0-oz-TYr" firstAttribute="top" secondItem="wDn-w6-diD" secondAttribute="bottom" constant="3" id="ds7-P5-1Ls"/>
-                                    <constraint firstItem="qU0-oz-TYr" firstAttribute="baseline" secondItem="iOT-be-UGA" secondAttribute="baseline" id="e6j-Px-VZ5"/>
+                                    <constraint firstItem="uYr-HK-s8m" firstAttribute="top" secondItem="2yJ-az-dTL" secondAttribute="bottom" constant="19" id="Y1b-Po-uPz"/>
+                                    <constraint firstItem="2yJ-az-dTL" firstAttribute="trailing" secondItem="3z9-9B-CrL" secondAttribute="trailing" id="Yeb-Pb-7Be"/>
+                                    <constraint firstItem="wDn-w6-diD" firstAttribute="leading" secondItem="NFy-5o-TWv" secondAttribute="leading" constant="30" id="eto-QO-vCa"/>
                                     <constraint firstItem="tvg-NC-Fgj" firstAttribute="top" secondItem="uYr-HK-s8m" secondAttribute="bottom" constant="8" id="jWX-IU-lZo"/>
-                                    <constraint firstItem="iOT-be-UGA" firstAttribute="trailing" secondItem="3z9-9B-CrL" secondAttribute="trailing" id="m5i-Lp-0Bp"/>
-                                    <constraint firstItem="yyZ-Yb-i0F" firstAttribute="leading" secondItem="iOT-be-UGA" secondAttribute="leading" id="ov1-d5-Z4J"/>
-                                    <constraint firstItem="wDn-w6-diD" firstAttribute="leading" secondItem="qU0-oz-TYr" secondAttribute="leading" id="pnZ-R7-xd0"/>
-                                    <constraint firstItem="3z9-9B-CrL" firstAttribute="leading" secondItem="2yJ-az-dTL" secondAttribute="leading" id="pwx-or-0vB"/>
-                                    <constraint firstItem="3z9-9B-CrL" firstAttribute="trailing" secondItem="2yJ-az-dTL" secondAttribute="trailing" id="qYK-zx-XKU"/>
+                                    <constraint firstItem="2yJ-az-dTL" firstAttribute="top" secondItem="F8S-zW-Xcc" secondAttribute="bottom" constant="8" symbolic="YES" id="kCj-s7-bYV"/>
+                                    <constraint firstItem="yyZ-Yb-i0F" firstAttribute="leading" secondItem="iOT-be-UGA" secondAttribute="leading" id="l1d-Bx-tor"/>
+                                    <constraint firstItem="cbw-pV-thZ" firstAttribute="baseline" secondItem="iOT-be-UGA" secondAttribute="baseline" id="orC-mE-Maf"/>
+                                    <constraint firstItem="wDn-w6-diD" firstAttribute="baseline" secondItem="yyZ-Yb-i0F" secondAttribute="baseline" id="ox4-bb-Q9V"/>
+                                    <constraint firstItem="wDn-w6-diD" firstAttribute="trailing" secondItem="cbw-pV-thZ" secondAttribute="trailing" id="rNx-1Y-de9"/>
                                     <constraint firstItem="F8S-zW-Xcc" firstAttribute="centerX" secondItem="NFy-5o-TWv" secondAttribute="centerX" id="sOt-X6-48B"/>
                                     <constraint firstItem="3z9-9B-CrL" firstAttribute="leading" secondItem="NFy-5o-TWv" secondAttribute="leadingMargin" id="tNJ-Ns-4UL"/>
-                                    <constraint firstItem="yyZ-Yb-i0F" firstAttribute="trailing" secondItem="iOT-be-UGA" secondAttribute="trailing" id="vyr-H4-F1g"/>
+                                    <constraint firstItem="3z9-9B-CrL" firstAttribute="top" secondItem="cbw-pV-thZ" secondAttribute="bottom" constant="20" id="vwy-DU-9k2"/>
+                                    <constraint firstItem="wDn-w6-diD" firstAttribute="leading" secondItem="cbw-pV-thZ" secondAttribute="leading" id="xty-d7-0nw"/>
+                                    <constraint firstAttribute="trailing" secondItem="yyZ-Yb-i0F" secondAttribute="trailing" constant="34" id="zSa-Rz-e2Q"/>
                                     <constraint firstItem="OHA-Nq-ocP" firstAttribute="centerX" secondItem="NFy-5o-TWv" secondAttribute="centerX" id="zYx-jL-h8t"/>
                                     <constraint firstItem="tvg-NC-Fgj" firstAttribute="centerX" secondItem="NFy-5o-TWv" secondAttribute="centerX" id="zco-ba-ZCY"/>
                                 </constraints>
@@ -2390,6 +2389,11 @@
                                         <real key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="R9m-d5-uYW"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NCL-Jo-C6e">
                                 <rect key="frame" x="138" y="50" width="325" height="34"/>
@@ -2480,6 +2484,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="1vp-zx-Ifd"/>
         <segue reference="Zqd-d8-8Ir"/>
-        <segue reference="rjy-ED-TYS"/>
+        <segue reference="aAn-to-k47"/>
     </inferredMetricsTieBreakers>
 </document>
