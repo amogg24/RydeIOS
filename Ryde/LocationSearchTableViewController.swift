@@ -13,6 +13,7 @@ class LocationSearchTable : UITableViewController {
     var handleMapSearchDelegate:HandleMapSearch? = nil
     var matchingItems:[MKMapItem] = []
     var mapView: MKMapView? = nil
+
     
     func parseAddress(selectedItem:MKPlacemark) -> String {
         // put a space between "4" and "Melrose Place"
@@ -40,7 +41,18 @@ class LocationSearchTable : UITableViewController {
 }
 
 extension LocationSearchTable : UISearchResultsUpdating {
+
+    
     func updateSearchResultsForSearchController(searchController: UISearchController) {
+        
+        // Cancelled button tapped
+        
+        if !searchController.active {
+            
+            handleMapSearchDelegate?.cancelSearch()
+
+        }
+        
         guard let mapView = mapView,
             let searchBarText = searchController.searchBar.text else { return }
         let request = MKLocalSearchRequest()
@@ -55,7 +67,10 @@ extension LocationSearchTable : UISearchResultsUpdating {
             self.tableView.reloadData()
         }
     }
+    
+    
 }
+
 
 extension LocationSearchTable {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,6 +79,10 @@ extension LocationSearchTable {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell")!
+        
+        cell.textLabel?.textColor = UIColor.whiteColor()
+        cell.detailTextLabel?.textColor = UIColor.whiteColor()
+        
         let selectedItem = matchingItems[indexPath.row].placemark
         cell.textLabel?.text = selectedItem.name
         cell.detailTextLabel?.text = parseAddress(selectedItem)
@@ -74,7 +93,7 @@ extension LocationSearchTable {
 extension LocationSearchTable {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let selectedItem = matchingItems[indexPath.row].placemark
-        handleMapSearchDelegate?.dropPinZoomIn(selectedItem)
+        handleMapSearchDelegate?.dropPinZoomIn(selectedItem, destination: selectedItem.name!)
         
         dismissViewControllerAnimated(true, completion: nil)
     }
