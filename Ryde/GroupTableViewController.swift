@@ -35,16 +35,6 @@ class GroupTableViewController: UITableViewController {
     @IBAction func unwindToGroupsViewController(sender: UIStoryboardSegue) {
         
     }
-    
-    //INFO FROM SERVER THAT I NEED
-    /**
-    * List of groups the user is a member of
-    * On click of tableview cell, group information
-    * On press of addGroup, need to be able to send group object to database
-    * On press of addGroup, need to be able to retrieve facebook friends
-    * On press of searchForGroup, need to be able to query groups by name
-    * On press of searchForGroup, need to be able to send requestToJoinGroup object to database for multiple groups
-    **/
 
     // Mark - Lifecycle Methods
     
@@ -113,6 +103,7 @@ class GroupTableViewController: UITableViewController {
             if let parseJSON = json {
                 // Okay, the parsedJSON is here, lets store its values into an array
                 self.currentUser = parseJSON as NSDictionary
+                self.appDelegate.currentUser = self.currentUser
                 self.getUserGroups()
             }
             else {

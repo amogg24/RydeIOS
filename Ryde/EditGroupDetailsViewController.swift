@@ -90,6 +90,8 @@ class EditGroupDetailsViewController: UIViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    //MARK: - HTTP request methods
+    
     func put(params : NSDictionary, url : String) {
         print("PUTTING UPDATE TO GROUP")
         
@@ -198,7 +200,7 @@ class EditGroupDetailsViewController: UIViewController {
         
         let row = indexPath.row
         
-        let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as UITableViewCell!
+        let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as! EditGroupDetailsTableViewCell!
         
         cell.selectionStyle = .None
         
@@ -206,32 +208,31 @@ class EditGroupDetailsViewController: UIViewController {
         
         if let memberFirstName = memberRow["firstName"] as? String {
             if let memberLastName = memberRow["lastName"] as? String {
-                cell.textLabel!.text = memberFirstName + " " + memberLastName
+                cell.memberNameLabel.text = memberFirstName + " " + memberLastName
             }
         }
+        cell.removeMember.tag = row
+        cell.removeMember.addTarget(self, action: #selector(EditGroupDetailsViewController.removeMember(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         return cell
     }
-    
-//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        let row = indexPath.row
-//        
-//        let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as UITableViewCell!
-//        
-//        let memberRow = searchBarResults[row]
-//        let memberID = String(memberRow["id"]!)
-//        
-//        if let foundIndex = selectedGroupMembers.indexOf(memberID) {
-//            //remove the item at the found index
-//            cell.accessoryType = UITableViewCellAccessoryType.None
-//            selectedGroupMembers.removeAtIndex(foundIndex)
-//        }
-//        else {
-//            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-//            selectedGroupMembers.append(memberID)
-//        }
-//        
-//        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-//    }
 
+    //MARK: - Tableview button method
+    
+    func removeMember(sender: UIButton) {
+        let row = sender.tag
+        let memberRow = memberList[row]
+        
+        if let memberID = memberRow["id"] as? String {
+            if let currentUser = appDelegate.currentUser {
+                if let currentID = currentUser["id"] as? String {
+                    if currentID != memberID {
+                        memberList.removeAtIndex(row)
+                        groupMemberTableView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+    
 }
