@@ -309,6 +309,10 @@ class RiderRequestGroupTableViewController: UITableViewController {
                     {
                         self.getUserTimeslots()
                     }
+                    else
+                    {
+                        self.passcodeError()
+                    }
                 }
             }
             else {
