@@ -216,6 +216,9 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             // Under the Delegation Design Pattern, set the addCityViewController's delegate to be self
             editProfileViewController.cellNumber = infoLabel[0]
             editProfileViewController.id = id
+            editProfileViewController.carMake = carMakeString
+            editProfileViewController.carModel = carModelString
+            editProfileViewController.carColor = carColorString
         }
     }
     // MARK: - Facebook Login
