@@ -64,8 +64,6 @@ class EditGroupDetailsViewController: UIViewController {
             // Sends a PUT to the specified URL with the JSON conent
             self.put(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group/\(id)")
             
-            
-            
             let alertController = UIAlertController(title: "Group Successfully Updated!", message: "Your group \(title!) has been updated!", preferredStyle: UIAlertControllerStyle.Alert)
             let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
                 self.performSegueWithIdentifier("UnwindToDetails-Save", sender: nil)
@@ -222,11 +220,12 @@ class EditGroupDetailsViewController: UIViewController {
     func removeMember(sender: UIButton) {
         let row = sender.tag
         let memberRow = memberList[row]
-        
-        if let memberID = memberRow["id"] as? String {
+        if let memberID = memberRow["id"] {
+            print(memberID)
             if let currentUser = appDelegate.currentUser {
-                if let currentID = currentUser["id"] as? String {
-                    if currentID != memberID {
+                if let currentID = currentUser["id"] {
+                    print("second id")
+                    if String(currentID) != String(memberID) {
                         memberList.removeAtIndex(row)
                         groupMemberTableView.reloadData()
                     }

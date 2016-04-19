@@ -68,135 +68,135 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
             ]
             
             // Sends a POST to the specified URL with the JSON conent
-            self.post(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group")
+            self.postGroup(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group")
             
         }
     }
-    
-    func getGroupInfo(title: String) {
-        print("RETRIEVE GROUP WITH TITLE")
-        
-        let titleNoSpaces = title.stringByReplacingOccurrencesOfString(" ", withString: "+")
-        
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/title/\(titleNoSpaces)")
-        
-        print(url)
-        
-        // Creaste URL Request
-        let request = NSMutableURLRequest(URL:url!);
-        
-        // Set request HTTP method to GET. It could be POST as well
-        request.HTTPMethod = "GET"
-        
-        // If needed you could add Authorization header value
-        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
-        
-        // Execute HTTP Request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            
-            // Check for error
-            if error != nil
-            {
-                print("error=\(error)")
-                return
-            }
-            
-            // Print out response string
-            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            //print("responseString = \(responseString!)")
-            
-            
-            let json: [NSDictionary]?
-            
-            do {
-                
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
-                
-            } catch let dataError{
-                
-                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                print(dataError)
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: '\(jsonStr!)'")
-                // return or throw?
-                return
-            }
-            
-            // The JSONObjectWithData constructor didn't return an error. But, we should still
-            // check and make sure that json has a value using optional binding.
-            if let parseJSON = json {
-                
-                // Okay, the parsedJSON is here, lets store its values into an array
-                let newGroupArray = parseJSON as [NSDictionary]
-                
-                self.newGroup = newGroupArray[0] as NSDictionary
-
-                //got the new groups id
-                let groupID = String(self.newGroup["id"]!)
-                
-                print(groupID)
-                //iterate over user ids and add
-                for member in self.selectedGroupMembers {
-                    let groupDict = [ "id" : groupID ]
-                    let memberDict = [ "id" : member ]
-                    
-                    let JSONGroupUserObject = [
-                        
-                        "admin": "0",
-                        "groupId": groupDict,
-                        "userId": memberDict
-                    ]
-                    
-                    print(JSONGroupUserObject)
-                    self.post(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
-                    
-                }
-                
-                let currentID = String(self.currentUser!["id"]!)
-                
-                let groupDict = [ "id" : groupID ]
-                let memberDict = [ "id" : currentID ]
-                
-                let JSONGroupUserObject = [
-                    
-                    "admin": "1",
-                    "groupId": groupDict,
-                    "userId": memberDict
-                ]
-                
-                print(JSONGroupUserObject)
-                self.post(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    let alertController = UIAlertController(title: "Group Successfully Created!", message: "Your group \"\(title)\" has been created!", preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
-                        self.performSegueWithIdentifier("UnwindToGroups-Add", sender: nil)
-                    })
-                    alertController.addAction(okAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                })
-            }
-            else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: \(jsonStr!)")
-            }
-            
-            
-        })
-        
-        task.resume()
-    }
-    
+//    
+//    func getGroupInfo(title: String) {
+//        print("RETRIEVE GROUP WITH TITLE")
+//        
+//        let titleNoSpaces = title.stringByReplacingOccurrencesOfString(" ", withString: "+")
+//        
+//        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/title/\(titleNoSpaces)")
+//        
+//        print(url)
+//        
+//        // Creaste URL Request
+//        let request = NSMutableURLRequest(URL:url!);
+//        
+//        // Set request HTTP method to GET. It could be POST as well
+//        request.HTTPMethod = "GET"
+//        
+//        // If needed you could add Authorization header value
+//        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+//        
+//        // Execute HTTP Request
+//        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+//            
+//            // Check for error
+//            if error != nil
+//            {
+//                print("error=\(error)")
+//                return
+//            }
+//            
+//            // Print out response string
+//            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//            //print("responseString = \(responseString!)")
+//            
+//            
+//            let json: [NSDictionary]?
+//            
+//            do {
+//                
+//                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+//                
+//            } catch let dataError{
+//                
+//                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+//                print(dataError)
+//                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//                print("Error could not parse JSON: '\(jsonStr!)'")
+//                // return or throw?
+//                return
+//            }
+//            
+//            // The JSONObjectWithData constructor didn't return an error. But, we should still
+//            // check and make sure that json has a value using optional binding.
+//            if let parseJSON = json {
+//                
+//                // Okay, the parsedJSON is here, lets store its values into an array
+//                let newGroupArray = parseJSON as [NSDictionary]
+//                
+//                self.newGroup = newGroupArray[0] as NSDictionary
+//
+//                //got the new groups id
+//                let groupID = String(self.newGroup["id"]!)
+//                
+//                print(groupID)
+//                //iterate over user ids and add
+//                for member in self.selectedGroupMembers {
+//                    let groupDict = [ "id" : groupID ]
+//                    let memberDict = [ "id" : member ]
+//                    
+//                    let JSONGroupUserObject = [
+//                        
+//                        "admin": "0",
+//                        "groupId": groupDict,
+//                        "userId": memberDict
+//                    ]
+//                    
+//                    print(JSONGroupUserObject)
+//                    self.post(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+//                    
+//                }
+//                
+//                let currentID = String(self.currentUser!["id"]!)
+//                
+//                let groupDict = [ "id" : groupID ]
+//                let memberDict = [ "id" : currentID ]
+//                
+//                let JSONGroupUserObject = [
+//                    
+//                    "admin": "1",
+//                    "groupId": groupDict,
+//                    "userId": memberDict
+//                ]
+//                
+//                print(JSONGroupUserObject)
+//                self.post(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+//                
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    let alertController = UIAlertController(title: "Group Successfully Created!", message: "Your group \"\(title)\" has been created!", preferredStyle: UIAlertControllerStyle.Alert)
+//                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
+//                        self.performSegueWithIdentifier("UnwindToGroups-Add", sender: nil)
+//                    })
+//                    alertController.addAction(okAction)
+//                    self.presentViewController(alertController, animated: true, completion: nil)
+//                })
+//            }
+//            else {
+//                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+//                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//                print("Error could not parse JSON: \(jsonStr!)")
+//            }
+//            
+//            
+//        })
+//        
+//        task.resume()
+//    }
+//    
     
     // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
     
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
-    func post(params : NSDictionary, url : String) {
+    func postGroup(params : NSDictionary, url : String) {
         
         
-        print("POSTING TO GROUP/GROUPUSER")
+        print("POSTING TO GROUP")
         
         print(url)
         
@@ -216,9 +216,6 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            //print("Response: \(response)")
-            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            //print("Body: \(strData)")
             
             let json: NSDictionary?
             
@@ -227,13 +224,75 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
             } catch let dataError{
                 
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                print(dataError)
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                //print("Error could not parse JSON in getting RESPONSE: '\(jsonStr)'")
-                // return or throw?
-                if let title = params["title"] as? String {
-                    self.getGroupInfo(title)
+                print("error: \(dataError)")
+                return
+            }
+            
+            
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                // Okay, the parsedJSON is here, lets get back the group and update the groupuser table
+                if let id = parseJSON["id"] {
+                    let groupID = String(id)
+                    
+                    //go through all of the selected members and add them to the group
+                    for member in self.selectedGroupMembers {
+                        
+                        let groupDict = [ "id" : groupID ]
+                        let memberDict = [ "id" : member ]
+                        
+                        let JSONGroupUserObject = [
+                            "admin": "0",
+                            "groupId": groupDict,
+                            "userId": memberDict
+                        ]
+
+                        self.postGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+
+                    }
+                    
                 }
+                print("parseJSON \(parseJSON)")
+            }
+        })
+        
+        task.resume()
+    }
+
+    func postGroupUser(params : NSDictionary, url : String) {
+        
+        
+        print("POSTING TO GROUPUSER")
+        
+        print(url)
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        
+        
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+        } catch {
+            print(error)
+            request.HTTPBody = nil
+        }
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print("error: \(dataError)")
                 return
             }
             
@@ -243,28 +302,17 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
                 // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                let success = parseJSON["success"] as? Int
-                print("Succes: \(success)")
-                
-//                if let title = params["title"] as? String {
-//                    self.getGroupInfo(title)
-//                }
-            }
-            else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON Still Success: \(jsonStr)")
-                
-//                if let title = params["title"] as? String {
-//                    self.getGroupInfo(title)
-//                }
+                if let groupID = parseJSON["id"] {
+                    let id = String(groupID)
+                }
+                print("parseJSON \(parseJSON)")
             }
         })
         
         task.resume()
     }
-
     
+
     // Mark - Lifecycle Methods
     
     override func viewDidLoad() {

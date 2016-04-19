@@ -856,9 +856,10 @@
                                     <action selector="deleteGroupPressed:" destination="vcr-NN-QIc" eventType="touchUpInside" id="LOu-h8-ZTT"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PKu-fg-CRB">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PKu-fg-CRB">
                                 <rect key="frame" x="16" y="318" width="568" height="178"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="memberCell" id="4CD-yd-HkK" customClass="EditGroupDetailsTableViewCell" customModule="Ryde" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="568" height="44"/>
@@ -868,8 +869,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NIZ-lf-8lD">
-                                                    <rect key="frame" x="514" y="7" width="46" height="30"/>
-                                                    <state key="normal" title="Button"/>
+                                                    <rect key="frame" x="505" y="7" width="55" height="30"/>
+                                                    <state key="normal" title="Remove">
+                                                        <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fGW-Pk-xur">
                                                     <rect key="frame" x="8" y="11" width="42" height="21"/>
@@ -886,6 +889,7 @@
                                                 <constraint firstItem="NIZ-lf-8lD" firstAttribute="centerY" secondItem="xPT-WO-1eg" secondAttribute="centerY" id="y3q-py-jrR"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
                                         <connections>
                                             <outlet property="memberNameLabel" destination="fGW-Pk-xur" id="rOW-Ay-abh"/>
                                             <outlet property="removeMember" destination="NIZ-lf-8lD" id="KL0-rD-OPw"/>
