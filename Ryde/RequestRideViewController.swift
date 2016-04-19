@@ -7,16 +7,29 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class RequestRideViewController: UIViewController {
     
+    // Rider FB id
+    var FBid = ""
+    
     var queueNum: String = ""
+    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var queueLabel: UILabel!
     
     override func viewDidLoad() {
         // gets rid of back button in navigation
         let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: navigationController, action: nil)
+        
+        // Grab data from FB
+        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
+        graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
+            self.FBid = (result.valueForKey("id") as? String)!
+        })
         
         self.title = "Ryde Requested"
         navigationItem.leftBarButtonItem = backButton
@@ -77,6 +90,9 @@ class RequestRideViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
             self.tabBarController?.tabBar.hidden = false
             
+            let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/cancel/" + self.FBid)
+            self.postCancel(postUrl)
+            
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
         
@@ -85,6 +101,28 @@ class RequestRideViewController: UIViewController {
         }))
         
         presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
+    // Post Function for Canceling
+    func postCancel(url : String) {
+        
+        //let params: [String : AnyObject] = [:]
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "DELETE"
+        
+        let task = session.dataTaskWithRequest(request)
+        {
+            (data, response, error) in
+            guard let _ = data else {
+                print("error calling")
+                return
+            }
+            print("canceling")
+        }
+        
+        task.resume()
     }
     
     /*

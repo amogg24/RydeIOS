@@ -28,6 +28,7 @@
 		780388A41CB6E4D6004F5A69 /* maps.html in Resources */ = {isa = PBXBuildFile; fileRef = 780388A31CB6E4D6004F5A69 /* maps.html */; };
 		780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780388A51CB6E5A0004F5A69 /* DriverMenuViewController.swift */; };
 		780388A81CB6E5A0004F5A69 /* DriverBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780388A61CB6E5A0004F5A69 /* DriverBaseViewController.swift */; };
+		7859C24E1CC67805008A5603 /* DriverEditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7859C24D1CC67805008A5603 /* DriverEditProfileViewController.swift */; };
 		7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF56AD61CAAFCEF00FF779A /* AppDelegate.swift */; };
 		7EF56ADE1CAAFCEF00FF779A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADC1CAAFCEF00FF779A /* Main.storyboard */; };
 		7EF56AE01CAAFCEF00FF779A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56ADF1CAAFCEF00FF779A /* Assets.xcassets */; };
@@ -63,6 +64,7 @@
 		780388A31CB6E4D6004F5A69 /* maps.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = maps.html; sourceTree = "<group>"; };
 		780388A51CB6E5A0004F5A69 /* DriverMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverMenuViewController.swift; sourceTree = "<group>"; };
 		780388A61CB6E5A0004F5A69 /* DriverBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverBaseViewController.swift; sourceTree = "<group>"; };
+		7859C24D1CC67805008A5603 /* DriverEditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverEditProfileViewController.swift; sourceTree = "<group>"; };
 		7EF56AD31CAAFCEE00FF779A /* Ryde.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ryde.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF56AD61CAAFCEF00FF779A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EF56ADD1CAAFCEF00FF779A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				780388A01CB6E4C4004F5A69 /* DriverMapViewController.swift */,
 				780388A51CB6E5A0004F5A69 /* DriverMenuViewController.swift */,
 				780388A61CB6E5A0004F5A69 /* DriverBaseViewController.swift */,
+				7859C24D1CC67805008A5603 /* DriverEditProfileViewController.swift */,
 			);
 			name = Driver;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				FCF46C151CBD495200C28E1B /* ProfileTableViewCell.swift in Sources */,
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
+				7859C24E1CC67805008A5603 /* DriverEditProfileViewController.swift in Sources */,
 				7EF56AD71CAAFCEF00FF779A /* AppDelegate.swift in Sources */,
 				C38581D11CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift in Sources */,
 				101BF3771CBC3B1C00D5332D /* RideGroupTableViewCell.swift in Sources */,

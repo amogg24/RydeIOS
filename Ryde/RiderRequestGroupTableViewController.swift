@@ -37,23 +37,19 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // Destination Longitude
     var destLong: Double = 0
     
-    // ID of chosen TAD
-    var tadID = ""
-    
     // Section Titles
     let section = ["Groups with Active Timeslots"]
     
     // Queue Position
-    var queuePos:String! = "0"
-    
-    // join TAD success/failure
-    var success: Bool = true
+    var queuePos:Int = 0
     
     var groupDictionary = [NSDictionary]()
     
     var selectedGroupInfo: NSDictionary?
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
+    var selectedTID:Int = 0
     
     override func viewDidLoad() {
         //Adds a navigation button to bring up alert to add TAD
@@ -65,6 +61,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
         graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
             self.FBid = (result.valueForKey("id") as? String)!
+            self.getUserTimeslots()
         })
         
         self.navigationItem.hidesBackButton = true
@@ -77,10 +74,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         getUserTimeslots()
-        /*
-         get TAD list from server
-         
-         */
     }
     
     func back(sender: UIBarButtonItem) {
@@ -88,20 +81,17 @@ class RiderRequestGroupTableViewController: UITableViewController {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    // Mark - Retrieve the users groups from the server
+    // Mark - Retrieve the user's active groups from the server
     
     func getUserTimeslots() {
-        
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/user/1")
+        //let url = NSURL(string: (String)("http://172.30.42.7:8080/Ryde/api/timeslotuser/gettads/" + "JohnFBTok"))
+        let url = NSURL(string: (String)("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/gettads/" + FBid))
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
         
         // Set request HTTP method to GET. It could be POST as well
         request.HTTPMethod = "GET"
-        
-        // If needed you could add Authorization header value
-        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
         
         // Execute HTTP Request
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
@@ -114,9 +104,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
             }
             
             // Print out response string
-            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            //let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
             //print("responseString = \(responseString!)")
-            
             
             let json: [NSDictionary]?
             
@@ -139,6 +128,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
             if let parseJSON = json {
                 // Okay, the parsedJSON is here, lets store its values into an array
                 self.groupDictionary = parseJSON as [NSDictionary]
+                //print(self.groupDictionary)
                 dispatch_async(dispatch_get_main_queue(), {
                     self.tableView.reloadData()
                 })
@@ -181,8 +171,14 @@ class RiderRequestGroupTableViewController: UITableViewController {
         let row = indexPath.row
         let cell = tableView.dequeueReusableCellWithIdentifier("rideGroupCell") as! RideGroupTableViewCell
         
-        if let groupTitle = groupDictionary[row]["title"] as? String {
+        if let groupTitle = groupDictionary[row]["groupName"] as? String {
             cell.rowName.text = groupTitle
+        }
+        if let numDriver = groupDictionary[row]["numDrivers"] as? Int {
+            cell.numDriverLabel.text = "Number of Drivers: " + (String)(numDriver)
+        }
+        if let numQueue = groupDictionary[row]["queueSize"] as? Int {
+            cell.numQueueLabel.text = "People in Queue: " + (String)(numQueue)
         }
         
         return cell
@@ -191,33 +187,22 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // A row selected
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let row = indexPath.row
-        
-        selectedGroupInfo = groupDictionary[row]
+
+        if let tid = groupDictionary[row]["tsId"] as? Int {
+            self.selectedTID = tid
+        }
         
         let JSONObject: [String : AnyObject] = [
-            "driverUserId" : 1,
-            "riderUserId" : 2,
-            "tsId" : 3,
-            "startLat" : 4,
-            "startLon" : 5,
-            "endLat"    : 6,
-            "endLon"   : 7
+            "tsId" : self.selectedTID,
+            "startLat" : self.startLatitude,
+            "startLon" : self.startLongitude,
+            "endLat"    : self.destLat,
+            "endLon"   : self.destLong
         ]
         
-        /*
-         let JSONObject: [String : AnyObject] = [
-         "fbTok" : self.FBid,
-         "gID" : -1,
-         "tID" : 1,
-         "startLat" : 0,
-         "startLon" : 0,
-         "endLat"    : 0,
-         "endLon"   : 0
-         ]
-         */
-        //let postUrl = "http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/" + self.FBid
-        let postUrl = "http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/JohnFBTok"
-        //self.postRequest(JSONObject, url: postUrl)
+        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/" + self.FBid + "/" + (String)(self.selectedTID))
+        //let postUrl = ("http://172.30.42.7:8080/Ryde/api/ride/request/JohnFBTok/" + (String)(self.selectedTID))
+        self.postRequest(JSONObject, url: postUrl)
         
         performSegueWithIdentifier("ShowRequestRide", sender: nil)
     }
@@ -242,9 +227,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
         
         alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction!) in
             let textField = alert.textFields![0] as UITextField
-            
-            self.passcodeError()
-            //self.generateTADRequest(textField.text!)
+            self.generateTADRequest(textField.text!)
         }))
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action: UIAlertAction!) in
@@ -262,7 +245,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
             "TADPasscode" : passcode
         ]
         
-        self.postTAD(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/passcode")
+        self.postTAD(JSONObject, url: ("http://\(self.appDelegate.baseURL)/Ryde/api/timeslotuser/jointad/" + FBid + "/" + passcode))
+        //self.postTAD(JSONObject, url: ("http://172.30.42.7:8080/Ryde/api/timeslotuser/jointad/" + "JohnFBTok" + "/" + passcode))
     }
     
     func passcodeError()
@@ -281,7 +265,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
     func postTAD(params : Dictionary<String, String>, url : String) {
-        
         
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
@@ -315,17 +298,22 @@ class RiderRequestGroupTableViewController: UITableViewController {
                 self.passcodeError()
                 return
             }
-            
-            
-            
+
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
                 // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                let success = parseJSON["success"] as? Int
-                print("Succes: \(success)")
-                
-                self.getUserTimeslots()
+                if let succ = parseJSON["joinTADSuccess"] as? Bool
+                {
+                    if (succ == true)
+                    {
+                        self.getUserTimeslots()
+                    }
+                    else
+                    {
+                        self.passcodeError()
+                    }
+                }
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
@@ -342,7 +330,47 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // Post Function for request
     func postRequest(params : Dictionary<String, AnyObject>, url : String) {
         
+        //let params: [String : AnyObject] = [:]
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
         
+        let task = session.dataTaskWithRequest(request)
+        {
+            (data, response, error) in
+            guard let _ = data else {
+                print("error calling")
+                return
+            }
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                self.queuePos = (parseJSON["position"] as? Int)!
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+            print("canceling")
+        }
+        
+        task.resume()
+        /*
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
@@ -375,16 +403,10 @@ class RiderRequestGroupTableViewController: UITableViewController {
                 return
             }
             
-            
-            
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
-                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                let success = parseJSON["success"] as? Int
-                print("Succes: \(success)")
-                
-                //refresh Page
+                self.queuePos = (parseJSON["position"] as? Int)!
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
@@ -393,7 +415,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
             }
         })
         
-        task.resume()
+        task.resume()*/
     }
     
     /*
@@ -412,7 +434,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
             let requestRideViewController: RequestRideViewController = segue.destinationViewController as! RequestRideViewController
             
             //Pass the data object to the destination view controller object
-            requestRideViewController.queueNum = queuePos
+            requestRideViewController.queueNum = (String)(queuePos)
             
         }
     }
