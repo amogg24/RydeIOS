@@ -28,6 +28,14 @@ class EditProfileViewController: UIViewController {
     var id = Int()
 
     override func viewDidLoad() {
+        
+        //Make the image a circle
+        profileImage.layer.borderWidth = 1
+        //profileImage.layer.masksToBounds = false
+        profileImage.layer.borderColor = UIColor.clearColor().CGColor
+        profileImage.layer.cornerRadius = profileImage.frame.height/2
+        profileImage.clipsToBounds = true
+        
         super.viewDidLoad()
         
         cellNumberTextField.text! = cellNumber

@@ -11,7 +11,8 @@ import MapKit
 import CoreLocation
 
 protocol HandleMapSearch {
-    func dropPinZoomIn(placemark:MKPlacemark)
+    func dropPinZoomIn(placemark:MKPlacemark, destination:String)
+    func cancelSearch()
 }
 
 class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, HandleMapSearch {
@@ -55,6 +56,10 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Search Controller
     var resultSearchController:UISearchController? = nil
     
+    // Destination Button to Search
+    
+    @IBOutlet var destinationButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,29 +76,25 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         
         geoCoder = CLGeocoder()
         
+    }
+    
+    // Mark - Cancel Search
+    
+    func cancelSearch() {
         
-        let locationSearchTable = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! LocationSearchTable
-        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
-        resultSearchController?.searchResultsUpdater = locationSearchTable
-        let searchBar = resultSearchController!.searchBar
-        searchBar.sizeToFit()
-        searchBar.placeholder = "Enter Destination"
-        
-       
-        addressView.addSubview((resultSearchController?.searchBar)!)
-
-        resultSearchController?.hidesNavigationBarDuringPresentation = false
-        resultSearchController?.dimsBackgroundDuringPresentation = true
-        definesPresentationContext = true
-        locationSearchTable.mapView = mapView
-        
-        locationSearchTable.handleMapSearchDelegate = self
+        if addressView.subviews.count > 1 {
+            addressView.subviews.last?.removeFromSuperview()
+            destinationButton.setTitle("Enter Destination", forState: UIControlState.Normal)
+        }
+            
         
     }
     
+    
     // Mark - Destination Pin Drop
     
-    func dropPinZoomIn(placemark:MKPlacemark){
+    func dropPinZoomIn(placemark:MKPlacemark, destination:String){
+        
         // cache the pin
         selectedPin = placemark
         // clear existing pins
@@ -110,14 +111,41 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         self.destLat = Double(placemark.coordinate.latitude)
         self.destLong = Double(placemark.coordinate.longitude)
         
+        addressView.subviews.last?.removeFromSuperview()
         
+        destinationButton.setTitle(destination, forState: UIControlState.Normal)
         
-//        The following code drops a pin where the user searched but we dont want that. Just in case im leaving it here.
+        //        The following code drops a pin where the user searched but we dont want that. Just in case im leaving it here.
         
-//        let span = MKCoordinateSpanMake(0.05, 0.05)
-//        let region = MKCoordinateRegionMake(placemark.coordinate, span)
-//        mapView.setRegion(region, animated: true)
+        //        let span = MKCoordinateSpanMake(0.05, 0.05)
+        //        let region = MKCoordinateRegionMake(placemark.coordinate, span)
+        //        mapView.setRegion(region, animated: true)
     }
+    
+    // Mark - Change Destination Button Clicked
+    
+    @IBAction func changeDestination(sender: UIButton) {
+        
+        let locationSearchTable = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! LocationSearchTable
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable
+        let searchBar = resultSearchController!.searchBar
+        
+        searchBar.placeholder = "Enter Destination"
+        
+        
+        addressView.addSubview((resultSearchController?.searchBar)!)
+        
+        searchBar.sizeToFit()
+        
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        resultSearchController?.dimsBackgroundDuringPresentation = true
+        definesPresentationContext = true
+        locationSearchTable.mapView = mapView
+        
+        locationSearchTable.handleMapSearchDelegate = self
+    }
+    
 
     
     // Mark - Location Delegate Methods
