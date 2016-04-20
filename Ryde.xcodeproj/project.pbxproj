@@ -39,7 +39,6 @@
 		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
 		C3F548FD1CB39EF000A46A20 /* GroupDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */; };
-		FCF46C151CBD495200C28E1B /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF46C141CBD495200C28E1B /* ProfileTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,7 +76,6 @@
 		C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
 		C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
 		C3F548FC1CB39EF000A46A20 /* GroupDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsTableViewController.swift; sourceTree = "<group>"; };
-		FCF46C141CBD495200C28E1B /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,7 +132,6 @@
 		5A747B8F1CB07018009C3B41 /* Tab - Profile */ = {
 			isa = PBXGroup;
 			children = (
-				FCF46C141CBD495200C28E1B /* ProfileTableViewCell.swift */,
 				5A7243061CBC716F006AD877 /* EditProfileViewController.swift */,
 				5A747B901CB07048009C3B41 /* ProfileViewController.swift */,
 			);
@@ -312,7 +309,6 @@
 				101BF3731CBC393900D5332D /* RiderRequestGroupTableViewController.swift in Sources */,
 				C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */,
 				C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */,
-				FCF46C151CBD495200C28E1B /* ProfileTableViewCell.swift in Sources */,
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7859C24E1CC67805008A5603 /* DriverEditProfileViewController.swift in Sources */,

@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var FBid = ""
     
+    var rydesTakenCount = 0
+    var rydesGivenCount = 0
+    
     var currentUser: NSDictionary?
         
     var window: UIWindow?

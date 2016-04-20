@@ -17,8 +17,13 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var profileName: UILabel!
     
+    @IBOutlet var cellNumberTextField: UILabel!
+    @IBOutlet var carInfoTextField: UILabel!
+    @IBOutlet var rydesGivenLabel: UILabel!
+    
     //Global Strings
     var carMakeString = ""
+    @IBOutlet var rydesTakenLabel: UILabel!
     var carModelString = ""
     var carColorString = ""
     var carInfo = ""
@@ -64,6 +69,13 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         fbButton.delegate = self
         self.view.addSubview(fbButton)
         
+        rydesGivenLabel.text! = String(appDelegate.rydesGivenCount)
+        rydesTakenLabel.text! = String(appDelegate.rydesTakenCount)
+        
+        getUserData(FBSDKAccessToken.currentAccessToken().userID)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+        
         // Grab data from FB
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
         graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
@@ -77,46 +89,10 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             let url = NSURL(string: "https://graph.facebook.com/\(self.FBid)/picture?type=large&return_ssl_resources=1")
             // Set Image
             self.profileImage.image = UIImage(data: NSData(contentsOfURL: url!)!)
-            
-            
-            //Grab Data from API
-            //self.getUserData(self.FBid)
         })
         
-        profileTableView.separatorColor = UIColor.darkGrayColor()
-        profileTableView.tableFooterView = UIView()
     }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return nameLabels.count
-    }
-    
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: ProfileTableViewCell = tableView.dequeueReusableCellWithIdentifier("ProfileTableView") as! ProfileTableViewCell
         
-        // Configure the cell...
-        let rowNumber = indexPath.row
-        cell.typeLabel.text! = nameLabels[rowNumber]
-        
-        //Get the User data
-        getUserData(FBSDKAccessToken.currentAccessToken().userID)
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-//        if (flag == 0)
-//        {
-//            //print("info: \(infoLabel[rowNumber])")
-//            cell.typeLabel.hidden = true
-//        }
-//        else{
-         //   print("info:\(infoLabel[rowNumber])test")
-            cell.infoLabel.text! = infoLabel[rowNumber]
-       // }
-        
-        return cell
-    }
-    
     // Mark - Retrieve the users groups from the server
     
     func getUserData(token: String) {
@@ -175,6 +151,9 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
                 //This data should always be found, signal semaphore once found
                 self.infoLabel[0] = (parseJSON["phoneNumber"] as? String)!
                 self.id = (parseJSON["id"] as? Int)!
+                
+                self.cellNumberTextField.text! = (parseJSON["phoneNumber"] as? String)!
+                self.carInfoTextField.text! = self.carInfo
                 dispatch_semaphore_signal(self.semaphore);
                 
             }

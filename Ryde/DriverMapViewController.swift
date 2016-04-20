@@ -106,6 +106,8 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         webView.loadRequest(request)
     }
     
+    // Mark - Cancel Button
+    
     @IBAction func cancelButtonPressed(sender: UIButton) {
         //confirm pickup
         let alertController = UIAlertController(title: "Confirmation",
@@ -121,6 +123,8 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         // Present the alert controller by calling the presentViewController method
         presentViewController(alertController, animated: true, completion: nil)
     }
+    
+    // Mark - Pick Up Button
     
     @IBAction func pickupButtonPressed(sender: UIButton) {
         if !hasRider {
@@ -158,9 +162,13 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         
     }
     
+    // Mark - Call Rider Button
+    
     @IBAction func phoneButtonPressed(sender: UIButton) {
-//        let url:NSURL? = NSURL(string: "tel://\(4072573512)")
-//        UIApplication.sharedApplication().openURL(url!)
+
+        if let url = NSURL(string: "tel://\(7034857174)") {
+            UIApplication.sharedApplication().openURL(url)
+        }
         
     }
     /*
@@ -180,21 +188,5 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
             
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
     
 }
