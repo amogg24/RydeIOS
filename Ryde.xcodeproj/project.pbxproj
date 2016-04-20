@@ -35,6 +35,8 @@
 		7EF56AE31CAAFCEF00FF779A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EF56AE11CAAFCEF00FF779A /* LaunchScreen.storyboard */; };
 		C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */; };
 		C38581D11CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38581D01CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift */; };
+		C38581E91CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C38581E31CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.m */; };
+		C38581EB1CC7F42900BE55CC /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C38581E71CC7F42900BE55CC /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */; };
 		C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */; };
 		C3F548F91CB39AAA00A46A20 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */; };
@@ -72,6 +74,10 @@
 		7EF56AE41CAAFCEF00FF779A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchGroupsTableViewController.swift; sourceTree = "<group>"; };
 		C38581D01CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditGroupDetailsTableViewCell.swift; sourceTree = "<group>"; };
+		C38581E21CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		C38581E31CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		C38581E61CC7F42900BE55CC /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
+		C38581E71CC7F42900BE55CC /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 		C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditGroupDetailsViewController.swift; sourceTree = "<group>"; };
 		C3A9680C1CBC1BB900E3F3F1 /* AddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGroupViewController.swift; sourceTree = "<group>"; };
 		C3F548F81CB39AAA00A46A20 /* GroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
@@ -98,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				780388A21CB6E4D6004F5A69 /* Google Maps JavaScript API */,
+				C38581DF1CC7F42900BE55CC /* TPKeyboardAvoiding */,
 				5AB6F2951CB1C02B00E875D4 /* MapKit.framework */,
 				5AB6F2931CB1C02200E875D4 /* CoreLocation.framework */,
 				5A295D021CAB6EFF006539F5 /* FBSDKCoreKit.framework */,
@@ -222,6 +229,18 @@
 			path = Ryde;
 			sourceTree = "<group>";
 		};
+		C38581DF1CC7F42900BE55CC /* TPKeyboardAvoiding */ = {
+			isa = PBXGroup;
+			children = (
+				C38581E21CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.h */,
+				C38581E31CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.m */,
+				C38581E61CC7F42900BE55CC /* UIScrollView+TPKeyboardAvoidingAdditions.h */,
+				C38581E71CC7F42900BE55CC /* UIScrollView+TPKeyboardAvoidingAdditions.m */,
+			);
+			name = TPKeyboardAvoiding;
+			path = Ryde/TPKeyboardAvoiding;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -305,10 +324,12 @@
 				C3A7EB421CBCD2E000A22B51 /* EditGroupDetailsViewController.swift in Sources */,
 				5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */,
 				5A7243071CBC716F006AD877 /* EditProfileViewController.swift in Sources */,
+				C38581EB1CC7F42900BE55CC /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */,
 				101BF3731CBC393900D5332D /* RiderRequestGroupTableViewController.swift in Sources */,
 				C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */,
 				C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */,
+				C38581E91CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.m in Sources */,
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
 				7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */,
 				7859C24E1CC67805008A5603 /* DriverEditProfileViewController.swift in Sources */,

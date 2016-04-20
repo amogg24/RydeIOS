@@ -10,7 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
+class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate {
 
     
     // Mark - Fields
@@ -25,8 +25,12 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
     
     var newGroup = NSDictionary()
     
+    var activeSearchBar: UISearchBar?
+    
     // Mark - IBOutlets
     
+    @IBOutlet var scrollView: UIScrollView!
+
     @IBOutlet var groupNameTextField: UITextField!
     
     @IBOutlet var groupDescriptionTextView: UITextView!
@@ -134,7 +138,6 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
                             "userId": memberDict
                         ]
 
-                        print(JSONGroupUserObject)
                         self.postGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
                     }
                     
@@ -221,10 +224,13 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
     }
     
 
-    // Mark - Lifecycle Methods
+    //MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Designate self as a subscriber to Keyboard Notifications
+        registerForKeyboardNotifications()
         
         //print permissions, such as public_profile
         print(FBSDKAccessToken.currentAccessToken().permissions)
@@ -242,22 +248,130 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
         
         groupMemberTableView.tableFooterView = UIView()
 
-        
     }
+
+
+    //MARK: - Textfield delegate
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if (textField == groupNameTextField) {
+            groupNameTextField.resignFirstResponder()
+            groupDescriptionTextView.becomeFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    /*
+     ---------------------------------------------
+     MARK: - Register and Unregister Notifications
+     ---------------------------------------------
+     */
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+        self.registerForKeyboardNotifications()
     }
     
-    // Mark - Search Bar Delegates
+    override func viewDidDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+//    /*
+//     ---------------------------------------
+//     MARK: - Handling Keyboard Notifications
+//     ---------------------------------------
+//     */
+//    
+    // This method is called in viewDidLoad() to register self for keyboard notifications
+    func registerForKeyboardNotifications() {
+        
+        // "An NSNotificationCenter object (or simply, notification center) provides a
+        // mechanism for broadcasting information within a program." [Apple]
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        
+        notificationCenter.addObserver(self,
+                                       selector:   #selector(AddGroupViewController.keyboardWillShow(_:)),    // <-- Call this method upon Keyboard Will SHOW Notification
+            name:       UIKeyboardWillShowNotification,
+            object:     nil)
+        
+        notificationCenter.addObserver(self,
+                                       selector:   #selector(AddGroupViewController.keyboardWillHide(_:)),    //  <-- Call this method upon Keyboard Will HIDE Notification
+            name:       UIKeyboardWillHideNotification,
+            object:     nil)
+    }
+    
+    // This method is called upon Keyboard Will SHOW Notification
+    func keyboardWillShow(sender: NSNotification) {
+        
+        if (activeSearchBar != nil) {
+            // "userInfo, the user information dictionary stores any additional
+            // objects that objects receiving the notification might use." [Apple]
+            let info: NSDictionary = sender.userInfo!
+            
+            /*
+             Key     = UIKeyboardFrameBeginUserInfoKey
+             Value   = an NSValue object containing a CGRect that identifies the start frame of the keyboard in screen coordinates.
+             */
+            let value: NSValue = info.valueForKey(UIKeyboardFrameBeginUserInfoKey) as! NSValue
+            
+            // Obtain the size of the keyboard
+            let keyboardSize: CGSize = value.CGRectValue().size
+            
+            // Create Edge Insets for the view.
+            let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+            
+            // Set the distance that the content view is inset from the enclosing scroll view.
+            scrollView.contentInset = contentInsets
+            
+            // Set the distance the scroll indicators are inset from the edge of the scroll view.
+            scrollView.scrollIndicatorInsets = contentInsets
+            
+            //-----------------------------------------------------------------------------------
+            // Scroll the search bar up so it is at the top of the view
+            //-----------------------------------------------------------------------------------
+            
+            // Obtain the frame size of the View
+            var selfViewFrameSize: CGRect = self.view.frame
+            
+            // Subtract the keyboard height from the self's view height
+            // and set it as the new height of the self's view
+            selfViewFrameSize.size.height -= keyboardSize.height
+            
+            let searchBarRect = groupMemberSearchBar.frame
+            
+            let topLayoutGuideBottom = self.topLayoutGuide.length
+            
+            let offset = CGPointMake(0, searchBarRect.origin.y - topLayoutGuideBottom)
+            
+            scrollView.contentOffset = offset
+        }
+    }
+    
+    // This method is called upon Keyboard Will HIDE Notification
+    func keyboardWillHide(sender: NSNotification) {
+        
+        // Set contentInsets to top=0, left=0, bottom=0, and right=0
+        let contentInsets: UIEdgeInsets = UIEdgeInsetsZero
+        
+        // Set scrollView's contentInsets to top=0, left=0, bottom=0, and right=0
+        scrollView.contentInset = contentInsets
+        
+        // Set scrollView's scrollIndicatorInsets to top=0, left=0, bottom=0, and right=0
+        scrollView.scrollIndicatorInsets = contentInsets
+    }
+    
+    // Mark: - Search Bar Delegates
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchActive = true;
+        activeSearchBar = searchBar
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchActive = false;
+        activeSearchBar = nil
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
@@ -266,6 +380,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchActive = false;
+        searchBar.resignFirstResponder()
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -374,6 +489,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
         if let memberFirstName = memberRow["firstName"] as? String {
             if let memberLastName = memberRow["lastName"] as? String {
                 cell.textLabel!.text = memberFirstName + " " + memberLastName
+                cell.textLabel?.textColor = UIColor.whiteColor()
             }
         }
         

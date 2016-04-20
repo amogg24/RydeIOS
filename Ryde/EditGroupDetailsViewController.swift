@@ -121,7 +121,7 @@ class EditGroupDetailsViewController: UIViewController {
                         "userId": memberDict
                     ]
                     
-                    //self.postGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+                    self.postGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
                 }
             }
             
@@ -131,16 +131,8 @@ class EditGroupDetailsViewController: UIViewController {
                 
                 if let memberID = initialAdmin["id"] {
                     let memberIDString = String(memberID)
-                    let memberDict = [ "id" : memberIDString ]
                     
-                    let JSONGroupUserObject = [
-                        
-                        "admin": "0",
-                        "groupId": groupDict,
-                        "userId": memberDict
-                    ]
-                    
-                    //self.putGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+                    self.putGroupUser("http://\(self.appDelegate.baseURL)/Ryde/api/groupuser/admin/\(memberIDString)/\(id)/0")
                 }
             }
             
@@ -149,16 +141,8 @@ class EditGroupDetailsViewController: UIViewController {
                 
                 if let memberID = newAdmin["id"] {
                     let memberIDString = String(memberID)
-                    let memberDict = [ "id" : memberIDString ]
-                    
-                    let JSONGroupUserObject = [
-                        
-                        "admin": "1",
-                        "groupId": groupDict,
-                        "userId": memberDict
-                    ]
-                    
-                    //self.putGroupUser(JSONGroupUserObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/groupuser")
+
+                    self.putGroupUser("http://\(self.appDelegate.baseURL)/Ryde/api/groupuser/admin/\(memberIDString)/\(id)/1")
                 }
             }
             
@@ -167,7 +151,7 @@ class EditGroupDetailsViewController: UIViewController {
                 
                 if let memberID = initialMember["id"] {
                     
-                    //self.deleteGroupUser("http://\(self.appDelegate.baseURL)/Ryde/api/groupuser/\(memberID)")
+                    self.deleteGroupUser("http://\(self.appDelegate.baseURL)/Ryde/api/groupuser/\(memberID)/\(id)")
                 }
             }
             
@@ -242,9 +226,42 @@ class EditGroupDetailsViewController: UIViewController {
         task.resume()
     }
     
-    func putGroupUser(params : NSDictionary, url : String) {
+    func putGroupUser(url : String) {
+        print("PUTTING TO GROUPUSER")
         
+        print(url)
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "PUT"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print("error: \(dataError)")
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                // Okay, the parsedJSON is here, let's see what we sent
+                print("parseJSON \(parseJSON)")
+            }
+        })
+        
+        task.resume()
     }
+
     
     func putGroup(params : NSDictionary, url : String) {
         print("PUTTING UPDATE TO GROUP")
@@ -365,6 +382,7 @@ class EditGroupDetailsViewController: UIViewController {
         if let memberFirstName = memberRow["firstName"] as? String {
             if let memberLastName = memberRow["lastName"] as? String {
                 cell.memberNameLabel.text = memberFirstName + " " + memberLastName
+                cell.memberNameLabel.textColor = UIColor.whiteColor()
             }
         }
         cell.removeMember.tag = row
