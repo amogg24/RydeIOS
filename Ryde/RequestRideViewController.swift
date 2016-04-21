@@ -15,7 +15,7 @@ class RequestRideViewController: UIViewController {
     // Rider FB id
     var FBid = ""
     
-    var queueNum: String = ""
+    var queueNum: Int = 0
     
     // Rider Latitude
     var startLatitude: Double = 0
@@ -28,6 +28,9 @@ class RequestRideViewController: UIViewController {
     
     // Destination Longitude
     var destLong: Double = 0
+    
+    // Timeslot ID
+    var selectedTID:Int = 0
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -49,7 +52,7 @@ class RequestRideViewController: UIViewController {
         super.viewDidLoad()
         
         // schedules task for every n second
-        var updateTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
+        var updateTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
         
         self.queueLabel.text = "2"
         
@@ -79,7 +82,8 @@ class RequestRideViewController: UIViewController {
     }
     
     func updateQueue(){
-        print("function called")
+        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/getposition/" + self.FBid + "/" + (String)(self.selectedTID))
+        self.getQueuePos(postUrl)
     }
     
     override func didReceiveMemoryWarning() {
@@ -137,6 +141,46 @@ class RequestRideViewController: UIViewController {
         task.resume()
     }
     
+    // Get Function for Canceling
+    func getQueuePos(url : String) {
+        
+        //let params: [String : AnyObject] = [:]
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        let task = session.dataTaskWithRequest(request)
+        {
+            (data, response, error) in
+            guard let _ = data else {
+                print("error calling")
+                return
+            }
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                return
+            }
+            if let parseJSON = json {
+                self.queueNum = (parseJSON["position"] as? Int)!
+                print(self.queueNum)
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+        }
+        
+        task.resume()
+    }
     
     /*
      -------------------------
