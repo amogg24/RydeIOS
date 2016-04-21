@@ -167,7 +167,7 @@ class EditGroupDetailsViewController: UIViewController {
     
     @IBAction func deleteGroupPressed(sender: UIButton) {
         let alertController = UIAlertController(title: "Are you sure?", message: "Once a group is deleted, it cannot be recovered", preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
+        let okAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
             let id = self.groupInfo!["id"]!
             self.deleteGroup("http://\(self.appDelegate.baseURL)/Ryde/api/group/\(id)")
             self.performSegueWithIdentifier("UnwindToGroups-Delete", sender: nil)
