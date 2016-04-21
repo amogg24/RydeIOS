@@ -54,7 +54,8 @@ class RequestRideViewController: UIViewController {
         // schedules task for every n second
         var updateTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
         
-        self.queueLabel.text = "2"
+        self.queueLabel.text = (String)(self.queueNum)
+        print(self.queueNum)
         
         let seconds = 2.0
         let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
@@ -62,7 +63,7 @@ class RequestRideViewController: UIViewController {
         
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             
-            self.queueLabel.text = "1"
+            //self.queueLabel.text = "1"
             
         })
         
@@ -74,7 +75,7 @@ class RequestRideViewController: UIViewController {
             
             updateTimer.invalidate()     //stops updateTimer (put in the post request when queue = 0 later)
             
-            self.queueLabel.text = "0"
+            //self.queueLabel.text = "0"
             self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
             
         })
@@ -84,6 +85,8 @@ class RequestRideViewController: UIViewController {
     func updateQueue(){
         let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/getposition/" + self.FBid + "/" + (String)(self.selectedTID))
         self.getQueuePos(postUrl)
+        self.queueLabel.text = (String)(queueNum)
+        //check if queueNum is 0, segue when it is.
     }
     
     override func didReceiveMemoryWarning() {

@@ -56,8 +56,8 @@ class RiderMenuViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func updateArrayMenuOptions(){
-        arrayMenuOptions.append(["title":"Contact Driver", "icon":"HomeIcon"])
-        arrayMenuOptions.append(["title":"Cancel Ride", "icon":"PlayIcon"])
+        arrayMenuOptions.append(["title":"Contact Driver", "icon":"Call"])
+        arrayMenuOptions.append(["title":"Cancel Ride", "icon":"Cancel"])
         
         tblMenuOptions.reloadData()
     }
