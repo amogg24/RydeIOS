@@ -631,23 +631,29 @@ class EditGroupDetailsViewController: UIViewController {
 
         }
         else {
-            for member in memberList {
-                if let memberFirstName = member["firstName"] as? String {
-                    if let memberLastName = member["lastName"] as? String {
-                        let queryName = memberFirstName + " " + memberLastName
-                        let lowercaseQueryName = queryName.lowercaseString
-                        
-                        let lowercaseSearch = searchText.lowercaseString
-                        
-                        print("name: \(lowercaseQueryName)")
-                        print("search: \(lowercaseSearch)")
-                        if lowercaseQueryName.rangeOfString(lowercaseSearch) != nil {
-                            searchBarResults.append(member)
+            
+            if(searchText == "") {
+                searchBarResults = memberList
+            }
+            else {
+                for member in memberList {
+                    if let memberFirstName = member["firstName"] as? String {
+                        if let memberLastName = member["lastName"] as? String {
+                            let queryName = memberFirstName + " " + memberLastName
+                            let lowercaseQueryName = queryName.lowercaseString
+                            
+                            let lowercaseSearch = searchText.lowercaseString
+                            
+                            print("name: \(lowercaseQueryName)")
+                            print("search: \(lowercaseSearch)")
+                            if lowercaseQueryName.rangeOfString(lowercaseSearch) != nil {
+                                searchBarResults.append(member)
+                            }
                         }
                     }
                 }
+
             }
-            print(searchBarResults.count)
             groupMemberTableView.reloadData()
         }
     }
