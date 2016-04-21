@@ -23,6 +23,8 @@ class DriverEditProfileViewController: UIViewController {
     var cameFromDriverView = false
     
     var cellNumber = ""
+    let semaphore = dispatch_semaphore_create(0);
+
     // Mark - Fields
     
     var FBid = ""
@@ -31,7 +33,15 @@ class DriverEditProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cellNumberTextField.text! = cellNumber
+        profileImage.layer.borderWidth = 1
+        //profileImage.layer.masksToBounds = false
+        profileImage.layer.borderColor = UIColor.clearColor().CGColor
+        profileImage.layer.cornerRadius = profileImage.frame.height/2
+        profileImage.clipsToBounds = true
+
+        
+        getUserData(FBSDKAccessToken.currentAccessToken().userID)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         
         // Grab data from FB
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
@@ -49,6 +59,77 @@ class DriverEditProfileViewController: UIViewController {
         print("id = \(id)")
         
     }
+    
+    
+    func getUserData(token: String) {
+        print("RETRIEVE USER DATA")
+        
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findByToken/\(token)")
+        print(url)
+        
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url!);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Execute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            //print("Response: \(response)")
+            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Body: \(strData)")
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                // return or throw?
+                return
+            }
+            
+            
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                //Check if the user has car data
+                if parseJSON["carMake"] != nil {
+                    self.carMakeTextField.text! = (parseJSON["carMake"] as? String)!
+                    self.carModelTextField.text! = (parseJSON["carModel"] as? String)!
+                    self.carColorTextField.text! = (parseJSON["carColor"] as? String)!
+                    
+                }
+                
+                //This id should always be found
+                self.id = (parseJSON["id"] as? Int)!
+                
+                //Set the labels and signal semaphore
+                self.cellNumberTextField.text! = (parseJSON["phoneNumber"] as? String)!
+                
+                dispatch_semaphore_signal(self.semaphore);
+                
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+        })
+        
+        task.resume()
+        
+    }
+
     
     
     @IBAction func saveButtonTapped(sender: UIButton) {
