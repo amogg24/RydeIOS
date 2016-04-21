@@ -130,12 +130,7 @@ class EditProfileViewController: UIViewController {
         
         // Sends a POST to the specified URL with the JSON conent
         self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")      
-       //performSegueWithIdentifier("Save", sender: self)
-        //EditProfileViewController.showViewController(ProfileViewController)
-        //ProfileViewController.viewWillAppear()
-        if let navController = self.navigationController {
-            navController.popViewControllerAnimated(true)
-        }
+    performSegueWithIdentifier("Save", sender: self)
         
     }
     

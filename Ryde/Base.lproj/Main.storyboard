@@ -1934,7 +1934,7 @@
                         <outlet property="profileImage" destination="ssT-18-m7M" id="Kdo-hG-qmV"/>
                         <outlet property="profileName" destination="hXH-9y-TPr" id="TdF-3i-gor"/>
                         <segue destination="P6T-6r-ncU" kind="showDetail" identifier="Delete" id="3ui-dR-XQn"/>
-                        <segue destination="Ae2-9A-WFx" kind="show" identifier="Save" id="fLp-gv-9iW"/>
+                        <segue destination="NMU-m6-DMJ" kind="show" identifier="Save" id="yCc-Om-4Xs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Se2-av-I1Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2764,7 +2764,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="1Dz-x7-ZVx"/>
-        <segue reference="Zqd-d8-8Ir"/>
-        <segue reference="fLp-gv-9iW"/>
+        <segue reference="3ui-dR-XQn"/>
+        <segue reference="yCc-Om-4Xs"/>
     </inferredMetricsTieBreakers>
 </document>
