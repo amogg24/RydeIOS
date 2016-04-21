@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 class EditGroupDetailsViewController: UIViewController {
 
@@ -16,6 +17,12 @@ class EditGroupDetailsViewController: UIViewController {
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    var currentUser: NSDictionary?
+    
+    var searchBarResults = [NSDictionary]()
+    
+    var addingNewMembers: Bool = false
+    
     var adminList = [NSDictionary]()
     
     var memberList = [NSDictionary]()
@@ -24,9 +31,16 @@ class EditGroupDetailsViewController: UIViewController {
     
     var initialAdminList = [NSDictionary]()
     
+    var selectedGroupMembers = [NSDictionary]()
+    
+    var activeSearchBar: UISearchBar?
+    
+    var searchActive: Bool = false
+    
     // Mark - IBOutlets
+    @IBOutlet var scrollView: UIScrollView!
     
-    
+    @IBOutlet var groupMemberSearchBar: UISearchBar!
     
     @IBOutlet var groupNameTextField: UITextField!
     
@@ -34,7 +48,35 @@ class EditGroupDetailsViewController: UIViewController {
     
     @IBOutlet var groupMemberTableView: UITableView!
     
+    @IBOutlet var addNewMembersButton: UIButton!
+    
     // Mark - IBActions
+    
+    
+    @IBAction func addNewMembersPressed(sender: AnyObject) {
+        if (addingNewMembers) {
+            addingNewMembers = false
+            memberList = selectedGroupMembers
+            selectedGroupMembers.removeAll()
+            searchBarSearchButtonClicked(groupMemberSearchBar)
+            searchBarTextDidEndEditing(groupMemberSearchBar)
+            addNewMembersButton.setTitle("Add New Members", forState: UIControlState.Normal)
+            groupMemberTableView.reloadData()
+            
+        }
+        else {
+            addingNewMembers = true
+            addNewMembersButton.setTitle("Done Adding New Members", forState: UIControlState.Normal)
+            searchBarSearchButtonClicked(groupMemberSearchBar)
+            searchBarTextDidEndEditing(groupMemberSearchBar)
+            selectedGroupMembers = memberList
+            groupMemberTableView.reloadData()
+        }
+    }
+    
+    @IBAction func editTimeslotsPressed(sender: AnyObject) {
+    }
+    
     
     @IBAction func saveEditedGroupPressed(sender: UIBarButtonItem) {
         if (groupNameTextField.text == "") {
@@ -167,7 +209,7 @@ class EditGroupDetailsViewController: UIViewController {
     
     @IBAction func deleteGroupPressed(sender: UIButton) {
         let alertController = UIAlertController(title: "Are you sure?", message: "Once a group is deleted, it cannot be recovered", preferredStyle: UIAlertControllerStyle.Alert)
-        let okAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
+        let okAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Default, handler: { (action:UIAlertAction) -> Void in
             let id = self.groupInfo!["id"]!
             self.deleteGroup("http://\(self.appDelegate.baseURL)/Ryde/api/group/\(id)")
             self.performSegueWithIdentifier("UnwindToGroups-Delete", sender: nil)
@@ -344,6 +386,11 @@ class EditGroupDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Designate self as a subscriber to Keyboard Notifications
+        registerForKeyboardNotifications()
+        
+        currentUser = appDelegate.currentUser
+        
         groupMemberTableView.tableFooterView = UIView()
         
         if let dict = groupInfo {
@@ -355,17 +402,266 @@ class EditGroupDetailsViewController: UIViewController {
             }
         }
         
+        selectedGroupMembers.removeAll()
+        
         initialAdminList = adminList
         initialMemberList = memberList
+        
+        for subview in self.groupMemberSearchBar.subviews {
+            removeClearButtonFromSearch(subview)
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.registerForKeyboardNotifications()
     }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func removeClearButtonFromSearch(view: UIView) {
+        
+        for subview in view.subviews {
+            removeClearButtonFromSearch(subview)
+        }
+        
+        if (view.conformsToProtocol(UITextInputTraits)) {
+            let textField = view as! UITextField
+            textField.clearButtonMode = UITextFieldViewMode.Never
+            
+        }
+        
+        
+    }
+    
+    //    /*
+    //     ---------------------------------------
+    //     MARK: - Handling Keyboard Notifications
+    //     ---------------------------------------
+    //     */
+    //
+    // This method is called in viewDidLoad() to register self for keyboard notifications
+    func registerForKeyboardNotifications() {
+        
+        // "An NSNotificationCenter object (or simply, notification center) provides a
+        // mechanism for broadcasting information within a program." [Apple]
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        
+        notificationCenter.addObserver(self,
+                                       selector:   #selector(AddGroupViewController.keyboardWillShow(_:)),    // <-- Call this method upon Keyboard Will SHOW Notification
+            name:       UIKeyboardWillShowNotification,
+            object:     nil)
+        
+        notificationCenter.addObserver(self,
+                                       selector:   #selector(AddGroupViewController.keyboardWillHide(_:)),    //  <-- Call this method upon Keyboard Will HIDE Notification
+            name:       UIKeyboardWillHideNotification,
+            object:     nil)
+    }
+    
+    // This method is called upon Keyboard Will SHOW Notification
+    func keyboardWillShow(sender: NSNotification) {
+        
+        if (activeSearchBar != nil) {
+            // "userInfo, the user information dictionary stores any additional
+            // objects that objects receiving the notification might use." [Apple]
+            let info: NSDictionary = sender.userInfo!
+            
+            /*
+             Key     = UIKeyboardFrameBeginUserInfoKey
+             Value   = an NSValue object containing a CGRect that identifies the start frame of the keyboard in screen coordinates.
+             */
+            let value: NSValue = info.valueForKey(UIKeyboardFrameBeginUserInfoKey) as! NSValue
+            
+            // Obtain the size of the keyboard
+            let keyboardSize: CGSize = value.CGRectValue().size
+            
+            // Create Edge Insets for the view.
+            let contentInsets: UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0)
+            
+            // Set the distance that the content view is inset from the enclosing scroll view.
+            scrollView.contentInset = contentInsets
+            
+            // Set the distance the scroll indicators are inset from the edge of the scroll view.
+            scrollView.scrollIndicatorInsets = contentInsets
+            
+            //-----------------------------------------------------------------------------------
+            // Scroll the search bar up so it is at the top of the view
+            //-----------------------------------------------------------------------------------
+            
+            // Obtain the frame size of the View
+            var selfViewFrameSize: CGRect = self.view.frame
+            
+            // Subtract the keyboard height from the self's view height
+            // and set it as the new height of the self's view
+            selfViewFrameSize.size.height -= keyboardSize.height
+            
+            let searchBarRect = groupMemberSearchBar.frame
+            
+            let topLayoutGuideBottom = self.topLayoutGuide.length
+            
+            let offset = CGPointMake(0, searchBarRect.origin.y - topLayoutGuideBottom)
+            
+            scrollView.contentOffset = offset
+        }
+    }
+    
+    // This method is called upon Keyboard Will HIDE Notification
+    func keyboardWillHide(sender: NSNotification) {
+        
+        // Set contentInsets to top=0, left=0, bottom=0, and right=0
+        let contentInsets: UIEdgeInsets = UIEdgeInsetsZero
+        
+        // Set scrollView's contentInsets to top=0, left=0, bottom=0, and right=0
+        scrollView.contentInset = contentInsets
+        
+        // Set scrollView's scrollIndicatorInsets to top=0, left=0, bottom=0, and right=0
+        scrollView.scrollIndicatorInsets = contentInsets
+    }
+    
+    // Mark: - Search Bar Delegates
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchActive = true;
+        activeSearchBar = searchBar
+    }
+    
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        searchActive = false;
+        activeSearchBar = nil
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchActive = false;
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchActive = false;
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        //Clear out all old search results
+        searchBarResults.removeAll()
+        
+        if (addingNewMembers) {
+            if (searchText != "") {
+                print("RETRIEVE USERS WITH NAME IN SEARCH BAR")
+                
+                let searchTextNoSpaces = searchText.stringByReplacingOccurrencesOfString(" ", withString: "+")
+                
+                let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/name/\(searchTextNoSpaces)")
+                
+                print(url)
+                
+                // Creaste URL Request
+                let request = NSMutableURLRequest(URL:url!);
+                
+                // Set request HTTP method to GET. It could be POST as well
+                request.HTTPMethod = "GET"
+                
+                // If needed you could add Authorization header value
+                //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+                
+                // Execute HTTP Request
+                let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+                    
+                    // Check for error
+                    if error != nil
+                    {
+                        print("error=\(error)")
+                        return
+                    }
+                    
+                    
+                    let json: [NSDictionary]?
+                    
+                    do {
+                        
+                        json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                        
+                    } catch let dataError{
+                        
+                        // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                        print(dataError)
+                        let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                        print("Error could not parse JSON: '\(jsonStr!)'")
+                        // return or throw?
+                        return
+                    }
+                    
+                    // The JSONObjectWithData constructor didn't return an error. But, we should still
+                    // check and make sure that json has a value using optional binding.
+                    if let parseJSON = json {
+                        // Okay, the parsedJSON is here, lets store its values into an array
+                        self.searchBarResults = parseJSON as [NSDictionary]
+                        
+                        for (index, result) in self.searchBarResults.enumerate() {
+                            let resultID = String(result["id"]!)
+                            let currentID = String(self.currentUser!["id"]!)
+                            
+                            if currentID == resultID {
+                                self.searchBarResults.removeAtIndex(index)
+                                break
+                            }
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.groupMemberTableView.reloadData()
+                        })
+                    }
+                    else {
+                        // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                        let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                        print("Error could not parse JSON: \(jsonStr!)")
+                    }
+                    
+                    
+                })
+                
+                task.resume()
+                
+            }
+            else {
+                groupMemberTableView.reloadData()
+            }
+
+        }
+        else {
+            for member in memberList {
+                if let memberFirstName = member["firstName"] as? String {
+                    if let memberLastName = member["lastName"] as? String {
+                        let queryName = memberFirstName + " " + memberLastName
+                        let lowercaseQueryName = queryName.lowercaseString
+                        
+                        let lowercaseSearch = searchText.lowercaseString
+                        
+                        print("name: \(lowercaseQueryName)")
+                        print("search: \(lowercaseSearch)")
+                        if lowercaseQueryName.rangeOfString(lowercaseSearch) != nil {
+                            searchBarResults.append(member)
+                        }
+                    }
+                }
+            }
+            print(searchBarResults.count)
+            groupMemberTableView.reloadData()
+        }
+    }
+    
 
     // Mark - TableView Delegates
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if (addingNewMembers) {
+            return searchBarResults.count
+        }
+        else if (searchActive) {
+            return searchBarResults.count
+        }
         return memberList.count
     }
     
@@ -373,38 +669,122 @@ class EditGroupDetailsViewController: UIViewController {
         
         let row = indexPath.row
         
-        let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as! EditGroupDetailsTableViewCell!
-        
-        cell.selectionStyle = .None
-        
-        let memberRow = memberList[row]
-        
-        if let memberFirstName = memberRow["firstName"] as? String {
-            if let memberLastName = memberRow["lastName"] as? String {
-                cell.memberNameLabel.text = memberFirstName + " " + memberLastName
-                cell.memberNameLabel.textColor = UIColor.whiteColor()
+        if (addingNewMembers) {
+            let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("addedMemberCell") as UITableViewCell!
+            
+            cell.selectionStyle = .None
+            
+            let memberRow = searchBarResults[row]
+            
+            if let memberFirstName = memberRow["firstName"] as? String {
+                if let memberLastName = memberRow["lastName"] as? String {
+                    cell.textLabel!.text = memberFirstName + " " + memberLastName
+                    cell.textLabel?.textColor = UIColor.whiteColor()
+                }
             }
+
+            if let _ = selectedGroupMembers.indexOf(memberRow) {
+                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+            }
+            else {
+                cell.accessoryType = UITableViewCellAccessoryType.None
+            }
+            
+            return cell
+
         }
-        cell.removeMember.tag = row
-        cell.removeMember.addTarget(self, action: #selector(EditGroupDetailsViewController.removeMember(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        cell.changeAdminStatusButton.setTitle("Make Admin", forState: UIControlState.Normal)
-        
-        if let memberID = memberRow["id"] {
-            for admin in adminList {
-                if let adminID = admin["id"] {
-                    if String(memberID) == String(adminID) {
-                        cell.changeAdminStatusButton.setTitle("Revoke Admin", forState: UIControlState.Normal)
-                        break
+        else if (searchActive) {
+            let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as! EditGroupDetailsTableViewCell!
+            
+            cell.selectionStyle = .None
+            
+            let memberRow = searchBarResults[row]
+            
+            if let memberFirstName = memberRow["firstName"] as? String {
+                if let memberLastName = memberRow["lastName"] as? String {
+                    cell.memberNameLabel.text = memberFirstName + " " + memberLastName
+                    cell.memberNameLabel.textColor = UIColor.whiteColor()
+                }
+            }
+            cell.removeMember.tag = row
+            cell.removeMember.addTarget(self, action: #selector(EditGroupDetailsViewController.removeMember(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            cell.changeAdminStatusButton.setTitle("Make Admin", forState: UIControlState.Normal)
+            
+            if let memberID = memberRow["id"] {
+                for admin in adminList {
+                    if let adminID = admin["id"] {
+                        if String(memberID) == String(adminID) {
+                            cell.changeAdminStatusButton.setTitle("Revoke Admin", forState: UIControlState.Normal)
+                            break
+                        }
                     }
                 }
             }
+            
+            cell.changeAdminStatusButton.tag = row
+            cell.changeAdminStatusButton.addTarget(self, action: #selector(EditGroupDetailsViewController.changeAdminStatus(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            return cell
+
         }
-        
-        cell.changeAdminStatusButton.tag = row
-        cell.changeAdminStatusButton.addTarget(self, action: #selector(EditGroupDetailsViewController.changeAdminStatus(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        return cell
+        else {
+            let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as! EditGroupDetailsTableViewCell!
+            
+            cell.selectionStyle = .None
+            
+            let memberRow = memberList[row]
+            
+            if let memberFirstName = memberRow["firstName"] as? String {
+                if let memberLastName = memberRow["lastName"] as? String {
+                    cell.memberNameLabel.text = memberFirstName + " " + memberLastName
+                    cell.memberNameLabel.textColor = UIColor.whiteColor()
+                }
+            }
+            cell.removeMember.tag = row
+            cell.removeMember.addTarget(self, action: #selector(EditGroupDetailsViewController.removeMember(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            cell.changeAdminStatusButton.setTitle("Make Admin", forState: UIControlState.Normal)
+            
+            if let memberID = memberRow["id"] {
+                for admin in adminList {
+                    if let adminID = admin["id"] {
+                        if String(memberID) == String(adminID) {
+                            cell.changeAdminStatusButton.setTitle("Revoke Admin", forState: UIControlState.Normal)
+                            break
+                        }
+                    }
+                }
+            }
+            
+            cell.changeAdminStatusButton.tag = row
+            cell.changeAdminStatusButton.addTarget(self, action: #selector(EditGroupDetailsViewController.changeAdminStatus(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            return cell
+
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if (addingNewMembers) {
+            let row = indexPath.row
+            
+            let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("addedMemberCell") as UITableViewCell!
+            
+            let memberRow = searchBarResults[row]
+            
+            if let foundIndex = selectedGroupMembers.indexOf(memberRow) {
+                //remove the item at the found index
+                cell.accessoryType = UITableViewCellAccessoryType.None
+                selectedGroupMembers.removeAtIndex(foundIndex)
+            }
+            else {
+                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                selectedGroupMembers.append(memberRow)
+            }
+            
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        }
     }
 
     //MARK: - Tableview button method
