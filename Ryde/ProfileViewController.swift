@@ -11,8 +11,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
-    
-    
+
     @IBOutlet var editButton: UIButton!
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var profileName: UILabel!
@@ -34,8 +33,6 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var profileTableView: UITableView!
-    var nameLabels = ["Cell Number", "Car Info"]
-    var infoLabel = ["Cell Number Data", ""]
     var dataObjectPassed = ["Cell Number"]
     var id = Int()
     var flag = 0
@@ -92,7 +89,6 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         })
         
     }
-        
     // Mark - Retrieve the users groups from the server
     
     func getUserData(token: String) {
@@ -143,17 +139,23 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
                     self.carModelString = (parseJSON["carModel"] as? String)!
                     self.carColorString = (parseJSON["carColor"] as? String)!
                     self.carInfo = "\(self.carMakeString) \(self.carModelString) \(self.carColorString)"
-                    self.infoLabel[1] = self.carInfo
-                    self.flag == 1
 
                 }
                 
-                //This data should always be found, signal semaphore once found
-                self.infoLabel[0] = (parseJSON["phoneNumber"] as? String)!
+                //This id should always be found
                 self.id = (parseJSON["id"] as? Int)!
                 
+                //Set the labels and signal semaphore
                 self.cellNumberTextField.text! = (parseJSON["phoneNumber"] as? String)!
-                self.carInfoTextField.text! = self.carInfo
+                
+                if (self.carInfo.isEmpty)
+                {
+                    self.carInfoTextField.text! = "No Info Entered"
+                }
+                else{
+                    self.carInfoTextField.text! = self.carInfo
+                }
+                
                 dispatch_semaphore_signal(self.semaphore);
                 
             }
@@ -189,7 +191,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             let editProfileViewController: EditProfileViewController = segue.destinationViewController as! EditProfileViewController
             
             // Under the Delegation Design Pattern, set the addCityViewController's delegate to be self
-            editProfileViewController.cellNumber = infoLabel[0]
+            editProfileViewController.cellNumber = cellNumberTextField.text!
             editProfileViewController.id = id
             editProfileViewController.carMake = carMakeString
             editProfileViewController.carModel = carModelString
@@ -212,5 +214,4 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         
         performSegueWithIdentifier("logOut", sender: self)
     }
-    
 }
