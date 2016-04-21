@@ -11,6 +11,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 class EditProfileViewController: UIViewController {
+    @IBOutlet var scrollView: UIScrollView!
     // Mark - Fields
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var profileName: UILabel!
@@ -31,17 +32,17 @@ class EditProfileViewController: UIViewController {
     var id = Int()
     let loginManager = FBSDKLoginManager()
 
+
     override func viewDidLoad() {
-        
+        super.viewDidLoad()
+                
         //Make the image a circle
         profileImage.layer.borderWidth = 1
         //profileImage.layer.masksToBounds = false
         profileImage.layer.borderColor = UIColor.clearColor().CGColor
         profileImage.layer.cornerRadius = profileImage.frame.height/2
         profileImage.clipsToBounds = true
-        
-        super.viewDidLoad()
-        
+
         cellNumberTextField.text! = cellNumber
         carMakeTextField.text! = carMake
         carModelTextField.text! = carModel
@@ -257,6 +258,4 @@ class EditProfileViewController: UIViewController {
             return true
         }
     }
-
-
 }
