@@ -386,11 +386,12 @@ class RiderRequestGroupTableViewController: UITableViewController {
             let requestRideViewController: RequestRideViewController = segue.destinationViewController as! RequestRideViewController
             
             //Pass the data object to the destination view controller object
-            requestRideViewController.queueNum = (String)(queuePos)
+            requestRideViewController.queueNum = self.queuePos
             requestRideViewController.startLatitude = self.startLatitude
             requestRideViewController.startLongitude = self.startLongitude
             requestRideViewController.destLat = self.destLat
             requestRideViewController.destLong = self.destLong
+            requestRideViewController.selectedTID = self.selectedTID
         }
     }
     
