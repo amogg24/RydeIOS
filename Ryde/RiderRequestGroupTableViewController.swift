@@ -52,8 +52,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
     var selectedTID:Int = 0
     
     override func viewDidLoad() {
-        //Adds a navigation button to bring up alert to add TAD
-        
         self.title = "Select Group"
         super.viewDidLoad()
         
@@ -68,6 +66,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
         let newBackButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Bordered, target: self, action: "back:")
         self.navigationItem.leftBarButtonItem = newBackButton;
         
+        //Adds a navigation button to bring up alert to add TAD
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(self.joinTAD))
     }
     
@@ -388,7 +387,10 @@ class RiderRequestGroupTableViewController: UITableViewController {
             
             //Pass the data object to the destination view controller object
             requestRideViewController.queueNum = (String)(queuePos)
-            
+            requestRideViewController.startLatitude = self.startLatitude
+            requestRideViewController.startLongitude = self.startLongitude
+            requestRideViewController.destLat = self.destLat
+            requestRideViewController.destLong = self.destLong
         }
     }
     

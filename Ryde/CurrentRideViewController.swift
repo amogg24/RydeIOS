@@ -7,19 +7,37 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate {
+class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMapViewDelegate {
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     // Rider FB id
     var FBid = ""
     
+    // Rider Latitude
+    var startLatitude: Double = 0
+    
+    // Rider Longitude
+    var startLongitude: Double = 0
+    
+    // Destination Latitude
+    var destLat: Double = 0
+    
+    // Destination Longitude
+    var destLong: Double = 0
+    
+    // Route between anotations
+    var myRoute : MKRoute?
+    
+    // Mapkit showing the anotations
+    @IBOutlet var mapView: MKMapView!
+    
     override func viewDidLoad() {
-        // gets rid of back button in navigation
-        //let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: navigationController, action: nil)
         
         // Grab data from FB
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
@@ -28,11 +46,68 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate {
         })
         
         self.title = "Current Ride"
+        
+        // Add the side menu bar
         self.addSlideMenuButton()
-        //navigationItem.leftBarButtonItem = backButton
+        
+        // Set map view delegate with controller
+        self.mapView.delegate = self
+        
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        // Create the start coordinates
+        let startLocation = CLLocationCoordinate2DMake(startLatitude, startLongitude)
+        
+        // Set the span of the map
+        let theSpan:MKCoordinateSpan = MKCoordinateSpanMake(0.03 , 0.03)
+        let theRegion:MKCoordinateRegion = MKCoordinateRegionMake(startLocation, theSpan)
+        mapView.setRegion(theRegion, animated: true)
+    
+        // Places an annotation for start location
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = startLocation
+        annotation.title = "Your pick up location."
+        mapView.addAnnotation(annotation)
+        
+        // Show two anotation and a route instead if a destination was inputted
+        if (destLong != 0 && destLat != 0)
+        {
+            let destLocation = CLLocationCoordinate2DMake(destLat, destLong)
+            let destAnnotation = MKPointAnnotation()
+            destAnnotation.coordinate = destLocation
+            destAnnotation.title = "Your drop off location."
+            mapView.addAnnotation(destAnnotation)
+            
+            
+            let directionsRequest = MKDirectionsRequest()
+            let markStart = MKPlacemark(coordinate: CLLocationCoordinate2DMake(annotation.coordinate.latitude, annotation.coordinate.longitude), addressDictionary: nil)
+            let markDest = MKPlacemark(coordinate: CLLocationCoordinate2DMake(destAnnotation.coordinate.latitude, destAnnotation.coordinate.longitude), addressDictionary: nil)
+            
+            directionsRequest.source = MKMapItem(placemark: markStart)
+            directionsRequest.destination = MKMapItem(placemark: markDest)
+            directionsRequest.transportType = MKDirectionsTransportType.Automobile
+            let directions = MKDirections(request: directionsRequest)
+            directions.calculateDirectionsWithCompletionHandler
+                {
+                    (response, error) -> Void in
+                    
+                    if let routes = response?.routes where response?.routes.count > 0 && error == nil
+                    {
+                        let route : MKRoute = routes[0]
+                        
+                        //distance calculated from the request
+                        print(route.distance) 
+                        
+                        //travel time calculated from the request
+                        print(route.expectedTravelTime)
+                        
+                        self.mapView.addOverlay((route.polyline), level: MKOverlayLevel.AboveRoads)
+                        
+                        let rect = route.polyline.boundingMapRect
+                        self.mapView.setRegion(MKCoordinateRegionForMapRect(rect), animated: true)
+                    }
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -84,6 +159,8 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate {
         
         task.resume()
     }
+    
+    //Handles Slide Menu interaction
     
     func slideMenuItemSelectedAtIndex(index: Int32) {
         let topViewController : UIViewController = self.navigationController!.topViewController!
@@ -190,7 +267,6 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate {
             sender.enabled = true
             }, completion:nil)
     }
-    
     /*
      // MARK: - Navigation
      
@@ -200,5 +276,13 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate {
      // Pass the selected object to the new view controller.
      }
      */
+    
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.strokeColor = UIColor.blueColor()
+        renderer.lineWidth = 3.0
+        
+        return renderer
+    }
     
 }

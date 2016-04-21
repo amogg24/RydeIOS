@@ -17,6 +17,18 @@ class RequestRideViewController: UIViewController {
     
     var queueNum: String = ""
     
+    // Rider Latitude
+    var startLatitude: Double = 0
+    
+    // Rider Longitude
+    var startLongitude: Double = 0
+    
+    // Destination Latitude
+    var destLat: Double = 0
+    
+    // Destination Longitude
+    var destLong: Double = 0
+    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var queueLabel: UILabel!
@@ -125,14 +137,28 @@ class RequestRideViewController: UIViewController {
         task.resume()
     }
     
+    
     /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
+     -------------------------
+     MARK: - Prepare For Segue
+     -------------------------
      */
+    
+    // This method is called by the system whenever you invoke the method performSegueWithIdentifier:sender:
+    // You never call this method. It is invoked by the system.
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        
+        if segue.identifier == "ShowCurrentRide" {
+            
+            // Obtain the object reference of the destination view controller
+            let currentRiderViewController: CurrentRideViewController   = segue.destinationViewController as! CurrentRideViewController
+            
+            //Pass the data object to the destination view controller object
+            currentRiderViewController.startLatitude = self.startLatitude
+            currentRiderViewController.startLongitude = self.startLongitude
+            currentRiderViewController.destLat = self.destLat
+            currentRiderViewController.destLong = self.destLong
+        }
+    }
     
 }
