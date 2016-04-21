@@ -266,39 +266,32 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
     func postTAD(params : Dictionary<String, String>, url : String) {
         
-        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        let session = NSURLSession.sharedSession()
-        request.HTTPMethod = "POST"
-        
-        do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
-        } catch {
-            print(error)
-            request.HTTPBody = nil
-        }
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
-        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            print("Response: \(response)")
-            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("Body: \(strData)")
-            
+         //let params: [String : AnyObject] = [:]
+         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+         let session = NSURLSession.sharedSession()
+         request.HTTPMethod = "POST"
+         
+         let task = session.dataTaskWithRequest(request)
+         {
+            (data, response, error) in
+            guard let _ = data else {
+                print("error calling")
+                return
+            }
+         
             let json: NSDictionary?
-            
+         
             do {
                 json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
             } catch let dataError{
-                
+         
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
                 print(dataError)
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 print("Error could not parse JSON: '\(jsonStr)'")
-                self.passcodeError()
                 return
             }
-
+         
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
@@ -320,8 +313,9 @@ class RiderRequestGroupTableViewController: UITableViewController {
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 print("Error could not parse JSON: \(jsonStr)")
             }
-        })
-        
+            print("canceling")
+        }
+         
         task.resume()
     }
     
@@ -330,47 +324,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
     // Post Function for request
     func postRequest(params : Dictionary<String, AnyObject>, url : String) {
         
-        //let params: [String : AnyObject] = [:]
-        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        let session = NSURLSession.sharedSession()
-        request.HTTPMethod = "POST"
-        
-        let task = session.dataTaskWithRequest(request)
-        {
-            (data, response, error) in
-            guard let _ = data else {
-                print("error calling")
-                return
-            }
-            
-            let json: NSDictionary?
-            
-            do {
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
-            } catch let dataError{
-                
-                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                print(dataError)
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: '\(jsonStr)'")
-                return
-            }
-            
-            // The JSONObjectWithData constructor didn't return an error. But, we should still
-            // check and make sure that json has a value using optional binding.
-            if let parseJSON = json {
-                self.queuePos = (parseJSON["position"] as? Int)!
-            }
-            else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: \(jsonStr)")
-            }
-            print("canceling")
-        }
-        
-        task.resume()
-        /*
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
@@ -415,7 +368,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
             }
         })
         
-        task.resume()*/
+        task.resume()
     }
     
     /*
