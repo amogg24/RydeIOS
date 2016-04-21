@@ -130,7 +130,7 @@ class EditProfileViewController: UIViewController {
         
         // Sends a POST to the specified URL with the JSON conent
         self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")      
-        performSegueWithIdentifier("Save", sender: self)
+    performSegueWithIdentifier("Save", sender: self)
         
     }
     
