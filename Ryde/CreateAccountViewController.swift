@@ -60,6 +60,20 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate  {
     
     @IBAction func submitCreateAccount(sender: UIButton) {
         
+        
+        if phoneNumber.text?.characters.count < 13 {
+            
+            let alertController = UIAlertController(title: "Invalid Entry",
+                                                    message: "You did not enter a valid telephone number.",
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: .Default, handler: nil))
+            
+            // Present the alert controller by calling the presentViewController method
+            presentViewController(alertController, animated: true, completion: nil)
+            
+            return
+        }
+        
         let name = profileName.text
         
         let fullNameArr = name?.componentsSeparatedByString(" ")
