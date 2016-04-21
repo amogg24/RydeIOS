@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P6T-6r-ncU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P6T-6r-ncU">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -674,7 +674,7 @@
                     <connections>
                         <segue destination="o2p-at-fUd" kind="relationship" relationship="viewControllers" id="tKS-GK-iiy"/>
                         <segue destination="MZ0-65-JAr" kind="relationship" relationship="viewControllers" id="KZ7-Sb-FQd"/>
-                        <segue destination="NMU-m6-DMJ" kind="relationship" relationship="viewControllers" id="ef5-xv-xtl"/>
+                        <segue destination="Ae2-9A-WFx" kind="relationship" relationship="viewControllers" id="ef5-xv-xtl"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T5K-ih-0C0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -808,7 +808,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKq-nC-3uz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3580" y="1595"/>
+            <point key="canvasLocation" x="4392" y="1595"/>
         </scene>
         <!--Edit Group-->
         <scene sceneID="ROZ-na-vIP">
@@ -1100,7 +1100,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MDI-vk-4GG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Tl8-Ms-hhQ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4305" y="1701"/>
+            <point key="canvasLocation" x="5117" y="1701"/>
         </scene>
         <!--Search Groups-->
         <scene sceneID="gdE-Yi-XXt">
@@ -1924,6 +1924,8 @@
                             <constraint firstItem="gB5-vX-3hz" firstAttribute="centerX" secondItem="rmt-fc-Ebn" secondAttribute="centerX" id="vaO-kp-sog"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="zyg-gJ-h6w"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="carColorTextField" destination="EXb-zy-hNn" id="bCa-3R-eZ3"/>
                         <outlet property="carMakeTextField" destination="BuJ-Co-Wi2" id="mc9-at-Ohs"/>
@@ -1932,12 +1934,12 @@
                         <outlet property="profileImage" destination="ssT-18-m7M" id="Kdo-hG-qmV"/>
                         <outlet property="profileName" destination="hXH-9y-TPr" id="TdF-3i-gor"/>
                         <segue destination="P6T-6r-ncU" kind="showDetail" identifier="Delete" id="3ui-dR-XQn"/>
-                        <segue destination="NMU-m6-DMJ" kind="showDetail" identifier="Save" id="aAn-to-k47"/>
+                        <segue destination="NMU-m6-DMJ" kind="show" identifier="Save" id="yCc-Om-4Xs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Se2-av-I1Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2597" y="1649"/>
+            <point key="canvasLocation" x="3409" y="1649"/>
         </scene>
         <!--Request Ride View Controller-->
         <scene sceneID="k8G-Pk-ldg">
@@ -2366,7 +2368,7 @@
             </objects>
             <point key="canvasLocation" x="4412" y="-1508"/>
         </scene>
-        <!--Profile-->
+        <!--Profile View Controller-->
         <scene sceneID="uwe-A9-sIa">
             <objects>
                 <viewController id="NMU-m6-DMJ" customClass="ProfileViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
@@ -2601,7 +2603,6 @@
                                 <state key="normal" title="Edit Profile"/>
                                 <connections>
                                     <action selector="editProfileButtonTapped:" destination="NMU-m6-DMJ" eventType="touchUpInside" id="QGy-e3-fY6"/>
-                                    <segue destination="SmI-kv-lsB" kind="show" identifier="editProfile" id="ez3-xk-imH"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -2624,8 +2625,8 @@
                             <constraint firstAttribute="trailing" secondItem="NFy-5o-TWv" secondAttribute="trailing" id="wyy-RJ-ZWL"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Profile" image="Profile" id="Dk6-RC-4SW"/>
                     <navigationItem key="navigationItem" id="tJu-1X-Aet"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="carInfoTextField" destination="tvg-NC-Fgj" id="g5F-ep-clc"/>
                         <outlet property="cellNumberTextField" destination="F8S-zW-Xcc" id="nu4-VJ-7LC"/>
@@ -2635,11 +2636,12 @@
                         <outlet property="rydesGivenLabel" destination="wDn-w6-diD" id="qg9-5j-ad4"/>
                         <outlet property="rydesTakenLabel" destination="yyZ-Yb-i0F" id="jOS-A6-HzC"/>
                         <segue destination="P6T-6r-ncU" kind="showDetail" identifier="logOut" id="Zqd-d8-8Ir"/>
+                        <segue destination="SmI-kv-lsB" kind="show" identifier="editProfile" id="1t7-yo-Ehe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="luF-6J-Zx4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1794" y="1649"/>
+            <point key="canvasLocation" x="2606" y="1649"/>
         </scene>
         <!--Rider Menu View Controller-->
         <scene sceneID="hbF-VO-VTZ">
@@ -2733,6 +2735,27 @@
             </objects>
             <point key="canvasLocation" x="3580" y="-3428"/>
         </scene>
+        <!--Profile-->
+        <scene sceneID="LuX-uW-rRi">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="Ae2-9A-WFx" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Profile" image="Profile" id="Dk6-RC-4SW"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="e8n-SN-bwp"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Brn-By-qlp">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="NMU-m6-DMJ" kind="relationship" relationship="rootViewController" id="Cwa-hY-FB2"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hFo-Yp-yJU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1794" y="1649"/>
+        </scene>
     </scenes>
     <resources>
         <image name="BackgroundMain" width="1040" height="1536"/>
@@ -2745,8 +2768,8 @@
         <image name="r-logo-nobg-filled" width="800" height="600"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1vp-zx-Ifd"/>
-        <segue reference="Zqd-d8-8Ir"/>
-        <segue reference="aAn-to-k47"/>
+        <segue reference="1Dz-x7-ZVx"/>
+        <segue reference="3ui-dR-XQn"/>
+        <segue reference="yCc-Om-4Xs"/>
     </inferredMetricsTieBreakers>
 </document>
