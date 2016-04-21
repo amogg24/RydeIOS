@@ -32,10 +32,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     var groupDictionary = [NSDictionary]()
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet var profileTableView: UITableView!
-    var dataObjectPassed = ["Cell Number"]
     var id = Int()
-    var flag = 0
     
     let semaphore = dispatch_semaphore_create(0);
     
@@ -132,7 +129,6 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
-                self.flag = 0
                 //Check if the user has car data
                 if parseJSON["carMake"] != nil {
                     self.carMakeString = (parseJSON["carMake"] as? String)!
