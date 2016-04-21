@@ -938,7 +938,7 @@
                                                 <rect key="frame" x="16" y="272" width="568" height="235"/>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25" colorSpace="calibratedRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="150" id="SIZ-rm-aw5"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="160" id="SIZ-rm-aw5"/>
                                                 </constraints>
                                                 <color key="separatorColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 <prototypes>
