@@ -2,7 +2,7 @@
 //  ProfileViewController.swift
 //  Ryde
 //
-//  Created by Joe Fletcher on 4/2/16.
+//  Created by Andrew Mogg on 4/2/16.
 //  Copyright © 2016 Jared Deiner. All rights reserved.
 //
 
@@ -12,10 +12,10 @@ import FBSDKLoginKit
 
 class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
 
+    //Outlets
     @IBOutlet var editButton: UIButton!
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var profileName: UILabel!
-    
     @IBOutlet var cellNumberTextField: UILabel!
     @IBOutlet var carInfoTextField: UILabel!
     @IBOutlet var rydesGivenLabel: UILabel!
@@ -27,18 +27,9 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     var carColorString = ""
     var carInfo = ""
     var phoneNumber = ""
-    var email = ""
-    
-    var groupDictionary = [NSDictionary]()
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
     var id = Int()
-    
     let semaphore = dispatch_semaphore_create(0);
-    
-    
-    // Mark - Fields
-    
     var FBid = ""
     var token = ""
     
@@ -51,7 +42,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         profileImage.layer.borderColor = UIColor.clearColor().CGColor
         profileImage.layer.cornerRadius = profileImage.frame.height/2
         profileImage.clipsToBounds = true
-        
+        profileName.text! = ""
         
         //Set FB button to bottom of screen
         let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -63,9 +54,12 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         fbButton.delegate = self
         self.view.addSubview(fbButton)
         
+        
+        //Set the ryde counters
         rydesGivenLabel.text! = String(appDelegate.rydesGivenCount)
         rydesTakenLabel.text! = String(appDelegate.rydesTakenCount)
         
+        //Get the user data
         getUserData(FBSDKAccessToken.currentAccessToken().userID)
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
@@ -86,8 +80,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         })
         
     }
-    // Mark - Retrieve the users groups from the server
     
+    // Mark - Retrieve the users groups from the server
     func getUserData(token: String) {
         print("RETRIEVE USER DATA")
         
@@ -106,7 +100,6 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         // Execute HTTP Request
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             
-            //print("Response: \(response)")
             let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
             print("Body: \(strData)")
             
@@ -144,7 +137,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
                 //Set the labels and signal semaphore
                 self.cellNumberTextField.text! = (parseJSON["phoneNumber"] as? String)!
                 
-                if (self.carInfo.isEmpty)
+                //Check if they have car data
+                if (self.carInfo == "  " || self.carInfo.isEmpty)
                 {
                     self.carInfoTextField.text! = "No Info Entered"
                 }
@@ -168,7 +162,6 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     
     @IBAction func editProfileButtonTapped(sender: UIButton) {
         performSegueWithIdentifier("editProfile", sender: self)
-        
     }
     
     /*
@@ -186,7 +179,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             // Obtain the object reference of the destination view controller
             let editProfileViewController: EditProfileViewController = segue.destinationViewController as! EditProfileViewController
             
-            // Under the Delegation Design Pattern, set the addCityViewController's delegate to be self
+            // Pass the User data to the EditProfile
             editProfileViewController.cellNumber = cellNumberTextField.text!
             editProfileViewController.id = id
             editProfileViewController.carMake = carMakeString
@@ -194,8 +187,8 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
             editProfileViewController.carColor = carColorString
         }
     }
+
     // MARK: - Facebook Login
-    
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         
         print("This should never be called")

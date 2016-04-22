@@ -11,23 +11,22 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 class EditProfileViewController: UIViewController {
+    
+    //Outlets
     @IBOutlet var scrollView: UIScrollView!
-    // Mark - Fields
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var profileName: UILabel!
-        
     @IBOutlet var cellNumberTextField: UITextField!
     @IBOutlet var carMakeTextField: UITextField!
     @IBOutlet var carModelTextField: UITextField!
     @IBOutlet var carColorTextField: UITextField!
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+     // Mark - Fields
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var cellNumber = ""
     var carMake = ""
     var carModel = ""
     var carColor = ""
-    
-    
     var FBid = ""
     var id = Int()
     let loginManager = FBSDKLoginManager()
@@ -38,11 +37,11 @@ class EditProfileViewController: UIViewController {
                 
         //Make the image a circle
         profileImage.layer.borderWidth = 1
-        //profileImage.layer.masksToBounds = false
         profileImage.layer.borderColor = UIColor.clearColor().CGColor
         profileImage.layer.cornerRadius = profileImage.frame.height/2
         profileImage.clipsToBounds = true
-
+        
+        //Set the text fields to the users data that is passed from the ProfileViewController
         cellNumberTextField.text! = cellNumber
         carMakeTextField.text! = carMake
         carModelTextField.text! = carModel
@@ -112,6 +111,7 @@ class EditProfileViewController: UIViewController {
         task.resume()
     }
 
+    //Save The New Data to the Server
     @IBAction func saveButtonTapped(sender: UIButton) {
         let name = profileName.text
         
@@ -131,11 +131,9 @@ class EditProfileViewController: UIViewController {
         
         // Sends a POST to the specified URL with the JSON conent
         self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")      
-    performSegueWithIdentifier("Save", sender: self)
+        performSegueWithIdentifier("Save", sender: self)
         
     }
-    
-    
     
     // Put the new user data to the server
     func put(params : Dictionary<String, AnyObject>, url : String) {

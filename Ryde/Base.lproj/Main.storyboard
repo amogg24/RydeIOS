@@ -1818,7 +1818,7 @@
                                                 </constraints>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="SmI-kv-lsB" id="wP8-o6-f5O"/>
                                                 </connections>
@@ -1849,7 +1849,7 @@
                                                 </constraints>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="SmI-kv-lsB" id="sLi-EY-sR5"/>
                                                 </connections>
@@ -1880,7 +1880,7 @@
                                                 </constraints>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="SmI-kv-lsB" id="Nt7-oZ-U3x"/>
                                                 </connections>
@@ -2914,7 +2914,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="1Dz-x7-ZVx"/>
-        <segue reference="Zqd-d8-8Ir"/>
+        <segue reference="3ui-dR-XQn"/>
         <segue reference="yCc-Om-4Xs"/>
     </inferredMetricsTieBreakers>
 </document>
