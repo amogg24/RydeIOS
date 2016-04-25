@@ -14,8 +14,7 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
     var startTime = "10:00 p.m."
     var endTime = "1:00 a.m."
     var queueSize = 1
-    var timeSlotID = 0;
-    var id: Int!
+    var timeSlotID = 0
     
     var carMakeString = ""
     var carModelString = ""
@@ -31,10 +30,12 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
     @IBOutlet var acceptRideButton: UIButton!
     @IBOutlet var btnShowMenu: UIBarButtonItem!
     
-    var riderQueueDictionary = [NSDictionary]()
+    var nonActiveQueueDict = [NSDictionary]()
+    var nextRideDictionary = NSDictionary()
+    var queueArray = NSArray()
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    let semaphore = dispatch_semaphore_create(0);
+    let semaphore = dispatch_semaphore_create(0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,30 +45,28 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
         //hide back button and add slide menu button
         self.navigationItem.setHidesBackButton(true, animated:true);
         
+        //Get non active rides to get the queue size
+        getNonActiveRides()
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
         headerLabel.text = "Welcome " + driverName
         startLabel.text = "Start Time: " + startTime
         endLabel.text = "End Time: " + endTime
-        queueLabel.text = "Queue Size: " + String(queueSize)
-        //getUserData("JohnFBTok")
-        //dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        let status = true
-        id = 1
+        let queueSize = String(nonActiveQueueDict.count)
+        queueLabel.text = "Queue Size: " + queueSize
+        let status = 1
         
-        //Update the driver status to True (logged in)
-        let JSONObject: [String : AnyObject] = [
-            "driverStatus" : status,
-            "id"        : id,
-            /**
-            "lastName"  : fullNameArr![(fullNameArr?.count)!-1],
-            "firstName" : fullNameArr![0],
-            "fbTok"     : FBSDKAccessToken.currentAccessToken().userID,
-            "phoneNumber" : cellNumberTextField.text!,
-            "carMake"   : carMakeTextField.text!,
-            "carModel"  : carModelTextField.text!,
-            "carColor"  : carColorTextField.text!,
-            **/
-        ]
-        self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")
+        //updated driver status to true after logged in.
+        self.put("http://\(self.appDelegate.baseURL)/Ryde/api/user/setDriverStatus/\(self.appDelegate.FBid)/\(status)")
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        //Get non active rides to get the queue size
+        getNonActiveRides()
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        let queueSize = String(nonActiveQueueDict.count)
+        queueLabel.text = "Queue Size: " + queueSize
     }
     
     
@@ -84,83 +83,223 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
     
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
-    func put(params : Dictionary<String, AnyObject>, url : String) {
+    func put(url : String) {
         
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = "PUT"
-        
-        
-        do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
-        } catch {
-            print(error)
-            request.HTTPBody = nil
-        }
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             print("Response: \(response)")
+            /**
+             let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Body: \(strData)")
+             
+             let json: NSDictionary?
+             
+             do {
+             json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+             } catch let dataError{
+             
+             // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+             print(dataError)
+             let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Error could not parse JSON: '\(jsonStr)'")
+             // return or throw?
+             return
+             }
+             
+             // The JSONObjectWithData constructor didn't return an error. But, we should still
+             // check and make sure that json has a value using optional binding.
+             
+             if let parseJSON = json {
+             // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+             let success = parseJSON["success"] as? Int
+             print("Succes: \(success)")
+             }
+             else {
+             // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+             let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Error could not parse JSON: \(jsonStr)")
+             }
+             **/
+        })
+        
+        task.resume()
+    }
+    
+    // Mark - Retrieve queue information from the server
+    
+    func getNextRide() {
+        print("RETRIEVE Queue DATA")
+        
+        
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/ride/startNextRideForTimeslot/\(self.timeSlotID)/\(self.appDelegate.FBid)")!
+        
+        print(url)
+        
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Execute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            //print("Response: \(response)")
             let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
             print("Body: \(strData)")
             
             let json: NSDictionary?
             
             do {
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+                
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+                
             } catch let dataError{
                 
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
                 print(dataError)
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: '\(jsonStr)'")
+                print("Error could not parse JSON: '\(jsonStr!)'")
                 // return or throw?
                 return
             }
             
+            
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
-                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
-                let success = parseJSON["success"] as? Int
-                print("Succes: \(success)")
+                
+                self.nextRideDictionary = parseJSON as NSDictionary
+                
+            } else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+            dispatch_semaphore_signal(self.semaphore);
+        })
+        
+        task.resume()
+        
+    }
+    
+    func getNonActiveRides() {
+        print("RETRIEVE Queue DATA")
+        
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/ride/getNonActiveQueue/\(self.timeSlotID)")!
+        
+        
+        print(url)
+        
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Execute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            //print("Response: \(response)")
+            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Body: \(strData)")
+            
+            let json: [NSDictionary]?
+            
+            do {
+                
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr!)'")
+                // return or throw?
+                return
+            }
+            
+            
+            print("json : ===  \(json)")
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                
+                self.nonActiveQueueDict = parseJSON as [NSDictionary]
+                
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 print("Error could not parse JSON: \(jsonStr)")
             }
+            dispatch_semaphore_signal(self.semaphore);
         })
         
         task.resume()
+        
     }
-
+    
     
     /*
-    -------------------------
-    MARK: - Prepare for Segue
-    -------------------------
-    */
+     -------------------------
+     MARK: - Prepare for Segue
+     -------------------------
+     */
     // This method is called by the system whenever you invoke the method performSegueWithIdentifier:sender:
     // You never call this method. It is invoked by the system.
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         if segue.identifier == "AcceptRide" {
             
-            // Obtain the object reference of the destination (downstream) view controller
-            //let driverMapViewController: DriverMapViewController = segue.destinationViewController as! DriverMapViewController
+            //Get non active rides to get the queue size
+            getNextRide()
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            
+            print(nextRideDictionary)
+            let userInfo = nextRideDictionary["riderUserId"] as! NSDictionary
+            print(userInfo)
+            
+            // Obtain the object reference of the destination view controller
+            let driverMapViewController: DriverMapViewController = segue.destinationViewController as! DriverMapViewController
+            
+            //TODO: fields to be passed
+            driverMapViewController.riderName = userInfo["firstName"] as! String
+            driverMapViewController.riderPhone = userInfo["phoneNumber"] as! String
+            driverMapViewController.rideID = nextRideDictionary["id"] as! Int
+            driverMapViewController.riderLat = nextRideDictionary["startLat"] as! Double
+            driverMapViewController.riderLng = nextRideDictionary["startLon"] as! Double
+            driverMapViewController.driverLat = 0.0
+            driverMapViewController.driverLng = 0.0
+            driverMapViewController.destLat = nextRideDictionary["endLat"] as! Double
+            driverMapViewController.destLng = nextRideDictionary["endLon"] as! Double
         }
         else if segue.identifier == "EditProfileFromDriver" {
-
+            
             // Obtain the object reference of the destination (downstream) view controller
             //let driverMapViewController: DriverMapViewController = segue.destinationViewController as! DriverMapViewController
             
         }
     }
     
-    // Functions for the slide out menu
+    /*
+     --------------------------------
+     MARK: - Slide out menu functions
+     --------------------------------
+     */
     
     func slideMenuItemSelectedAtIndex(index: Int32) {
         let topViewController : UIViewController = self.navigationController!.topViewController!
@@ -169,18 +308,15 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
         case 0:
             //confirm Log out
             let alertController = UIAlertController(title: "Confirmation",
-                message: "Are you sure you would like to log out?",
-                preferredStyle: UIAlertControllerStyle.Alert)
+                                                    message: "Are you sure you would like to log out?",
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
             
             // Create a UIAlertAction object and add it to the alert controller
             alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action: UIAlertAction!) in
                 
-                //Update the driver status to True (logged in)
-                let JSONObject: [String : AnyObject] = [
-                    "driverStatus" : false,
-                    "id"        : self.id,
-                ]
-                self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(self.id)")
+                let status = 0
+                //Update the driver status to False (logged out)
+                self.put("http://\(self.appDelegate.baseURL)/Ryde/api/user/setDriverStatus/\(self.appDelegate.FBid)/\(status)")
                 
                 //Unhide tab bar and pop the current view from the navigation.
                 self.tabBarController?.tabBar.hidden = false;
@@ -241,71 +377,4 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
             sender.enabled = true
             }, completion:nil)
     }
-    
-    // Mark - Retrieve the users groups from the server
-    
-    func getUserData(token: String) {
-        print("RETRIEVE USER DATA")
-        
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findByToken/\(token)")
-        print(url)
-        
-        // Creaste URL Request
-        let request = NSMutableURLRequest(URL:url!);
-        
-        // Set request HTTP method to GET. It could be POST as well
-        request.HTTPMethod = "GET"
-        
-        // If needed you could add Authorization header value
-        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
-        
-        // Execute HTTP Request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            
-            //print("Response: \(response)")
-            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("Body: \(strData)")
-            
-            let json: NSDictionary?
-            
-            do {
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
-            } catch let dataError{
-                
-                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                print(dataError)
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: '\(jsonStr)'")
-                // return or throw?
-                return
-            }
-            
-            
-            
-            // The JSONObjectWithData constructor didn't return an error. But, we should still
-            // check and make sure that json has a value using optional binding.
-            if let parseJSON = json {
-                //Check if the user has car data
-                if parseJSON["carMake"] != nil {
-                    self.carMakeString = (parseJSON["carMake"] as? String)!
-                    self.carModelString = (parseJSON["carModel"] as? String)!
-                    self.carColorString = (parseJSON["carColor"] as? String)!
-                }
-                
-                //This data should always be found, signal semaphore once found
-                self.id = (parseJSON["id"] as? Int)!
-            }
-            else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: \(jsonStr)")
-            }
-            dispatch_semaphore_signal(self.semaphore);
-        })
-        
-        task.resume()
-        
-    }
-
-    
 }

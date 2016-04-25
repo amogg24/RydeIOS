@@ -64,7 +64,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     var timeslotDictionary = [NSDictionary]()
     
     // Store the timeslot id once retrieved
-    var timeslotID = "1"
+    var timeslotID = ""
     
     var fbToken = ""
     
@@ -257,7 +257,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     func getDriverTimeslot() {
         
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/driver/JakeFBTok")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/driver/\(fbToken)")
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
@@ -316,9 +316,6 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         })
         
         task.resume()
-        
-        //        performSegueWithIdentifier("Home", sender: self)
-        
     }
     
 
@@ -376,15 +373,24 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             
             // Obtain the object reference of the destination view controller
             let driverMainViewController: DriverMainViewController = segue.destinationViewController as! DriverMainViewController
-            //TODO: store timeslot id
             
-            
-            let startTime = timeslotDictionary[0]["startTime"] as! String
-            let endTime = timeslotDictionary[0]["endTime"] as! String
+            let tempStartTime = timeslotDictionary[0]["startTime"] as! String
+            let tempEndTime = timeslotDictionary[0]["endTime"] as! String
             let tsID = timeslotDictionary[0]["id"] as! Int
             
-            driverMainViewController.startTime = startTime
-            driverMainViewController.endTime = endTime
+            //TODO: Format start and end time
+            /**
+             let dateFormatter = NSDateFormatter()
+             let startTime = dateFormatter.dateFromString(tempStartTime)
+             let endTime = dateFormatter.dateFromString(tempEndTime)
+             dateFormatter.dateFormat = "hh:mm" //format style. Browse online to get a format that fits your needs.
+             
+             let formatedStartTime = dateFormatter.stringFromDate(startTime!)
+             let formatedEndTime = dateFormatter.stringFromDate(endTime!)
+             **/
+            
+            driverMainViewController.startTime = tempStartTime
+            driverMainViewController.endTime = tempEndTime
             driverMainViewController.timeSlotID = tsID
             
             timeslotDictionary.removeAll() //Clear dictionary so it must be reloaded if the user logs out
