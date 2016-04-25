@@ -12,6 +12,10 @@ import CoreLocation
 import FBSDKCoreKit
 import FBSDKLoginKit
 
+class CustomPointAnnotation: MKPointAnnotation {
+    var imageName: String!
+}
+
 class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMapViewDelegate {
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -36,6 +40,8 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     
     // Mapkit showing the anotations
     @IBOutlet var mapView: MKMapView!
+    
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         
@@ -64,20 +70,27 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
         mapView.setRegion(theRegion, animated: true)
     
         // Places an annotation for start location
-        let annotation = MKPointAnnotation()
+        let annotation = CustomPointAnnotation()
         annotation.coordinate = startLocation
         annotation.title = "Your pick up location."
+        annotation.imageName = "Marker Filled-50"
         mapView.addAnnotation(annotation)
+        
+        self.mapView.showsUserLocation = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
         
         // Show two anotation and a route instead if a destination was inputted
         if (destLong != 0 && destLat != 0)
         {
             let destLocation = CLLocationCoordinate2DMake(destLat, destLong)
-            let destAnnotation = MKPointAnnotation()
+            let destAnnotation = CustomPointAnnotation()
             destAnnotation.coordinate = destLocation
             destAnnotation.title = "Your drop off location."
+            destAnnotation.imageName = "Destination"
             mapView.addAnnotation(destAnnotation)
-            
+
             
             let directionsRequest = MKDirectionsRequest()
             let markStart = MKPlacemark(coordinate: CLLocationCoordinate2DMake(annotation.coordinate.latitude, annotation.coordinate.longitude), addressDictionary: nil)
@@ -103,7 +116,12 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
                         
                         self.mapView.addOverlay((route.polyline), level: MKOverlayLevel.AboveRoads)
                         
-                        let rect = route.polyline.boundingMapRect
+                        var rect = route.polyline.boundingMapRect
+                        rect.origin.x = rect.origin.x * 0.99
+                        rect.origin.y = rect.origin.y * 0.99
+                        rect.size.height = rect.size.height * 1.2
+                        rect.size.width = rect.size.width * 1.2
+                        
                         self.mapView.setRegion(MKCoordinateRegionForMapRect(rect), animated: true)
                     }
             }
@@ -113,6 +131,31 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        if !(annotation is CustomPointAnnotation) {
+            return nil
+        }
+        
+        let reuseId = "test"
+        
+        var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
+        if anView == nil {
+            anView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            anView!.canShowCallout = true
+        }
+        else {
+            anView!.annotation = annotation
+        }
+        
+        //Set annotation-specific properties **AFTER**
+        //the view is dequeued or created...
+        
+        let cpa = annotation as! CustomPointAnnotation
+        anView!.image = UIImage(named:cpa.imageName)
+        
+        return anView
     }
     
     /*
