@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import CoreLocation
 
-class DriverMainViewController: UIViewController, SlideMenuDelegate   {
+class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationManagerDelegate   {
     
     var driverName = "Blake Duncan"
     var startTime = "10:00 p.m."
     var endTime = "1:00 a.m."
     var queueSize = 1
     var timeSlotID = 0
+    var driverLat = 0.0
+    var driverLng = 0.0
     
     var carMakeString = ""
     var carModelString = ""
@@ -37,6 +40,9 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let semaphore = dispatch_semaphore_create(0)
     
+    // Location Manager instance
+    let locationManager = CLLocationManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,6 +64,13 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
         
         //updated driver status to true after logged in.
         self.put("http://\(self.appDelegate.baseURL)/Ryde/api/user/setDriverStatus/\(self.appDelegate.FBid)/\(status)")
+        
+        //Start getting driver coordinates
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -67,11 +80,50 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
         
         let queueSize = String(nonActiveQueueDict.count)
         queueLabel.text = "Queue Size: " + queueSize
+        
+        //Start getting driver coordinates again after view reappears
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
     }
     
+    //Location manager function to get driver coordinates.
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        driverLat = locValue.latitude
+        driverLng = locValue.longitude
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+    }
     
     @IBAction func acceptRidePressed(sender: UIButton) {
-        performSegueWithIdentifier("AcceptRide", sender: self)
+        
+        //Get non active rides to get the queue size
+        getNonActiveRides()
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        //Make sure queue isn't empty before getting next ride
+        if (nonActiveQueueDict.count != 0){
+            
+            //Stop updating driver location to conserve memory
+            locationManager.stopUpdatingLocation()
+            performSegueWithIdentifier("AcceptRide", sender: self)
+        
+        } else {    //no one in queue so you can't get next rider
+            
+            //Let driver know there is currently know one in the queue
+            let alertController = UIAlertController(title: "Queue Empty",
+                                                    message: "No rides have been requested.",
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
+            
+            // Create a UIAlertAction object and add it to the alert controller
+            alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: nil))
+            
+            // Present the alert controller by calling the presentViewController method
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+    
     }
     
     override func didReceiveMemoryWarning() {
@@ -282,8 +334,8 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate   {
             driverMapViewController.rideID = nextRideDictionary["id"] as! Int
             driverMapViewController.riderLat = nextRideDictionary["startLat"] as! Double
             driverMapViewController.riderLng = nextRideDictionary["startLon"] as! Double
-            driverMapViewController.driverLat = 0.0
-            driverMapViewController.driverLng = 0.0
+            driverMapViewController.driverLat = driverLat
+            driverMapViewController.driverLng = driverLng
             driverMapViewController.destLat = nextRideDictionary["endLat"] as! Double
             driverMapViewController.destLng = nextRideDictionary["endLon"] as! Double
         }
