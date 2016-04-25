@@ -11,7 +11,7 @@ import Foundation
 
 class EditGroupDetailsViewController: UIViewController {
 
-    // Mark - Fields
+    // MARK: - Fields
     
     var groupInfo: NSDictionary?
     
@@ -37,7 +37,7 @@ class EditGroupDetailsViewController: UIViewController {
     
     var searchActive: Bool = false
     
-    // Mark - IBOutlets
+    // MARK: - IBOutlets
     @IBOutlet var scrollView: UIScrollView!
     
     @IBOutlet var groupMemberSearchBar: UISearchBar!
@@ -50,7 +50,7 @@ class EditGroupDetailsViewController: UIViewController {
     
     @IBOutlet var addNewMembersButton: UIButton!
     
-    // Mark - IBActions
+    // MARK: - IBActions
     
     
     @IBAction func addNewMembersPressed(sender: AnyObject) {
@@ -853,6 +853,8 @@ class EditGroupDetailsViewController: UIViewController {
         if (segue.identifier == "UnwindToDetails-Save") {
             let dest = segue.destinationViewController as! GroupDetailsTableViewController
             dest.groupInfo = self.groupInfo
+            dest.adminList = self.adminList
+            dest.memberList = self.memberList
         }
     }
     

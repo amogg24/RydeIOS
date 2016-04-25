@@ -13,7 +13,7 @@ import FBSDKLoginKit
 class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate {
 
     
-    // Mark - Fields
+    // MARK: - Fields
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
@@ -27,7 +27,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
     
     var activeSearchBar: UISearchBar?
     
-    // Mark - IBOutlets
+    // MARK: - IBOutlets
     
     @IBOutlet var scrollView: UIScrollView!
 
@@ -41,7 +41,7 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
     
     var searchActive : Bool = false
     
-    // Mark - IBActions
+    // MARK: - IBActions
     
     @IBAction func saveGroup(sender: UIBarButtonItem) {
         
@@ -72,12 +72,12 @@ class AddGroupViewController: UIViewController, UISearchBarDelegate, UITableView
             ]
             
             // Sends a POST to the specified URL with the JSON conent
-            self.postGroup(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group")
+            self.postGroup(JSONGroupObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/group/createWithReturn")
             
         }
     }
     
-    // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
+    // MARK: - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
     
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
