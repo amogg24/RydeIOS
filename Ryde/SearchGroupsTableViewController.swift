@@ -58,6 +58,8 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController!.view.backgroundColor = UIColor.init(patternImage: UIImage(named: "BackgroundMain")!)
+        
         currentUser = appDelegate.currentUser
         tableView.tableFooterView = UIView()
     }
@@ -256,6 +258,7 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
         
         if let groupTitle = groupRow["title"] as? String {
                 cell.textLabel!.text = groupTitle
+                cell.textLabel?.textColor = UIColor.whiteColor()
         }
         
         let groupID = String(groupRow["id"]!)

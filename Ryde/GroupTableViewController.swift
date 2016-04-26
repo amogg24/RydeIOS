@@ -42,6 +42,8 @@ class GroupTableViewController: UITableViewController {
         super.viewDidLoad()
 
         tableView.tableFooterView = UIView()
+        
+        self.navigationController!.view.backgroundColor = UIColor.init(patternImage: UIImage(named: "BackgroundMain")!)
 
     }
     
@@ -208,6 +210,7 @@ class GroupTableViewController: UITableViewController {
         if let groupTitle = groupDictionary[row]["title"] as? String {
             print(groupTitle)
             cell.textLabel!.text = groupTitle
+            cell.textLabel?.textColor = UIColor.whiteColor()
         }
         
         return cell
