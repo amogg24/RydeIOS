@@ -92,6 +92,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         
         fbToken = self.appDelegate.FBid
         
+        //getRiderQueueStatus(("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/" + self.fbToken))
     }
     
     // Mark - Cancel Search
@@ -342,6 +343,57 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             presentViewController(alertController, animated: true, completion: nil)
         }
         
+    }
+    
+    // Get Function for Checking if user has already request a ride
+    func getRiderQueueStatus(url : String) {
+        
+        //let params: [String : AnyObject] = [:]
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        let task = session.dataTaskWithRequest(request)
+        {
+            (data, response, error) in
+            guard let _ = data else {
+                print("error calling")
+                return
+            }
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                return
+            }
+            if let parseJSON = json {
+                print(parseJSON)
+                if let status = parseJSON["queueStatus"] as? String
+                {
+                    if status == "nonActive"
+                    {
+                        self.performSegueWithIdentifier("homeShowRequestView", sender: self)
+                    }
+                    else if status == "active"
+                    {
+                        
+                    }
+                }
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+        }
+        
+        task.resume()
     }
     
     /*

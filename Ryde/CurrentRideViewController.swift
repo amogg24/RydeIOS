@@ -38,8 +38,24 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     // Route between anotations
     var myRoute : MKRoute?
     
+    // Driver name
+    var driverName:String = ""
+    
+    // Driver car info
+    var carinfo: String = ""
+    
+    // Driver Phone Number
+    var driverNumber:String = ""
+    
+    // Timer to schedule tasks
+    var updateTask: NSTimer?
+    
     // Mapkit showing the anotations
     @IBOutlet var mapView: MKMapView!
+    
+    @IBOutlet var driverNameLabel: UILabel!
+    
+    @IBOutlet var driverCarLabel: UILabel!
     
     let locationManager = CLLocationManager()
     
@@ -126,6 +142,15 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
                     }
             }
         }
+        
+        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/MikeFBTok")
+        self.getRideInfo(postUrl)
+        
+        driverNameLabel.text = "Driver Name: " + driverName
+        driverCarLabel.text = "Driver's Car: " + carinfo
+        
+        // schedules task for every n second
+        updateTask = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateRide", userInfo: nil, repeats: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -158,8 +183,103 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
         return anView
     }
     
+    func updateRide(){
+        //let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/" + self.FBid)
+        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/MikeFBTok")
+        self.getRideInfo(postUrl)
+        driverNameLabel.text = "Driver Name: " + driverName
+        driverCarLabel.text = "Driver's Car: " + carinfo
+    }
+    
+    // Get Function for Checking if user has already request a ride
+    func getRideInfo(url : String) {
+        
+        //let params: [String : AnyObject] = [:]
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "GET"
+        
+        let task = session.dataTaskWithRequest(request)
+        {
+            (data, response, error) in
+            guard let _ = data else {
+                print("error calling")
+                return
+            }
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                return
+            }
+            if let parseJSON = json {
+                print(parseJSON)
+                if let status = parseJSON["queueStatus"] as? String
+                {
+                    if status == "nonActive"
+                    {
+                        //segue back to queue?
+                    }
+                    else if status == "active"
+                    {
+                        if let driverJSON = parseJSON["driver"] as? NSDictionary
+                        {
+                            if let firstName = driverJSON["firstName"] as? String{
+                                self.driverName = firstName
+                            }
+                            if let lastName = driverJSON["lastName"] as? String{
+                                self.driverName = self.driverName + " " + lastName
+                            }
+                            if let carMake = driverJSON["carMake"] as? String{
+                                self.carinfo = carMake
+                            }
+                            if let carModel = driverJSON["carModel"] as? String{
+                                self.carinfo = self.carinfo + " " + carModel
+                            }
+                            if let carColor = driverJSON["carColor"] as? String{
+                                self.carinfo = self.carinfo + ", " + carColor
+                            }
+                            if let driverPhoneNumber = driverJSON["phoneNumber"] as? String{
+                                self.driverNumber = driverPhoneNumber
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    /*
+     Creates an alert box when contact driver is clicked
+     prints the driver number in the alert box
+    */
+    func contactDriverAlert()
+    {
+        let alert = UIAlertController(title: driverName + "'s Phone Number", message: driverNumber, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
     /*
      Creates an alert box cancel ride is clicked
+     post a delete request and pop to root view
      */
     func cancelRideAlert()
     {
@@ -170,7 +290,7 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
             
             let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/cancel/" + self.FBid)
             self.postCancel(postUrl)
-            
+            self.updateTask?.invalidate()
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
         
@@ -212,7 +332,7 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
         case 0:
             print("Contact Driver\n", terminator: "")
             
-            cancelRideAlert()
+            contactDriverAlert()
             
             break
         case 1:

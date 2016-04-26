@@ -51,6 +51,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
     
     var selectedTID:Int = 0
     
+    let semaphore = dispatch_semaphore_create(0);
+    
     override func viewDidLoad() {
         self.title = "Select Group"
         super.viewDidLoad()
@@ -103,8 +105,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
             }
             
             // Print out response string
-            //let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            //print("responseString = \(responseString!)")
+            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("responseString = \(responseString!)")
             
             let json: [NSDictionary]?
             
@@ -202,6 +204,8 @@ class RiderRequestGroupTableViewController: UITableViewController {
         let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/request/" + self.FBid + "/" + (String)(self.selectedTID))
         //let postUrl = ("http://172.30.42.7:8080/Ryde/api/ride/request/JohnFBTok/" + (String)(self.selectedTID))
         self.postRequest(JSONObject, url: postUrl)
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         
         performSegueWithIdentifier("ShowRequestRide", sender: nil)
     }
@@ -352,13 +356,18 @@ class RiderRequestGroupTableViewController: UITableViewController {
                 print(dataError)
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 print("Error could not parse JSON: '\(jsonStr)'")
+                //dispatch_semaphore_signal(self.semaphore);
                 return
             }
             
             // The JSONObjectWithData constructor didn't return an error. But, we should still
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
-                self.queuePos = (parseJSON["position"] as? Int)!
+                if let queueTemp = parseJSON["position"] as? Int
+                {
+                    self.queuePos = queueTemp
+                    dispatch_semaphore_signal(self.semaphore);
+                }
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
@@ -366,7 +375,6 @@ class RiderRequestGroupTableViewController: UITableViewController {
                 print("Error could not parse JSON: \(jsonStr)")
             }
         })
-        
         task.resume()
     }
     
