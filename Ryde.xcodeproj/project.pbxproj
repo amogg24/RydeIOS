@@ -24,7 +24,6 @@
 		5AB6F2921CB1AB8500E875D4 /* RiderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6F2911CB1AB8500E875D4 /* RiderViewController.swift */; };
 		5AB6F2941CB1C02200E875D4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AB6F2931CB1C02200E875D4 /* CoreLocation.framework */; };
 		5AB6F2961CB1C02B00E875D4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AB6F2951CB1C02B00E875D4 /* MapKit.framework */; };
-		5ADEE8521CCEF3BE00812088 /* TimeslotTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADEE8511CCEF3BE00812088 /* TimeslotTableViewController.swift */; };
 		7803889F1CB6E4B9004F5A69 /* DriverMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7803889E1CB6E4B9004F5A69 /* DriverMainViewController.swift */; };
 		780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780388A01CB6E4C4004F5A69 /* DriverMapViewController.swift */; };
 		780388A41CB6E4D6004F5A69 /* maps.html in Resources */ = {isa = PBXBuildFile; fileRef = 780388A31CB6E4D6004F5A69 /* maps.html */; };
@@ -63,7 +62,6 @@
 		5AB6F2911CB1AB8500E875D4 /* RiderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderViewController.swift; sourceTree = "<group>"; };
 		5AB6F2931CB1C02200E875D4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5AB6F2951CB1C02B00E875D4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		5ADEE8511CCEF3BE00812088 /* TimeslotTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeslotTableViewController.swift; sourceTree = "<group>"; };
 		7803889E1CB6E4B9004F5A69 /* DriverMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverMainViewController.swift; sourceTree = "<group>"; };
 		780388A01CB6E4C4004F5A69 /* DriverMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DriverMapViewController.swift; sourceTree = "<group>"; };
 		780388A31CB6E4D6004F5A69 /* maps.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = maps.html; sourceTree = "<group>"; };
@@ -136,7 +134,6 @@
 				C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */,
 				C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */,
 				C38581D01CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift */,
-				5ADEE8511CCEF3BE00812088 /* TimeslotTableViewController.swift */,
 			);
 			name = "Tab - Groups";
 			sourceTree = "<group>";
@@ -324,7 +321,6 @@
 				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
 				10849AA51CC877A60080CFF0 /* RiderMenuViewController.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
-				5ADEE8521CCEF3BE00812088 /* TimeslotTableViewController.swift in Sources */,
 				5A1362AE1CC50C380003DB2D /* LocationSearchTableViewController.swift in Sources */,
 				101BF37D1CBD450200D5332D /* CurrentRideViewController.swift in Sources */,
 				101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */,
