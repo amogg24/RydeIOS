@@ -1209,7 +1209,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IsT-96-m4U" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="oWy-jj-6Hn" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3601" y="530"/>
+            <point key="canvasLocation" x="3600" y="436"/>
         </scene>
         <!--Add Group-->
         <scene sceneID="e1X-et-RyB">

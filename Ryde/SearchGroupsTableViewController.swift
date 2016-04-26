@@ -58,6 +58,7 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        currentUser = appDelegate.currentUser
         tableView.tableFooterView = UIView()
     }
     
@@ -70,30 +71,19 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
     func postRequests() {
         
         
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/requestuser/")
-        
         for group in selectedGroups {
             
             if let currentID = currentUser!["id"] {
                 let memberID = String(currentID)
                 
-                let groupDict = [ "id" : group ]
-                let memberDict = [ "id" : memberID ]
+                let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/requestuser/createByUserAndGroup/\(memberID)/\(group)")
                 
-                let JSONRequestGroupObject = [
-                    "groupId": groupDict,
-                    "userId": memberDict
-                ]
-                
+                print(url)
                 // Creaste URL Request
                 let request = NSMutableURLRequest(URL:url!);
-                
-                do {
-                    request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(JSONRequestGroupObject, options: [])
-                } catch {
-                    print(error)
-                    request.HTTPBody = nil
-                }
+                let session = NSURLSession.sharedSession()
+                request.HTTPMethod = "POST"
+                request.HTTPBody = nil
                 
                 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -102,7 +92,7 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
                 //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
                 
                 // Execute HTTP Request
-                let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+                let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
                     
                     // Check for error
                     if error != nil
