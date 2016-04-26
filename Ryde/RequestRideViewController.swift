@@ -80,6 +80,7 @@ class RequestRideViewController: UIViewController {
             
         })
         // Do any additional setup after loading the view.
+ 
     }
     
     func updateQueue(){
@@ -172,6 +173,7 @@ class RequestRideViewController: UIViewController {
                 return
             }
             if let parseJSON = json {
+                print(parseJSON)
                 self.queueNum = (parseJSON["position"] as? Int)!
                 print(self.queueNum)
             }
