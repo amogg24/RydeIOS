@@ -15,7 +15,7 @@ class RequestRideViewController: UIViewController {
     // Rider FB id
     var FBid = ""
     
-    var queueNum: Int = 0
+    var queueNum: Int = 1
     
     // Rider Latitude
     var startLatitude: Double = 0
@@ -31,6 +31,9 @@ class RequestRideViewController: UIViewController {
     
     // Timeslot ID
     var selectedTID:Int = 0
+    
+    // Timer to schedule tasks
+    var updateTimer: NSTimer?
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -51,11 +54,13 @@ class RequestRideViewController: UIViewController {
         
         super.viewDidLoad()
         
+        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/getposition/" + self.FBid + "/" + (String)(self.selectedTID))
+        self.getQueuePos(postUrl)
         // schedules task for every n second
-        var updateTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
+        updateTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
         
         self.queueLabel.text = (String)(self.queueNum)
-        print(self.queueNum)
+        
         
         let seconds = 2.0
         let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
@@ -73,20 +78,26 @@ class RequestRideViewController: UIViewController {
         
         dispatch_after(dispatchTime2, dispatch_get_main_queue(), {
             
-            updateTimer.invalidate()     //stops updateTimer (put in the post request when queue = 0 later)
+            self.updateTimer!.invalidate()     //stops updateTimer (put in the post request when queue = 0 later)
             
             //self.queueLabel.text = "0"
             self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
             
         })
-        // Do any additional setup after loading the view.
+ 
  
     }
     
     func updateQueue(){
         let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/getposition/" + self.FBid + "/" + (String)(self.selectedTID))
         self.getQueuePos(postUrl)
+        print(queueNum)
         self.queueLabel.text = (String)(queueNum)
+        if queueNum == 0
+        {
+            updateTimer?.invalidate()
+            self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
+        }
         //check if queueNum is 0, segue when it is.
     }
     
@@ -113,6 +124,7 @@ class RequestRideViewController: UIViewController {
             let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/cancel/" + self.FBid)
             self.postCancel(postUrl)
             
+            self.updateTimer?.invalidate()
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
         
@@ -173,9 +185,10 @@ class RequestRideViewController: UIViewController {
                 return
             }
             if let parseJSON = json {
-                print(parseJSON)
-                self.queueNum = (parseJSON["position"] as? Int)!
-                print(self.queueNum)
+                if let tempNum = parseJSON["position"] as? Int
+                {
+                    self.queueNum = tempNum
+                }
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?

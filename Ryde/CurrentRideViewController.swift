@@ -47,6 +47,9 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     // Driver Phone Number
     var driverNumber:String = ""
     
+    // Timer to schedule tasks
+    var updateTask: NSTimer?
+    
     // Mapkit showing the anotations
     @IBOutlet var mapView: MKMapView!
     
@@ -147,7 +150,7 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
         driverCarLabel.text = "Driver's Car: " + carinfo
         
         // schedules task for every n second
-        var updateTask = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateRide", userInfo: nil, repeats: true)
+        updateTask = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateRide", userInfo: nil, repeats: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -287,7 +290,7 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
             
             let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/cancel/" + self.FBid)
             self.postCancel(postUrl)
-            
+            self.updateTask?.invalidate()
             self.navigationController?.popToRootViewControllerAnimated(true)
         }))
         
