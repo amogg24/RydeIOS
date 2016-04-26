@@ -75,6 +75,9 @@ class EditGroupDetailsViewController: UIViewController {
     }
     
     @IBAction func editTimeslotsPressed(sender: AnyObject) {
+        
+        performSegueWithIdentifier("timeslots", sender: self)
+        
     }
     
     
@@ -855,6 +858,13 @@ class EditGroupDetailsViewController: UIViewController {
             dest.groupInfo = self.groupInfo
             dest.adminList = self.adminList
             dest.memberList = self.memberList
+        }
+        
+        else if (segue.identifier == "timeslots") {
+            
+            let dest = segue.destinationViewController as! TimeslotsTableViewController
+            dest.groupInfo = self.groupInfo
+            
         }
     }
     

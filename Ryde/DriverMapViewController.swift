@@ -8,18 +8,18 @@
 
 import UIKit
 
-class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
+class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
     
     //needed fields
     var riderName = "Blake Duncan"
     var rideID = 0
     var riderPhone = ""
-    var riderLat = 37.234600
-    var riderLng = -80.4102
-    var driverLat = 37.231200
-    var driverLng = -80.4104
-    var destLat = 37.241660
-    var destLng = -80.418267
+    var riderLat = 0.0
+    var riderLng = 0.0
+    var driverLat = 0.0
+    var driverLng = 0.0
+    var destLat = 0.0
+    var destLng = 0.0
     
     //False if driver hasn't picked up rider and true otherwise
     var hasRider = false
@@ -44,12 +44,18 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         riderNameLabel.text = riderName
         hasRider = false
         
+        //Get the maps html file path and save it to a field
         mapsHtmlFilePath = NSBundle.mainBundle().pathForResource("maps", ofType: "html")
         
+        //now load the map
+        loadMapView()
+    }
+    
+    
+    func loadMapView(){
         let tempDriverLat = String(driverLat)
         let tempDriverLng = String(driverLng)
         let driverCoord = "\(tempDriverLat),\(tempDriverLng)"
-        
         let tempRiderLat = String(riderLat)
         let tempRiderLng = String(riderLng)
         let riderCoord = "\(tempRiderLat),\(tempRiderLng)"
@@ -74,8 +80,6 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         
         // Ask the webView object to display the web page for the given URL
         webView.loadRequest(request)
-        
-        // Do any additional setup after loading the view.
     }
     
     func pickupConfirmed(){
@@ -114,6 +118,10 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         
         // Create a UIAlertAction object and add it to the alert controller
         alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+            
+            //cancel pickup.  Rider is left in queue but driver is unassigned
+            self.put("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverCancel/\(self.appDelegate.FBid)/")
+            
             self.navigationController?.popViewControllerAnimated(true)
         }))
         alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: nil))
@@ -153,10 +161,7 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
                 
                 //Ride is over so post to db
                 let JSONObject: [String : String] = [
-                    
-                    "lastName"  : "",
-                    "firstName" : "",
-                    "fbTok"     : "",
+                    "id"  : "\(self.rideID)"
                 ]
                 
                 //Sends a POST to the specified URL with the JSON conent
@@ -184,7 +189,7 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
     
     // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
     func post(params : Dictionary<String, String>, url : String) {
-        
+        print("end ride post start here")
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         let session = NSURLSession.sharedSession()
         request.HTTPMethod = "POST"
@@ -235,6 +240,59 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         
         task.resume()
     }
+    
+    // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
+    
+    
+    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
+    func put(url : String) {
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "PUT"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            print("Response: \(response)")
+            /**
+             let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Body: \(strData)")
+             
+             let json: NSDictionary?
+             
+             do {
+             json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+             } catch let dataError{
+             
+             // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+             print(dataError)
+             let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Error could not parse JSON: '\(jsonStr)'")
+             // return or throw?
+             return
+             }
+             
+             // The JSONObjectWithData constructor didn't return an error. But, we should still
+             // check and make sure that json has a value using optional binding.
+             
+             if let parseJSON = json {
+             // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+             let success = parseJSON["success"] as? Int
+             print("Succes: \(success)")
+             }
+             else {
+             // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+             let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Error could not parse JSON: \(jsonStr)")
+             }
+             **/
+        })
+        
+        task.resume()
+    }
+
     
     /*
      -------------------------
