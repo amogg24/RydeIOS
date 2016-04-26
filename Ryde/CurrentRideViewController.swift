@@ -260,7 +260,23 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     }
     
     /*
+     Creates an alert box when contact driver is clicked
+     prints the driver number in the alert box
+    */
+    func contactDriverAlert()
+    {
+        let alert = UIAlertController(title: driverName + "'s Phone Number", message: driverNumber, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    /*
      Creates an alert box cancel ride is clicked
+     post a delete request and pop to root view
      */
     func cancelRideAlert()
     {
@@ -313,7 +329,7 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
         case 0:
             print("Contact Driver\n", terminator: "")
             
-            print(driverNumber)
+            contactDriverAlert()
             
             break
         case 1:
