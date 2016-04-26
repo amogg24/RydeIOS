@@ -181,21 +181,21 @@ class TimeslotsTableViewController: UITableViewController {
         
         if let timeSlotList = timeslotInfo[indexPath.section]["timeslots"] {
 
-            if let timeSlotDic = timeSlotList[indexPath.row] {
-                
-                
-                
-                let startTime = timeSlotDic["startTime"]!!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
-                
-                print("Start Time: \(startTime)")
-                
-                let endTime = timeSlotDic["endTime"]!!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
-                
-                print("End Time: \(endTime)")
-                
-                cell.textLabel?.text = "\(startTime) - \(endTime)"
+            //if let timeSlotDic = timeSlotList[indexPath.row] {
+
+            let timeSlotDic = (timeSlotList as! [NSDictionary])[indexPath.row]
+            
+            let startTime = timeSlotDic["startTime"]!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+            
+            print("Start Time: \(startTime)")
+            
+            let endTime = timeSlotDic["endTime"]!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+            
+            print("End Time: \(endTime)")
+            
+            cell.textLabel?.text = "\(startTime) - \(endTime)"
  
-            }
+            //}
         }
         
         cell.detailTextLabel?.text = "Driver(s): 2"
