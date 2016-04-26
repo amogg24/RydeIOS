@@ -370,7 +370,10 @@ class GroupDetailsTableViewController: UITableViewController {
                             otherCell.tag = row
                             otherCell.requestMemberName.text = firstName + " " + lastName
                             otherCell.requestMemberName.textColor = UIColor.whiteColor()
+                            otherCell.acceptButton.tag = row
+                            otherCell.denyButton.tag = row
                             otherCell.acceptButton.addTarget(self, action: #selector(GroupDetailsTableViewController.acceptRequest(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                            otherCell.acceptButton.addTarget(self, action: #selector(GroupDetailsTableViewController.denyRequest(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                             otherCell.denyButton.addTarget(self, action: #selector(GroupDetailsTableViewController.denyRequest(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                             return otherCell
                         }
@@ -503,13 +506,13 @@ class GroupDetailsTableViewController: UITableViewController {
                     return
                 }
                 
-                // The JSONObjectWithData constructor didn't return an error. But, we should still
-                // check and make sure that json has a value using optional binding.
                 if let parseJSON = json {
-                    // upload to group worked, lets now remove from the request list
-                    self.getGroupUsers()
-                    self.denyRequest(sender)
+                    self.memberList.append(parseJSON)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.tableView.reloadData()
+                    })
                 }
+                
             })
             
             task.resume()
