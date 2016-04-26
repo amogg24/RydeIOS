@@ -1,15 +1,15 @@
 //
-//  TimeslotTableViewController.swift
+//  TimeslotsTableViewController.swift
 //  Ryde
 //
-//  Created by Joe Fletcher on 4/22/16.
+//  Created by Joe Fletcher on 4/25/16.
 //  Copyright © 2016 Jared Deiner. All rights reserved.
 //
 
 import UIKit
 
-class TimeslotTableViewController: UITableViewController {
-    
+class TimeslotsTableViewController: UITableViewController {
+
     // Mark - Fields
     
     var groupInfo: NSDictionary?
@@ -24,6 +24,7 @@ class TimeslotTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.title = "\(groupInfo!["title"] as! String): Timeslot"
+        
         
         getData()
         
@@ -74,8 +75,8 @@ class TimeslotTableViewController: UITableViewController {
                 
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
                 print(dataError)
-                //                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                //                print("Error could not parse JSON: '\(jsonStr!)'")
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr!)'")
                 // return or throw?
                 return
             }
@@ -85,6 +86,10 @@ class TimeslotTableViewController: UITableViewController {
             if let parseJSON = json {
                 // Okay, the parsedJSON is here, lets store its values into an array
                 self.timeslotInfo = parseJSON as [NSDictionary]
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.tableView.reloadData()
+                })
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
@@ -103,88 +108,99 @@ class TimeslotTableViewController: UITableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return timeslotInfo.count
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-//        if let timeslots = timeslotInfo[section]["timeslots"] as? [Dictionary] {
-//            return timeslots.count
-//        }
-        print(timeslotInfo)
-        return 1
+        if let timeSlotsPerDate = timeslotInfo[section]["timeslots"] {
+            return timeSlotsPerDate.count
+        }
+        else {
+            return 0
+        }
+    
     }
-
+    
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-//        if let date = timeslotInfo[section]["date"] as? String {
-//            return date
-//        }
-        return "header"
+        let calendar = NSCalendar.currentCalendar()
+        calendar.timeZone = NSTimeZone(abbreviation: "GMT")!
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+    
+        
+        if let timeSlotDate = timeslotInfo[section]["date"] {
+            
+            let exampleServerStartDateArray = timeSlotDate.componentsSeparatedByString("T")
+            let exampleServerStartDate = exampleServerStartDateArray[0]
+            
+            // Start Date
+            let tempDate = dateFormatter.dateFromString(exampleServerStartDate)
+            let comp = calendar.components([.Day, .Month, .Year, .Hour, .Minute], fromDate: tempDate!)
+            let startDateComponent = NSDateComponents()
+            startDateComponent.year = comp.year
+            startDateComponent.month = comp.month
+            startDateComponent.day = comp.day
+            startDateComponent.hour = comp.hour
+            startDateComponent.minute = comp.minute
+            // Get NSDate given the above date components
+            let startDate = calendar.dateFromComponents(startDateComponent)
+            
+            
+            //        // End Date
+            //
+            //        tempDate = dateFormatter.dateFromString(exampleServerEndDate)
+            //        comp = calendar.components([.Day, .Month, .Year, .Hour, .Minute], fromDate: tempDate!)
+            //        let endDateComponent = NSDateComponents()
+            //        endDateComponent.year = comp.year
+            //        endDateComponent.month = comp.month
+            //        endDateComponent.day = comp.day
+            //        endDateComponent.hour = comp.hour
+            //        endDateComponent.minute = comp.minute
+            //
+            //        // Get NSDate given the above date components
+            //        let endDate = calendar.dateFromComponents(endDateComponent)
+            
+            // Format Start and End Dates
+            
+            dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+            
+            
+            print("Start Date: \(dateFormatter.stringFromDate(startDate!))")
+            //        print("End Date: \(dateFormatter.stringFromDate(endDate!))")
+            
+            return dateFormatter.stringFromDate(startDate!)
+        }
+        else {
+           return "N/A"
+        }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("timeslotCell", forIndexPath: indexPath)
-        //
-        //        let exampleServerStartDateArray = timeslots[indexPath.row]["startTime"]?.componentsSeparatedByString("T")
-        //        let exampleServerEndDateArray = timeslots[indexPath.row]["endTime"]?.componentsSeparatedByString("T")
-        //
-        //        let exampleServerStartDate = exampleServerStartDateArray![0]
-        //        let exampleServerEndDate = exampleServerEndDateArray![0]
-        //
-        //        let calendar = NSCalendar.currentCalendar()
-        //        calendar.timeZone = NSTimeZone(abbreviation: "GMT")!
-        //        let dateFormatter = NSDateFormatter()
-        //        dateFormatter.dateFormat = "yyyy-MM-dd"
-        //
-        //        // Start Date
-        //        var tempDate = dateFormatter.dateFromString(exampleServerStartDate)
-        //        var comp = calendar.components([.Day, .Month, .Year, .Hour, .Minute], fromDate: tempDate!)
-        //        let startDateComponent = NSDateComponents()
-        //        startDateComponent.year = comp.year
-        //        startDateComponent.month = comp.month
-        //        startDateComponent.day = comp.day
-        //        startDateComponent.hour = comp.hour
-        //        startDateComponent.minute = comp.minute
-        //        // Get NSDate given the above date components
-        //        let startDate = calendar.dateFromComponents(startDateComponent)
-        //
-        //
-        //        // End Date
-        //
-        //        tempDate = dateFormatter.dateFromString(exampleServerEndDate)
-        //        comp = calendar.components([.Day, .Month, .Year, .Hour, .Minute], fromDate: tempDate!)
-        //        let endDateComponent = NSDateComponents()
-        //        endDateComponent.year = comp.year
-        //        endDateComponent.month = comp.month
-        //        endDateComponent.day = comp.day
-        //        endDateComponent.hour = comp.hour
-        //        endDateComponent.minute = comp.minute
-        //
-        //        // Get NSDate given the above date components
-        //        let endDate = calendar.dateFromComponents(endDateComponent)
-        //
-        //        // Format Start and End Dates
-        //
-        //        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        //
-        //
-        //        let startTime = exampleServerStartDateArray![1].componentsSeparatedByString("-")[0]
-        //        let endTime = exampleServerEndDateArray![1].componentsSeparatedByString("-")[0]
-        //        
-        //        
-        //        print("Start Date: \(dateFormatter.stringFromDate(startDate!))")
-        //        print("Start Time: \(startTime)")
-        //        
-        //        
-        //        print("End Date: \(dateFormatter.stringFromDate(endDate!))")
-        //        print("End Time: \(endTime)")
-        //
-        //        
-        //        cell.textLabel?.text = "\(startTime) - \(endTime)"
+        
+        if let timeSlotList = timeslotInfo[indexPath.section]["timeslots"] {
+
+            if let timeSlotDic = timeSlotList[indexPath.row] {
+                
+                
+                
+                let startTime = timeSlotDic["startTime"]!!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+                
+                print("Start Time: \(startTime)")
+                
+                let endTime = timeSlotDic["endTime"]!!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+                
+                print("End Time: \(endTime)")
+                
+                cell.textLabel?.text = "\(startTime) - \(endTime)"
+ 
+            }
+        }
         
         cell.detailTextLabel?.text = "Driver(s): 2"
         
         return cell
     }
-    
+
 }

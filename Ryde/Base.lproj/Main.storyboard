@@ -1138,7 +1138,7 @@
                         <outlet property="scrollView" destination="iAh-mW-wiC" id="4Nh-Db-IQK"/>
                         <segue destination="Tl8-Ms-hhQ" kind="unwind" identifier="UnwindToDetails-Save" unwindAction="unwindToGroupDetailsViewController:" id="r1o-vP-PZ2"/>
                         <segue destination="Tl8-Ms-hhQ" kind="unwind" identifier="UnwindToGroups-Delete" unwindAction="unwindToGroupsViewController:" id="0k4-Ng-CTZ"/>
-                        <segue destination="2XV-a1-WJD" kind="show" identifier="timeslots" id="xNf-9C-rLt"/>
+                        <segue destination="2XV-a1-WJD" kind="show" identifier="timeslots" id="Ksa-gD-wLk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MDI-vk-4GG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1149,7 +1149,7 @@
         <!--Timeslots-->
         <scene sceneID="VOo-Wl-EDR">
             <objects>
-                <tableViewController title="Timeslots" id="2XV-a1-WJD" customClass="TimeslotTableViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Timeslots" id="2XV-a1-WJD" customClass="TimeslotsTableViewController" customModule="Ryde" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="2Bz-8Y-hEX">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="750"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1182,8 +1182,8 @@
                         </prototypes>
                         <sections/>
                         <connections>
-                            <outlet property="dataSource" destination="2XV-a1-WJD" id="fCg-lt-5Is"/>
-                            <outlet property="delegate" destination="2XV-a1-WJD" id="OtU-f7-ekE"/>
+                            <outlet property="dataSource" destination="2XV-a1-WJD" id="lV9-Mr-e3w"/>
+                            <outlet property="delegate" destination="2XV-a1-WJD" id="oBa-Vg-Chl"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Balci Beta: Timeslot" id="u4C-1R-abA">

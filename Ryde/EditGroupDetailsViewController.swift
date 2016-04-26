@@ -860,7 +860,7 @@ class EditGroupDetailsViewController: UIViewController {
         
         else if (segue.identifier == "timeslots") {
             
-            let dest = segue.destinationViewController as! TimeslotTableViewController
+            let dest = segue.destinationViewController as! TimeslotsTableViewController
             dest.groupInfo = self.groupInfo
             
         }

@@ -20,7 +20,7 @@
 		5A295D091CAB72FC006539F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A295D081CAB72FC006539F5 /* ViewController.swift */; };
 		5A7243071CBC716F006AD877 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7243061CBC716F006AD877 /* EditProfileViewController.swift */; };
 		5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A747B901CB07048009C3B41 /* ProfileViewController.swift */; };
-		5A89C4661CCF0B890088AB18 /* TimeslotTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A89C4651CCF0B890088AB18 /* TimeslotTableViewController.swift */; };
+		5A89C4681CCF0D2D0088AB18 /* TimeslotsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A89C4671CCF0D2D0088AB18 /* TimeslotsTableViewController.swift */; };
 		5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA355381CADA59D0087B485 /* CreateAccountViewController.swift */; };
 		5AB6F2921CB1AB8500E875D4 /* RiderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6F2911CB1AB8500E875D4 /* RiderViewController.swift */; };
 		5AB6F2941CB1C02200E875D4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AB6F2931CB1C02200E875D4 /* CoreLocation.framework */; };
@@ -59,7 +59,7 @@
 		5A295D081CAB72FC006539F5 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5A7243061CBC716F006AD877 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		5A747B901CB07048009C3B41 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		5A89C4651CCF0B890088AB18 /* TimeslotTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeslotTableViewController.swift; sourceTree = "<group>"; };
+		5A89C4671CCF0D2D0088AB18 /* TimeslotsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeslotsTableViewController.swift; sourceTree = "<group>"; };
 		5AA355381CADA59D0087B485 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		5AB6F2911CB1AB8500E875D4 /* RiderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RiderViewController.swift; sourceTree = "<group>"; };
 		5AB6F2931CB1C02200E875D4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -136,7 +136,7 @@
 				C37C9A151CBCBAD600F02755 /* SearchGroupsTableViewController.swift */,
 				C3A7EB411CBCD2E000A22B51 /* EditGroupDetailsViewController.swift */,
 				C38581D01CC555B300BE55CC /* EditGroupDetailsTableViewCell.swift */,
-				5A89C4651CCF0B890088AB18 /* TimeslotTableViewController.swift */,
+				5A89C4671CCF0D2D0088AB18 /* TimeslotsTableViewController.swift */,
 			);
 			name = "Tab - Groups";
 			sourceTree = "<group>";
@@ -324,7 +324,6 @@
 				780388A71CB6E5A0004F5A69 /* DriverMenuViewController.swift in Sources */,
 				10849AA51CC877A60080CFF0 /* RiderMenuViewController.swift in Sources */,
 				5AA355391CADA59D0087B485 /* CreateAccountViewController.swift in Sources */,
-				5A89C4661CCF0B890088AB18 /* TimeslotTableViewController.swift in Sources */,
 				5A1362AE1CC50C380003DB2D /* LocationSearchTableViewController.swift in Sources */,
 				101BF37D1CBD450200D5332D /* CurrentRideViewController.swift in Sources */,
 				101BF3751CBC399000D5332D /* RequestRideViewController.swift in Sources */,
@@ -335,6 +334,7 @@
 				780388A11CB6E4C4004F5A69 /* DriverMapViewController.swift in Sources */,
 				101BF3731CBC393900D5332D /* RiderRequestGroupTableViewController.swift in Sources */,
 				C3A9680D1CBC1BB900E3F3F1 /* AddGroupViewController.swift in Sources */,
+				5A89C4681CCF0D2D0088AB18 /* TimeslotsTableViewController.swift in Sources */,
 				C37C9A161CBCBAD600F02755 /* SearchGroupsTableViewController.swift in Sources */,
 				C38581E91CC7F42900BE55CC /* TPKeyboardAvoidingScrollView.m in Sources */,
 				5A747B911CB07048009C3B41 /* ProfileViewController.swift in Sources */,
