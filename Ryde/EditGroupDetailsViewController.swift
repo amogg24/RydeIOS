@@ -75,6 +75,9 @@ class EditGroupDetailsViewController: UIViewController {
     }
     
     @IBAction func editTimeslotsPressed(sender: AnyObject) {
+        
+        performSegueWithIdentifier("timeslots", sender: self)
+        
     }
     
     
@@ -853,6 +856,13 @@ class EditGroupDetailsViewController: UIViewController {
         if (segue.identifier == "UnwindToDetails-Save") {
             let dest = segue.destinationViewController as! GroupDetailsTableViewController
             dest.groupInfo = self.groupInfo
+        }
+        
+        else if (segue.identifier == "timeslots") {
+            
+            let dest = segue.destinationViewController as! TimeslotTableViewController
+            dest.groupInfo = self.groupInfo
+            
         }
     }
     
