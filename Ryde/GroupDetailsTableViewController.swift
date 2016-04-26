@@ -220,7 +220,7 @@ class GroupDetailsTableViewController: UITableViewController {
         
         let id = groupInfo!["id"]!
         
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/requestuser/inGroup/\(id)")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/findRequestUserForGroup/\(id)")
         
         print(url)
         
@@ -343,6 +343,7 @@ class GroupDetailsTableViewController: UITableViewController {
                 cell.textLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
                 if let groupDescription = dict["description"] as? String {
                     cell.textLabel!.text = groupDescription
+                    cell.textLabel?.textColor = UIColor.whiteColor()
                 }
             }
         }
@@ -351,6 +352,7 @@ class GroupDetailsTableViewController: UITableViewController {
             if let firstName = memberInfo["firstName"] as? String {
                 if let lastName = memberInfo["lastName"] as? String {
                     cell.textLabel!.text = firstName + " " + lastName
+                    cell.textLabel?.textColor = UIColor.whiteColor()
                 }
             }
         }
@@ -398,10 +400,10 @@ class GroupDetailsTableViewController: UITableViewController {
                 if let firstName = memberInfo["firstName"] as? String {
                     if let lastName = memberInfo["lastName"] as? String {
                         cell.textLabel!.text = firstName + " " + lastName
+                        cell.textLabel?.textColor = UIColor.whiteColor()
                     }
                 }
             }
-            cell.textLabel?.textColor = UIColor.whiteColor()
             return cell
             
         }
@@ -505,6 +507,7 @@ class GroupDetailsTableViewController: UITableViewController {
                 // check and make sure that json has a value using optional binding.
                 if let parseJSON = json {
                     // upload to group worked, lets now remove from the request list
+                    self.getGroupUsers()
                     self.denyRequest(sender)
                 }
             })
@@ -535,11 +538,13 @@ class GroupDetailsTableViewController: UITableViewController {
             let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
                 guard let _ = data
                     else {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.tableView.reloadData()
-                        })
+
                         return
                 }
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.requestList.removeAtIndex(sender.tag)
+                    self.tableView.reloadData()
+                })
             })
             
             task.resume()

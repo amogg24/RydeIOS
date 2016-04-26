@@ -9,7 +9,7 @@
 import UIKit
 
 class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegate {
-
+    
     // MARK: - fields
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -18,8 +18,12 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
     
     var searchBarResults = [NSDictionary]()
     
+    var groupDictionary = [NSDictionary]()
+    
+    var groupList = [String]()
+    
     var selectedGroups = [String]()
-
+    
     var searchActive : Bool = false
     
     // MARK: - IBOutlets
@@ -50,7 +54,7 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
             self.presentViewController(alertController, animated: true, completion: nil)
         }
         
-
+        
     }
     
     // MARK: - Lifecycle Methods
@@ -72,70 +76,78 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
     
     func postRequests() {
         
+        print(groupDictionary)
+        for group in groupDictionary {
+            if let groupID = group["id"] {
+                groupList.append(String(groupID))
+            }
+        }
         
         for group in selectedGroups {
             
-            if let currentID = currentUser!["id"] {
-                let memberID = String(currentID)
-                
-                let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/requestuser/createByUserAndGroup/\(memberID)/\(group)")
-                
-                print(url)
-                // Creaste URL Request
-                let request = NSMutableURLRequest(URL:url!);
-                let session = NSURLSession.sharedSession()
-                request.HTTPMethod = "POST"
-                request.HTTPBody = nil
-                
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.addValue("application/json", forHTTPHeaderField: "Accept")
-                
-                // If needed you could add Authorization header value
-                //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
-                
-                // Execute HTTP Request
-                let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            if (!groupList.contains(group)) {
+                if let currentID = currentUser!["id"] {
+                    let memberID = String(currentID)
                     
-                    // Check for error
-                    if error != nil
-                    {
-                        print("error=\(error)")
-                        return
-                    }
+                    let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/requestuser/createByUserAndGroup/\(memberID)/\(group)")
                     
-                    let json: [NSDictionary]?
+                    print(url)
+                    // Creaste URL Request
+                    let request = NSMutableURLRequest(URL:url!);
+                    let session = NSURLSession.sharedSession()
+                    request.HTTPMethod = "POST"
+                    request.HTTPBody = nil
                     
-                    do {
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    
+                    // If needed you could add Authorization header value
+                    //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+                    
+                    // Execute HTTP Request
+                    let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
                         
-                        json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                        // Check for error
+                        if error != nil
+                        {
+                            print("error=\(error)")
+                            return
+                        }
                         
-                    } catch let dataError{
+                        let json: [NSDictionary]?
                         
-                        // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                        print(dataError)
-                        let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                        print("Error could not parse JSON: '\(jsonStr!)'")
-                        // return or throw?
-                        return
-                    }
+                        do {
+                            
+                            json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                            
+                        } catch let dataError{
+                            
+                            // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                            print(dataError)
+                            let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                            print("Error could not parse JSON: '\(jsonStr!)'")
+                            // return or throw?
+                            return
+                        }
+                        
+                        // The JSONObjectWithData constructor didn't return an error. But, we should still
+                        // check and make sure that json has a value using optional binding.
+                        if let parseJSON = json {
+                            // Okay, the parsedJSON is here, lets store its values into an array
+                        }
+                        else {
+                            // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                            let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                            print("Error could not parse JSON: \(jsonStr!)")
+                        }
+                        
+                        
+                    })
                     
-                    // The JSONObjectWithData constructor didn't return an error. But, we should still
-                    // check and make sure that json has a value using optional binding.
-                    if let parseJSON = json {
-                        // Okay, the parsedJSON is here, lets store its values into an array
-                        print("good")
-                    }
-                    else {
-                        // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                        let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                        print("Error could not parse JSON: \(jsonStr!)")
-                    }
+                    task.resume()
                     
-                    
-                })
+                }
                 
-                task.resume()
-
             }
         }
     }
@@ -257,8 +269,8 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
         let groupRow = searchBarResults[row]
         
         if let groupTitle = groupRow["title"] as? String {
-                cell.textLabel!.text = groupTitle
-                cell.textLabel?.textColor = UIColor.whiteColor()
+            cell.textLabel!.text = groupTitle
+            cell.textLabel?.textColor = UIColor.whiteColor()
         }
         
         let groupID = String(groupRow["id"]!)
@@ -294,5 +306,5 @@ class SearchGroupsTableViewController: UITableViewController, UISearchBarDelegat
         
         tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
-
+    
 }

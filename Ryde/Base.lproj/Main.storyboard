@@ -764,7 +764,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="search" id="Wdx-1y-oNj">
                             <connections>
                                 <action selector="searchForGroupPressed:" destination="cZN-HG-WqJ" id="eea-jx-Hqh"/>
-                                <segue destination="6kQ-7q-Y1K" kind="show" identifier="SearchForGroup" id="t4K-5t-ejC"/>
+                                <segue destination="6kQ-7q-Y1K" kind="show" identifier="SearchGroups" id="t4K-5t-ejC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
