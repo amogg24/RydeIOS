@@ -8,21 +8,18 @@
 
 import UIKit
 
-class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
+class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
     
-    //37.231200, -80.4102
-    //37.234600, -80.4049
-    //37.241660, -80.418267
-    
+    //needed fields
     var riderName = "Blake Duncan"
-    var addressOne = ""
-    var addressTwo = ""
-    var riderLat = 37.234600
-    var riderLng = -80.4102
-    var driverLat = 37.231200
-    var driverLng = -80.4104
-    var destLat = 37.241660
-    var destLng = -80.418267
+    var rideID = 0
+    var riderPhone = ""
+    var riderLat = 0.0
+    var riderLng = 0.0
+    var driverLat = 0.0
+    var driverLng = 0.0
+    var destLat = 0.0
+    var destLng = 0.0
     
     //False if driver hasn't picked up rider and true otherwise
     var hasRider = false
@@ -36,6 +33,7 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
     
     //google maps fields
     var mapsHtmlFilePath: String?
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,12 +44,18 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         riderNameLabel.text = riderName
         hasRider = false
         
+        //Get the maps html file path and save it to a field
         mapsHtmlFilePath = NSBundle.mainBundle().pathForResource("maps", ofType: "html")
         
+        //now load the map
+        loadMapView()
+    }
+    
+    
+    func loadMapView(){
         let tempDriverLat = String(driverLat)
         let tempDriverLng = String(driverLng)
         let driverCoord = "\(tempDriverLat),\(tempDriverLng)"
-        
         let tempRiderLat = String(riderLat)
         let tempRiderLng = String(riderLng)
         let riderCoord = "\(tempRiderLat),\(tempRiderLng)"
@@ -62,22 +66,20 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
         let mapQuery = googleMapQuery
         
         /*
-        Convert the mapQuery into an NSURL object and store its object reference
-        into the local variable url. An NSURL object represents a URL.
-        */
+         Convert the mapQuery into an NSURL object and store its object reference
+         into the local variable url. An NSURL object represents a URL.
+         */
         let url: NSURL? = NSURL(string: mapQuery)
         
         /*
-        Convert the NSURL object into an NSURLRequest object and store its object
-        reference into the local variable request. An NSURLRequest object represents
-        a URL load request in a manner independent of protocol and URL scheme.
-        */
+         Convert the NSURL object into an NSURLRequest object and store its object
+         reference into the local variable request. An NSURLRequest object represents
+         a URL load request in a manner independent of protocol and URL scheme.
+         */
         let request = NSURLRequest(URL: url!)
         
         // Ask the webView object to display the web page for the given URL
         webView.loadRequest(request)
-        
-        // Do any additional setup after loading the view.
     }
     
     func pickupConfirmed(){
@@ -111,11 +113,15 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
     @IBAction func cancelButtonPressed(sender: UIButton) {
         //confirm pickup
         let alertController = UIAlertController(title: "Confirmation",
-            message: "Are you sure you would like to cancel pickup?",
-            preferredStyle: UIAlertControllerStyle.Alert)
+                                                message: "Are you sure you would like to cancel pickup?",
+                                                preferredStyle: UIAlertControllerStyle.Alert)
         
         // Create a UIAlertAction object and add it to the alert controller
         alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+            
+            //cancel pickup.  Rider is left in queue but driver is unassigned
+            self.put("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverCancel/\(self.appDelegate.FBid)/")
+            
             self.navigationController?.popViewControllerAnimated(true)
         }))
         alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: nil))
@@ -131,8 +137,8 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
             
             //confirm pickup
             let alertController = UIAlertController(title: "Confirm",
-                message: "Confirm that pickup has been made",
-                preferredStyle: UIAlertControllerStyle.Alert)
+                                                    message: "Confirm that pickup has been made",
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
             
             // Create a UIAlertAction object and add it to the alert controller
             alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
@@ -147,11 +153,20 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
             
             //confirm ride over and drop off made
             let alertController = UIAlertController(title: "Confirm",
-                message: "Confirm that ride is over and drop off has been made",
-                preferredStyle: UIAlertControllerStyle.Alert)
+                                                    message: "Confirm that ride is over and drop off has been made",
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
             
             // Create a UIAlertAction object and add it to the alert controller
             alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
+                
+                //Ride is over so post to db
+                let JSONObject: [String : String] = [
+                    "id"  : "\(self.rideID)"
+                ]
+                
+                //Sends a POST to the specified URL with the JSON conent
+                self.post(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/ride/endRide/\(self.rideID)")
+                
                 self.navigationController?.popViewControllerAnimated(true)
             }))
             alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: nil))
@@ -165,17 +180,125 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate {
     // Mark - Call Rider Button
     
     @IBAction func phoneButtonPressed(sender: UIButton) {
-
-        if let url = NSURL(string: "tel://\(7034857174)") {
+        
+        if let url = NSURL(string: "tel://\(riderPhone)") {
             UIApplication.sharedApplication().openURL(url)
         }
         
     }
+    
+    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
+    func post(params : Dictionary<String, String>, url : String) {
+        print("end ride post start here")
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        
+        
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+        } catch {
+            print(error)
+            request.HTTPBody = nil
+        }
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            print("Response: \(response)")
+            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Body: \(strData)")
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                // return or throw?
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+                let success = parseJSON["success"] as? Int
+                print("Succes: \(success)")
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+        })
+        
+        task.resume()
+    }
+    
+    // Mark - Generic POST function that takes in a JSON dictinoary and the URL to be POSTed to
+    
+    
+    // SOURCE: http://jamesonquave.com/blog/making-a-post-request-in-swift/
+    func put(url : String) {
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "PUT"
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            print("Response: \(response)")
+            /**
+             let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Body: \(strData)")
+             
+             let json: NSDictionary?
+             
+             do {
+             json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+             } catch let dataError{
+             
+             // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+             print(dataError)
+             let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Error could not parse JSON: '\(jsonStr)'")
+             // return or throw?
+             return
+             }
+             
+             // The JSONObjectWithData constructor didn't return an error. But, we should still
+             // check and make sure that json has a value using optional binding.
+             
+             if let parseJSON = json {
+             // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+             let success = parseJSON["success"] as? Int
+             print("Succes: \(success)")
+             }
+             else {
+             // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+             let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+             print("Error could not parse JSON: \(jsonStr)")
+             }
+             **/
+        })
+        
+        task.resume()
+    }
+
+    
     /*
-    -------------------------
-    MARK: - Prepare for Segue
-    -------------------------
-    */
+     -------------------------
+     MARK: - Prepare for Segue
+     -------------------------
+     */
     // This method is called by the system whenever you invoke the method performSegueWithIdentifier:sender:
     // You never call this method. It is invoked by the system.
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
