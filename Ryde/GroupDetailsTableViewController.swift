@@ -220,7 +220,7 @@ class GroupDetailsTableViewController: UITableViewController {
         
         let id = groupInfo!["id"]!
         
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/requestuser/inGroup/\(id)")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/group/findRequestUserForGroup/\(id)")
         
         print(url)
         
@@ -343,6 +343,7 @@ class GroupDetailsTableViewController: UITableViewController {
                 cell.textLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
                 if let groupDescription = dict["description"] as? String {
                     cell.textLabel!.text = groupDescription
+                    cell.textLabel?.textColor = UIColor.whiteColor()
                 }
             }
         }
@@ -351,6 +352,7 @@ class GroupDetailsTableViewController: UITableViewController {
             if let firstName = memberInfo["firstName"] as? String {
                 if let lastName = memberInfo["lastName"] as? String {
                     cell.textLabel!.text = firstName + " " + lastName
+                    cell.textLabel?.textColor = UIColor.whiteColor()
                 }
             }
         }
@@ -368,7 +370,10 @@ class GroupDetailsTableViewController: UITableViewController {
                             otherCell.tag = row
                             otherCell.requestMemberName.text = firstName + " " + lastName
                             otherCell.requestMemberName.textColor = UIColor.whiteColor()
+                            otherCell.acceptButton.tag = row
+                            otherCell.denyButton.tag = row
                             otherCell.acceptButton.addTarget(self, action: #selector(GroupDetailsTableViewController.acceptRequest(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                            otherCell.acceptButton.addTarget(self, action: #selector(GroupDetailsTableViewController.denyRequest(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                             otherCell.denyButton.addTarget(self, action: #selector(GroupDetailsTableViewController.denyRequest(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                             return otherCell
                         }
@@ -398,10 +403,10 @@ class GroupDetailsTableViewController: UITableViewController {
                 if let firstName = memberInfo["firstName"] as? String {
                     if let lastName = memberInfo["lastName"] as? String {
                         cell.textLabel!.text = firstName + " " + lastName
+                        cell.textLabel?.textColor = UIColor.whiteColor()
                     }
                 }
             }
-            cell.textLabel?.textColor = UIColor.whiteColor()
             return cell
             
         }
@@ -501,12 +506,13 @@ class GroupDetailsTableViewController: UITableViewController {
                     return
                 }
                 
-                // The JSONObjectWithData constructor didn't return an error. But, we should still
-                // check and make sure that json has a value using optional binding.
                 if let parseJSON = json {
-                    // upload to group worked, lets now remove from the request list
-                    self.denyRequest(sender)
+                    self.memberList.append(parseJSON)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.tableView.reloadData()
+                    })
                 }
+                
             })
             
             task.resume()
@@ -535,11 +541,13 @@ class GroupDetailsTableViewController: UITableViewController {
             let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
                 guard let _ = data
                     else {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.tableView.reloadData()
-                        })
+
                         return
                 }
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.requestList.removeAtIndex(sender.tag)
+                    self.tableView.reloadData()
+                })
             })
             
             task.resume()

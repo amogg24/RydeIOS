@@ -234,5 +234,9 @@ class GroupTableViewController: UITableViewController {
             let dest = segue.destinationViewController as! AddGroupViewController
             dest.currentUser = currentUser
         }
+        else if (segue.identifier == "SearchGroups") {
+            let dest = segue.destinationViewController as! SearchGroupsTableViewController
+            dest.groupDictionary = self.groupDictionary
+        }
     }
 }
