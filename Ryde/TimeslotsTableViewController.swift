@@ -102,6 +102,15 @@ class TimeslotsTableViewController: UITableViewController {
         task.resume()
     }
     
+    // MARK: - Create New Timeslot
+    
+    @IBAction func createNewTimeslot(sender: UIBarButtonItem) {
+        
+        performSegueWithIdentifier("detailTimeslot", sender: self)
+    }
+    
+    
+    
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -251,6 +260,22 @@ class TimeslotsTableViewController: UITableViewController {
         cell.detailTextLabel?.text = "Driver(s): 2"
         
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        performSegueWithIdentifier("detailTimeslot", sender: self)
+    }
+    
+    // MARK - Prepare for Segue
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "detailTimeslot" {
+            
+            let dest = segue.destinationViewController as! DetailTimeslotViewController
+            
+        }
     }
 
 }
