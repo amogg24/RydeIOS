@@ -18,7 +18,6 @@ class TimeslotsTableViewController: UITableViewController {
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -135,6 +134,7 @@ class TimeslotsTableViewController: UITableViewController {
             
             // Start Date
             let tempDate = dateFormatter.dateFromString(exampleServerStartDate)
+            print(tempDate!)
             let comp = calendar.components([.Day, .Month, .Year, .Hour, .Minute], fromDate: tempDate!)
             let startDateComponent = NSDateComponents()
             startDateComponent.year = comp.year
@@ -145,30 +145,39 @@ class TimeslotsTableViewController: UITableViewController {
             // Get NSDate given the above date components
             let startDate = calendar.dateFromComponents(startDateComponent)
             
-            
-            //        // End Date
-            //
-            //        tempDate = dateFormatter.dateFromString(exampleServerEndDate)
-            //        comp = calendar.components([.Day, .Month, .Year, .Hour, .Minute], fromDate: tempDate!)
-            //        let endDateComponent = NSDateComponents()
-            //        endDateComponent.year = comp.year
-            //        endDateComponent.month = comp.month
-            //        endDateComponent.day = comp.day
-            //        endDateComponent.hour = comp.hour
-            //        endDateComponent.minute = comp.minute
-            //
-            //        // Get NSDate given the above date components
-            //        let endDate = calendar.dateFromComponents(endDateComponent)
-            
-            // Format Start and End Dates
-            
+            // Format Start Date
             dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
             
             
-            print("Start Date: \(dateFormatter.stringFromDate(startDate!))")
-            //        print("End Date: \(dateFormatter.stringFromDate(endDate!))")
+            //print("Start Date: \(dateFormatter.stringFromDate(startDate!))")
             
-            return dateFormatter.stringFromDate(startDate!)
+            
+            // Determine if the Start Date is either today or tomorrow.
+            
+            var headerTitle = dateFormatter.stringFromDate(startDate!)
+            
+            // Check if date is today
+            
+            // get the current date and time
+            let currentDateTime = NSDate()
+            
+            print("Current Date: \(currentDateTime)")
+            
+            let order = NSCalendar.currentCalendar().compareDate(currentDateTime, toDate: tempDate! ,
+                                                                 toUnitGranularity: .Day)
+            
+            switch order {
+            case .OrderedDescending:
+                print("DESCENDING")
+            case .OrderedAscending:
+                print("ASCENDING")
+            case .OrderedSame:
+                print("SAME")
+                headerTitle = "Today"
+                
+            }
+            
+            return headerTitle
         }
         else {
            return "N/A"
@@ -181,21 +190,62 @@ class TimeslotsTableViewController: UITableViewController {
         
         if let timeSlotList = timeslotInfo[indexPath.section]["timeslots"] {
 
-            //if let timeSlotDic = timeSlotList[indexPath.row] {
+            
+            var AMPMLabelStart = "AM"
+            var AMPMLabelEnd = "AM"
 
             let timeSlotDic = (timeSlotList as! [NSDictionary])[indexPath.row]
             
-            let startTime = timeSlotDic["startTime"]!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+            var startTime = timeSlotDic["startTime"]!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+            startTime = startTime[startTime.startIndex..<startTime.endIndex.advancedBy(-3)]
+            var startTimeHour = Int(startTime[startTime.startIndex..<startTime.startIndex.advancedBy(2)])
             
-            print("Start Time: \(startTime)")
             
-            let endTime = timeSlotDic["endTime"]!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+            if startTimeHour > 12 {
+                startTimeHour = startTimeHour! - 12
+                AMPMLabelStart = "PM"
+                startTime = "\(String(startTimeHour!))\(startTime[startTime.startIndex.advancedBy(2)..<startTime.endIndex])"
+            }
+            else if startTimeHour == 12 {
+                startTime = "Noon"
+            }
+            else if startTimeHour == 0 {
+                startTime = "Midnight"
+            }
             
-            print("End Time: \(endTime)")
             
-            cell.textLabel?.text = "\(startTime) - \(endTime)"
- 
-            //}
+            
+            
+            
+            var endTime = timeSlotDic["endTime"]!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
+            endTime = endTime[endTime.startIndex..<endTime.endIndex.advancedBy(-3)]
+            var endTimeHour = Int(endTime[endTime.startIndex..<endTime.startIndex.advancedBy(2)])
+            
+            if endTimeHour > 12 {
+                endTimeHour = endTimeHour! - 12
+                AMPMLabelEnd = "PM"
+                endTime = "\(String(endTimeHour!))\(endTime[endTime.startIndex.advancedBy(2)..<endTime.endIndex])"
+                
+            }
+            else if endTimeHour == 12 {
+                endTime = "Noon"
+            }
+            else if endTimeHour == 0 {
+                endTime = "Midnight"
+            }
+            
+            
+            
+            if AMPMLabelStart == AMPMLabelEnd {
+                cell.textLabel?.text = "\(startTime) - \(endTime) \(AMPMLabelStart)"
+            }
+                
+            else {
+            
+                cell.textLabel?.text = "\(startTime) \(AMPMLabelStart) - \(endTime) \(AMPMLabelEnd)"
+            }
+            
+
         }
         
         cell.detailTextLabel?.text = "Driver(s): 2"
