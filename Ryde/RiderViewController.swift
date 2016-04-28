@@ -510,8 +510,28 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
              let formatedEndTime = dateFormatter.stringFromDate(endTime!)
              **/
             
-            driverMainViewController.startTime = tempStartTime
-            driverMainViewController.endTime = tempEndTime
+            //Convert the Start Time
+            let dateStartArray = tempStartTime.componentsSeparatedByString("T")
+            let dateStart = dateStartArray[0] // First
+            let timeAndZoneStart = dateStartArray[1]
+            
+            let timeStartArray = timeAndZoneStart.componentsSeparatedByString(":")
+            print("Start: \(timeStartArray[0])")
+            
+            let timeStart = "\(timeStartArray[0]):\(timeStartArray[1])"
+            driverMainViewController.startTime = timeStart
+            
+            
+            //Convert the End time
+            let dateEndArray = tempEndTime.componentsSeparatedByString("T")
+            let dateEnd = dateEndArray[0] // First
+            let timeAndZoneEnd = dateEndArray[1]
+            
+            let timeEndArray = timeAndZoneEnd.componentsSeparatedByString(":")
+            print("Start: \(timeEndArray[0])")
+            
+            let timeEnd = "\(timeEndArray[0]):\(timeEndArray[1])"
+            driverMainViewController.endTime = timeEnd
             driverMainViewController.timeSlotID = tsID
             
             timeslotDictionary.removeAll() //Clear dictionary so it must be reloaded if the user logs out

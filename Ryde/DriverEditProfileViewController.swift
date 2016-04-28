@@ -38,6 +38,7 @@ class DriverEditProfileViewController: UIViewController {
         profileImage.layer.borderColor = UIColor.clearColor().CGColor
         profileImage.layer.cornerRadius = profileImage.frame.height/2
         profileImage.clipsToBounds = true
+        profileName.text! = ""
 
         
         getUserData(FBSDKAccessToken.currentAccessToken().userID)
