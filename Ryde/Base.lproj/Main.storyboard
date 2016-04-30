@@ -417,6 +417,7 @@
                         <segue destination="HUR-78-3EN" kind="show" identifier="ShowRiderRequestGroup" id="0Ej-T9-vMW"/>
                         <segue destination="JmR-oa-Xc5" kind="show" identifier="DriverLogin" id="R5r-HO-CQx"/>
                         <segue destination="xli-Bo-8GQ" kind="show" identifier="homeShowRequestView" id="bnW-dX-e95"/>
+                        <segue destination="MPu-oQ-KkY" kind="show" identifier="homeShowCurrentRide" id="Hck-08-tWC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JIC-Vv-HT9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2493,7 +2494,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Ir-0d-ALd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2723" y="-3428"/>
+            <point key="canvasLocation" x="3580" y="-2635"/>
         </scene>
         <!--Driver Edit Profile View Controller-->
         <scene sceneID="o4z-cw-UJc">
@@ -3174,6 +3175,7 @@
         <segue reference="1Dz-x7-ZVx"/>
         <segue reference="3ui-dR-XQn"/>
         <segue reference="yCc-Om-4Xs"/>
+        <segue reference="Hck-08-tWC"/>
         <segue reference="bnW-dX-e95"/>
     </inferredMetricsTieBreakers>
 </document>

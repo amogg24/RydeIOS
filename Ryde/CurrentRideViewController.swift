@@ -50,6 +50,8 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     // Timer to schedule tasks
     var updateTask: NSTimer?
     
+    let semaphore = dispatch_semaphore_create(0);
+    
     // Mapkit showing the anotations
     @IBOutlet var mapView: MKMapView!
     
@@ -74,6 +76,8 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
         
         // Set map view delegate with controller
         self.mapView.delegate = self
+        
+        updateRide()
         
         super.viewDidLoad()
         
@@ -125,32 +129,20 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
                         let route : MKRoute = routes[0]
                         
                         //distance calculated from the request
-                        print(route.distance) 
-                        
+                        print(route.distance)
                         //travel time calculated from the request
                         print(route.expectedTravelTime)
-                        
                         self.mapView.addOverlay((route.polyline), level: MKOverlayLevel.AboveRoads)
                         
                         var rect = route.polyline.boundingMapRect
-                        rect.origin.x = rect.origin.x * 0.99
-                        rect.origin.y = rect.origin.y * 0.99
-                        rect.size.height = rect.size.height * 1.2
-                        rect.size.width = rect.size.width * 1.2
                         
                         self.mapView.setRegion(MKCoordinateRegionForMapRect(rect), animated: true)
                     }
             }
         }
         
-        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/MikeFBTok")
-        self.getRideInfo(postUrl)
-        
-        driverNameLabel.text = "Driver Name: " + driverName
-        driverCarLabel.text = "Driver's Car: " + carinfo
-        
         // schedules task for every n second
-        updateTask = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateRide", userInfo: nil, repeats: true)
+        updateTask = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "updateRide", userInfo: nil, repeats: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -184,8 +176,8 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     }
     
     func updateRide(){
-        //let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/" + self.FBid)
-        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/MikeFBTok")
+        let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/" + self.FBid)
+        //let postUrl = ("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/MikeFBTok")
         self.getRideInfo(postUrl)
         driverNameLabel.text = "Driver Name: " + driverName
         driverCarLabel.text = "Driver's Car: " + carinfo
@@ -222,31 +214,39 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
                 print(parseJSON)
                 if let status = parseJSON["queueStatus"] as? String
                 {
-                    if status == "nonActive"
+                    if status == "notInQueue"
+                    {
+                        print("notInQueue")
+                    }
+                    else if status == "nonActive"
                     {
                         //segue back to queue?
+                        print("nonActive")
                     }
                     else if status == "active"
                     {
-                        if let driverJSON = parseJSON["driver"] as? NSDictionary
+                        if  let rideJSON = parseJSON["ride"] as? NSDictionary
                         {
-                            if let firstName = driverJSON["firstName"] as? String{
-                                self.driverName = firstName
-                            }
-                            if let lastName = driverJSON["lastName"] as? String{
-                                self.driverName = self.driverName + " " + lastName
-                            }
-                            if let carMake = driverJSON["carMake"] as? String{
-                                self.carinfo = carMake
-                            }
-                            if let carModel = driverJSON["carModel"] as? String{
-                                self.carinfo = self.carinfo + " " + carModel
-                            }
-                            if let carColor = driverJSON["carColor"] as? String{
-                                self.carinfo = self.carinfo + ", " + carColor
-                            }
-                            if let driverPhoneNumber = driverJSON["phoneNumber"] as? String{
-                                self.driverNumber = driverPhoneNumber
+                            if let driverJSON = rideJSON["driverUserId"] as? NSDictionary
+                            {
+                                if let firstName = driverJSON["firstName"] as? String{
+                                    self.driverName = firstName
+                                }
+                                if let lastName = driverJSON["lastName"] as? String{
+                                    self.driverName = self.driverName + " " + lastName
+                                }
+                                if let carMake = driverJSON["carMake"] as? String{
+                                    self.carinfo = carMake
+                                }
+                                if let carModel = driverJSON["carModel"] as? String{
+                                    self.carinfo = self.carinfo + " " + carModel
+                                }
+                                if let carColor = driverJSON["carColor"] as? String{
+                                    self.carinfo = self.carinfo + ", " + carColor
+                                }
+                                if let driverPhoneNumber = driverJSON["phoneNumber"] as? String{
+                                    self.driverNumber = driverPhoneNumber
+                                }
                             }
                         }
                     }
@@ -270,7 +270,12 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     {
         let alert = UIAlertController(title: driverName + "'s Phone Number", message: driverNumber, preferredStyle: UIAlertControllerStyle.Alert)
         
-        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction!) in
+        alert.addAction(UIAlertAction(title: "Call", style: .Default, handler: { (action: UIAlertAction!) in
+            if let url = NSURL(string: "tel://\(self.driverNumber)") {
+                UIApplication.sharedApplication().openURL(url)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action: UIAlertAction!) in
             
         }))
         

@@ -70,6 +70,15 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     var driverStatus: Bool!
     
+    // Driver name
+    var driverName:String = ""
+    
+    // Driver car info
+    var carinfo: String = ""
+    
+    // Driver Phone Number
+    var driverNumber:String = ""
+    
     let semaphore = dispatch_semaphore_create(0);
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -92,7 +101,8 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         
         fbToken = self.appDelegate.FBid
         
-        //getRiderQueueStatus(("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/" + self.fbToken))
+        getRiderQueueStatus(("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/" + self.fbToken))
+        //getRiderQueueStatus(("http://\(self.appDelegate.baseURL)/Ryde/api/ride/driverInfo/MikeFBTok"))
     }
     
     // Mark - Cancel Search
@@ -378,11 +388,70 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
                 {
                     if status == "nonActive"
                     {
+                        if  let rideJSON = parseJSON["ride"] as? NSDictionary
+                        {
+                            if let startLat = rideJSON["startLat"] as? Double
+                            {
+                                self.previousLat = startLat
+                            }
+                            if let startLong = rideJSON["startLon"] as? Double
+                            {
+                                self.previousLong = startLong
+                            }
+                            if let endLat = rideJSON["endLat"] as? Double
+                            {
+                                self.destLat = endLat
+                            }
+                            if let endLong = rideJSON["endLon"] as? Double
+                            {
+                                self.destLong = endLong
+                            }
+                        }
                         self.performSegueWithIdentifier("homeShowRequestView", sender: self)
                     }
                     else if status == "active"
                     {
-                        
+                        if  let rideJSON = parseJSON["ride"] as? NSDictionary
+                        {
+                            if let driverJSON = rideJSON["driverUserId"] as? NSDictionary
+                            {
+                                if let firstName = driverJSON["firstName"] as? String{
+                                    self.driverName = firstName
+                                }
+                                if let lastName = driverJSON["lastName"] as? String{
+                                    self.driverName = self.driverName + " " + lastName
+                                }
+                                if let carMake = driverJSON["carMake"] as? String{
+                                    self.carinfo = carMake
+                                }
+                                if let carModel = driverJSON["carModel"] as? String{
+                                    self.carinfo = self.carinfo + " " + carModel
+                                }
+                                if let carColor = driverJSON["carColor"] as? String{
+                                    self.carinfo = self.carinfo + ", " + carColor
+                                }
+                                if let driverPhoneNumber = driverJSON["phoneNumber"] as? String{
+                                    self.driverNumber = driverPhoneNumber
+                                }
+                            }
+                            if let startLat = rideJSON["startLat"] as? Double
+                            {
+                                self.previousLat = startLat
+                            }
+                            if let startLong = rideJSON["startLon"] as? Double
+                            {
+                                self.previousLong = startLong
+                            }
+                            if let endLat = rideJSON["endLat"] as? Double
+                            {
+                                self.destLat = endLat
+                            }
+                            if let endLong = rideJSON["endLon"] as? Double
+                            {
+                                self.destLong = endLong
+                            }
+                        }
+                        self.performSegueWithIdentifier("homeShowCurrentRide", sender: self)
                     }
                 }
             }
@@ -466,6 +535,24 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             driverMainViewController.timeSlotID = tsID
             
             timeslotDictionary.removeAll() //Clear dictionary so it must be reloaded if the user logs out
+        } else if segue.identifier == "homeShowCurrentRide" {
+            // Obtain the object reference of the destination view controller
+            let currentRideViewController: CurrentRideViewController = segue.destinationViewController as! CurrentRideViewController
+            
+            currentRideViewController.startLatitude = self.previousLat
+            currentRideViewController.startLongitude = self.previousLong
+            currentRideViewController.destLat = self.destLat
+            currentRideViewController.destLong = self.destLong
+            currentRideViewController.driverName = self.driverName
+            currentRideViewController.carinfo = self.carinfo
+            currentRideViewController.driverNumber = self.driverNumber
+        } else if segue.identifier == "homeShowRequestView" {
+            let requestRideViewController: RequestRideViewController = segue.destinationViewController as! RequestRideViewController
+            
+            requestRideViewController.destLat = self.destLat
+            requestRideViewController.destLong = self.destLong
+            requestRideViewController.startLongitude = self.previousLong
+            requestRideViewController.startLatitude = self.previousLat
         }
     }
     

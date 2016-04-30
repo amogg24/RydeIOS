@@ -35,6 +35,9 @@ class RequestRideViewController: UIViewController {
     // Timer to schedule tasks
     var updateTimer: NSTimer?
     
+    // Status of ride
+    var rideStatus: String = "nonActive"
+    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var queueLabel: UILabel!
@@ -59,6 +62,8 @@ class RequestRideViewController: UIViewController {
         // schedules task for every n second
         updateTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "updateQueue", userInfo: nil, repeats: true)
         
+        
+        /*
         self.queueLabel.text = (String)(self.queueNum)
         
         
@@ -84,7 +89,7 @@ class RequestRideViewController: UIViewController {
             self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
             
         })
- 
+ */
  
     }
     
@@ -93,7 +98,7 @@ class RequestRideViewController: UIViewController {
         self.getQueuePos(postUrl)
         print(queueNum)
         self.queueLabel.text = (String)(queueNum)
-        if queueNum == 0
+        if rideStatus == "active"
         {
             updateTimer?.invalidate()
             self.performSegueWithIdentifier("ShowCurrentRide", sender: nil)
@@ -185,9 +190,14 @@ class RequestRideViewController: UIViewController {
                 return
             }
             if let parseJSON = json {
+                print(parseJSON)
                 if let tempNum = parseJSON["position"] as? Int
                 {
                     self.queueNum = tempNum
+                }
+                if let status = parseJSON["queueStatus"] as? String
+                {
+                    self.rideStatus = status
                 }
             }
             else {
