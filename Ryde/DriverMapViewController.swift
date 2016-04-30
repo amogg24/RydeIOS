@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 
-class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
+class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKMapViewDelegate,CLLocationManagerDelegate, UITextFieldDelegate, HandleMapSearch{
     
     //needed fields
     var riderName = "Blake Duncan"
@@ -20,6 +22,8 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
     var driverLng = 0.0
     var destLat = 0.0
     var destLng = 0.0
+    var searchLat = 0.0
+    var searchLng = 0.0
     
     //False if driver hasn't picked up rider and true otherwise
     var hasRider = false
@@ -35,6 +39,22 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
     var mapsHtmlFilePath: String?
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    // Search Controller
+    var resultSearchController:UISearchController? = nil
+    // View for pick up/ drop off adreesses
+    @IBOutlet var addressView: UIView!
+    // Destination Button to Search
+    @IBOutlet var destinationButton: UIButton!
+    // Map View Reference from StoryBoard
+    @IBOutlet var mapView: MKMapView!
+    // Destination pin
+    var selectedPin:MKPlacemark? = nil
+    // Location Manager instance
+    let locationManager = CLLocationManager()
+    
+    // Geo Coder Reference
+    var geoCoder: CLGeocoder!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,19 +68,37 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
         mapsHtmlFilePath = NSBundle.mainBundle().pathForResource("maps", ofType: "html")
         
         //now load the map
-        loadMapView()
+        loadMapView(1)
+        
+        self.mapView.showsUserLocation = true
+        self.mapView.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.delegate = self
+        self.locationManager.requestAlwaysAuthorization()
+        //        self.locationManager.requestLocation()
+        self.locationManager.startUpdatingLocation()
+        
+        geoCoder = CLGeocoder()
     }
     
     
-    func loadMapView(){
+    func loadMapView(showMap: Int){
         let tempDriverLat = String(driverLat)
         let tempDriverLng = String(driverLng)
         let driverCoord = "\(tempDriverLat),\(tempDriverLng)"
         let tempRiderLat = String(riderLat)
         let tempRiderLng = String(riderLng)
         let riderCoord = "\(tempRiderLat),\(tempRiderLng)"
+        let tempSearchLat = String(searchLat)
+        let tempSearchLng = String(searchLng)
+        let destCoord = "\(tempSearchLat),\(tempSearchLng)"
+        var googleMapQuery = ""
         
-        let googleMapQuery: String = mapsHtmlFilePath! + "?start=\(driverCoord)&end=\(riderCoord)&traveltype=DRIVING"
+        if showMap == 1 {
+            googleMapQuery = mapsHtmlFilePath! + "?start=\(driverCoord)&end=\(riderCoord)&traveltype=DRIVING"
+        } else {
+            googleMapQuery = mapsHtmlFilePath! + "?start=\(driverCoord)&end=\(destCoord)&traveltype=DRIVING"
+        }
         
         // Obtain the data passed from the upstream view controller VTPlaceInfoViewController
         let mapQuery = googleMapQuery
@@ -89,6 +127,7 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
         callButton.hidden = true
         cancelButton.hidden = true
         
+        if (destLat != 0 || destLng != 0){
         //load new directions
         let tempDriverLat = String(riderLat)
         let tempDriverLng = String(riderLng)
@@ -106,6 +145,87 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
         
         let request = NSURLRequest(URL: url!)
         webView.loadRequest(request)
+        } else {
+            let alertController = UIAlertController(title: "No rider desitnation entered",
+                                                    message: "Rider did not enter a destination. You can enter one manually",
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
+            
+            // Create a UIAlertAction object and add it to the alert controller
+            
+            alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: nil))
+            
+            // Present the alert controller by calling the presentViewController method
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func changeDestination(sender: UIButton) {
+        
+        let driverLocationSearch = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! LocationSearchTable
+        resultSearchController = UISearchController(searchResultsController: driverLocationSearch)
+        resultSearchController?.searchResultsUpdater = driverLocationSearch
+        let searchBar = resultSearchController!.searchBar
+        
+        searchBar.placeholder = "Enter Destination"
+        
+        
+        addressView.addSubview((resultSearchController?.searchBar)!)
+        
+        searchBar.sizeToFit()
+        
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        resultSearchController?.dimsBackgroundDuringPresentation = true
+        definesPresentationContext = true
+        driverLocationSearch.mapView = mapView
+        
+        driverLocationSearch.handleMapSearchDelegate = self
+    }
+    
+    // Mark - Destination Pin Drop
+    // Link: http://www.thorntech.com/2016/01/how-to-search-for-location-using-apples-mapkit/
+    
+    func dropPinZoomIn(placemark:MKPlacemark, destination:String){
+        
+        // cache the pin
+        selectedPin = placemark
+        // clear existing pins
+        mapView.removeAnnotations(mapView.annotations)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = placemark.coordinate
+        annotation.title = placemark.name
+        if let city = placemark.locality,
+            let state = placemark.administrativeArea {
+            annotation.subtitle = "\(city) \(state)"
+        }
+        mapView.addAnnotation(annotation)
+        
+        self.searchLat = Double(placemark.coordinate.latitude)
+        self.searchLng = Double(placemark.coordinate.longitude)
+        self.driverLat = mapView.centerCoordinate.latitude
+        self.driverLng = mapView.centerCoordinate.longitude
+        
+        addressView.subviews.last?.removeFromSuperview()
+        
+        destinationButton.setTitle(destination, forState: UIControlState.Normal)
+        loadMapView(2)
+        
+        //        The following code drops a pin where the user searched but we dont want that. Just in case im leaving it here.
+        
+        //        let span = MKCoordinateSpanMake(0.05, 0.05)
+        //        let region = MKCoordinateRegionMake(placemark.coordinate, span)
+        //        mapView.setRegion(region, animated: true)
+    }
+    
+    // Mark - Cancel Search
+    
+    func cancelSearch() {
+        
+        if addressView.subviews.count > 1 {
+            addressView.subviews.last?.removeFromSuperview()
+            destinationButton.setTitle("Enter Destination", forState: UIControlState.Normal)
+        }
+        
+        
     }
     
     // Mark - Cancel Button
@@ -158,7 +278,7 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
             
             // Create a UIAlertAction object and add it to the alert controller
             alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action: UIAlertAction!) in
-                
+
                 //Ride is over so post to db
                 let JSONObject: [String : String] = [
                     "id"  : "\(self.rideID)"
@@ -311,5 +431,56 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate{
             
         }
     }
+    
+    // Mark - Location Delegate Methods
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        print("location updated")
+        
+        self.locationManager.stopUpdatingLocation()
+        
+       // lastLocation = locations.last!
+        
+        let location: CLLocation = locations.first!
+        self.mapView.centerCoordinate = location.coordinate
+        let reg = MKCoordinateRegionMakeWithDistance(location.coordinate, 1500, 1500)
+        self.mapView.setRegion(reg, animated: true)
+        geoCode(location)
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("Error with Map View: " + error.localizedDescription)
+    }
+    
+    
+    // Mark - Map View Methods
+    
+    func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
+        geoCode(location)
+    }
+    
+    // Mark - Custom Methods
+    
+    func geoCode(location : CLLocation!){
+        /* Only one reverse geocoding can be in progress at a time hence we need to cancel existing
+         one if we are getting location updates */
+        geoCoder.cancelGeocode()
+        geoCoder.reverseGeocodeLocation(location, completionHandler: { (data, error) -> Void in
+            guard let placeMarks = data as [CLPlacemark]! else {
+                return
+            }
+            let loc: CLPlacemark = placeMarks[0]
+            let addressDict : [NSString:NSObject] = loc.addressDictionary as! [NSString: NSObject]
+            let addrList = addressDict["FormattedAddressLines"] as! [String]
+            
+            //let address = addrList[0]
+        })
+        
+    }
+    
+    
+
     
 }

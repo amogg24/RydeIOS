@@ -1784,16 +1784,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="0aI-mU-M4d">
+                                <rect key="frame" x="180" y="189" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="Arz-zS-Vmn"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="RlD-96-3jO" id="RDL-bX-Ldh"/>
+                                </connections>
+                            </mapView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundMain" translatesAutoresizingMaskIntoConstraints="NO" id="Ual-mF-TVQ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rbP-Tw-r4N">
-                                <rect key="frame" x="0.0" y="64" width="600" height="310"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="RlD-96-3jO" id="aeT-Bg-qQf"/>
-                                </connections>
-                            </webView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pickup:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9DE-mR-PGM">
                                 <rect key="frame" x="104" y="405" width="392" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1871,6 +1873,47 @@
                                     <action selector="phoneButtonPressed:" destination="RlD-96-3jO" eventType="touchUpInside" id="fXz-gW-qy8"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R6d-6i-EEu">
+                                <rect key="frame" x="20" y="64" width="560" height="34"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zf-Gh-EPN">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="20"/>
+                                        <state key="normal" title="Enter Destination">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="changeDestination:" destination="1pY-zf-QLY" eventType="touchUpInside" id="87f-j7-3Y7"/>
+                                            <action selector="changeDestination:" destination="RlD-96-3jO" eventType="touchUpInside" id="LMW-hj-sM7"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="4zf-Gh-EPN" secondAttribute="trailing" id="S5t-Zz-7zl"/>
+                                    <constraint firstAttribute="bottom" secondItem="4zf-Gh-EPN" secondAttribute="bottom" id="fNs-y0-XPI"/>
+                                    <constraint firstItem="4zf-Gh-EPN" firstAttribute="leading" secondItem="R6d-6i-EEu" secondAttribute="leading" id="gbT-W4-LsG"/>
+                                    <constraint firstItem="4zf-Gh-EPN" firstAttribute="top" secondItem="R6d-6i-EEu" secondAttribute="top" id="m4M-bP-5LZ"/>
+                                </constraints>
+                            </view>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rbP-Tw-r4N">
+                                <rect key="frame" x="0.0" y="98" width="600" height="310"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="RlD-96-3jO" id="aeT-Bg-qQf"/>
+                                </connections>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -1879,8 +1922,12 @@
                             <constraint firstItem="0Bc-am-iM8" firstAttribute="leading" secondItem="uo5-aT-Yxt" secondAttribute="leading" id="8eT-0m-25Z"/>
                             <constraint firstItem="uo5-aT-Yxt" firstAttribute="top" secondItem="0Bc-am-iM8" secondAttribute="bottom" constant="28" id="DC8-RV-9aq"/>
                             <constraint firstItem="Ual-mF-TVQ" firstAttribute="top" secondItem="V32-4t-eVd" secondAttribute="top" id="DDL-7a-18P"/>
+                            <constraint firstItem="0aI-mU-M4d" firstAttribute="centerX" secondItem="9DE-mR-PGM" secondAttribute="centerX" id="DTj-QW-kcT"/>
+                            <constraint firstItem="R6d-6i-EEu" firstAttribute="trailing" secondItem="z6u-ak-Z6F" secondAttribute="trailing" id="HWS-Sy-DtX"/>
                             <constraint firstItem="Ual-mF-TVQ" firstAttribute="leading" secondItem="rbP-Tw-r4N" secondAttribute="leading" id="Igg-UX-P5k"/>
-                            <constraint firstItem="0Bc-am-iM8" firstAttribute="top" secondItem="rbP-Tw-r4N" secondAttribute="bottom" constant="36" id="LeQ-Fb-5Vf"/>
+                            <constraint firstItem="rbP-Tw-r4N" firstAttribute="top" secondItem="R6d-6i-EEu" secondAttribute="bottom" id="JO7-f4-9PB"/>
+                            <constraint firstItem="9DE-mR-PGM" firstAttribute="top" secondItem="0aI-mU-M4d" secondAttribute="bottom" constant="88" id="LC4-CE-hSu"/>
+                            <constraint firstItem="0Bc-am-iM8" firstAttribute="top" secondItem="rbP-Tw-r4N" secondAttribute="bottom" constant="2" id="LeQ-Fb-5Vf"/>
                             <constraint firstItem="kQc-cp-wZH" firstAttribute="top" secondItem="uo5-aT-Yxt" secondAttribute="bottom" constant="8" symbolic="YES" id="N47-n8-Lna"/>
                             <constraint firstItem="z6u-ak-Z6F" firstAttribute="leading" secondItem="9DE-mR-PGM" secondAttribute="trailing" constant="4" id="Rob-EX-wQ9"/>
                             <constraint firstItem="yfF-LM-pJK" firstAttribute="top" secondItem="9DE-mR-PGM" secondAttribute="bottom" constant="3" id="Tl2-62-zRO"/>
@@ -1888,12 +1935,15 @@
                             <constraint firstItem="yfF-LM-pJK" firstAttribute="centerX" secondItem="uo5-aT-Yxt" secondAttribute="centerX" id="X2U-11-v20"/>
                             <constraint firstItem="rbP-Tw-r4N" firstAttribute="centerX" secondItem="9DE-mR-PGM" secondAttribute="centerX" id="XAw-R3-17j"/>
                             <constraint firstItem="0Bc-am-iM8" firstAttribute="bottom" secondItem="yfF-LM-pJK" secondAttribute="bottom" id="XAz-6G-NOb"/>
-                            <constraint firstItem="rbP-Tw-r4N" firstAttribute="top" secondItem="maz-DZ-s0z" secondAttribute="bottom" id="XEj-Di-ZuS"/>
+                            <constraint firstItem="rbP-Tw-r4N" firstAttribute="top" secondItem="maz-DZ-s0z" secondAttribute="bottom" constant="34" id="XEj-Di-ZuS"/>
+                            <constraint firstItem="0aI-mU-M4d" firstAttribute="centerY" secondItem="rbP-Tw-r4N" secondAttribute="centerY" id="XmD-2O-q14"/>
                             <constraint firstItem="z6u-ak-Z6F" firstAttribute="bottom" secondItem="yfF-LM-pJK" secondAttribute="bottom" id="fxK-dh-fsj"/>
-                            <constraint firstItem="9DE-mR-PGM" firstAttribute="top" secondItem="rbP-Tw-r4N" secondAttribute="bottom" constant="31" id="lXg-Fx-c6a"/>
+                            <constraint firstItem="R6d-6i-EEu" firstAttribute="leading" secondItem="0Bc-am-iM8" secondAttribute="leading" id="l0D-el-lNE"/>
+                            <constraint firstItem="9DE-mR-PGM" firstAttribute="top" secondItem="rbP-Tw-r4N" secondAttribute="bottom" constant="-3" id="lXg-Fx-c6a"/>
                             <constraint firstItem="Ual-mF-TVQ" firstAttribute="trailing" secondItem="rbP-Tw-r4N" secondAttribute="trailing" id="pOi-fx-fDx"/>
                             <constraint firstItem="9DE-mR-PGM" firstAttribute="leading" secondItem="0Bc-am-iM8" secondAttribute="trailing" constant="4" id="qSH-Vf-Ie7"/>
                             <constraint firstItem="Ual-mF-TVQ" firstAttribute="leading" secondItem="V32-4t-eVd" secondAttribute="leading" id="qxI-xM-Zww"/>
+                            <constraint firstItem="R6d-6i-EEu" firstAttribute="top" secondItem="maz-DZ-s0z" secondAttribute="bottom" id="taG-NT-hcB"/>
                             <constraint firstAttribute="bottom" secondItem="Ual-mF-TVQ" secondAttribute="bottom" id="veY-jM-qtM"/>
                             <constraint firstItem="z6u-ak-Z6F" firstAttribute="trailing" secondItem="uo5-aT-Yxt" secondAttribute="trailing" id="wpJ-NN-kn4"/>
                             <constraint firstAttribute="trailing" secondItem="Ual-mF-TVQ" secondAttribute="trailing" id="yMS-zq-pfY"/>
@@ -1902,10 +1952,13 @@
                     </view>
                     <navigationItem key="navigationItem" title="Driver" id="zLk-kA-odf"/>
                     <connections>
+                        <outlet property="addressView" destination="R6d-6i-EEu" id="3WU-sy-GzQ"/>
                         <outlet property="callButton" destination="z6u-ak-Z6F" id="BK0-aF-B5b"/>
                         <outlet property="cancelButton" destination="0Bc-am-iM8" id="wpy-7J-kKh"/>
+                        <outlet property="destinationButton" destination="4zf-Gh-EPN" id="VsL-Ux-Rr0"/>
                         <outlet property="driverButton" destination="uo5-aT-Yxt" id="05k-c5-6Z4"/>
                         <outlet property="headerLabel" destination="9DE-mR-PGM" id="ihb-dk-rFD"/>
+                        <outlet property="mapView" destination="0aI-mU-M4d" id="TjB-Q0-0VE"/>
                         <outlet property="riderNameLabel" destination="yfF-LM-pJK" id="C4V-9z-rBJ"/>
                         <outlet property="webView" destination="rbP-Tw-r4N" id="Tpv-sR-UW3"/>
                     </connections>
