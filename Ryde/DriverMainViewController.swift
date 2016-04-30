@@ -43,6 +43,9 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
     // Location Manager instance
     let locationManager = CLLocationManager()
     
+    // Timer to schedule tasks
+    var updateTimer: NSTimer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,6 +57,9 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
         //Get non active rides to get the queue size
         getNonActiveRides()
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        // schedules task for every n second
+        updateTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector:  "updateQueueLabel", userInfo: nil, repeats: true)
         
         headerLabel.text = "Welcome " + driverName
         startLabel.text = "Start Time: " + startTime
@@ -87,6 +93,22 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
         }
+        
+        // schedules task for every n second
+        if (updateTimer!.valid == false){
+            updateTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector:  "updateQueueLabel", userInfo: nil, repeats: true)
+        }
+    }
+    
+    override func viewWillDisappear(animated:Bool){
+        updateTimer?.invalidate()
+        locationManager.stopUpdatingLocation()
+    }
+    
+    func updateQueueLabel(){
+        updateNonActiveRides()
+        let queueSize = String(self.nonActiveQueueDict.count)
+        self.queueLabel.text = "Queue Size: " + queueSize
     }
     
     //Location manager function to get driver coordinates.
@@ -305,6 +327,61 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
         
     }
     
+    func updateNonActiveRides() {
+        print("RETRIEVE Queue DATA --")
+        
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/ride/getNonActiveQueue/\(self.timeSlotID)")!
+        
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Execute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            //print("Response: \(response)")
+            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            
+            let json: [NSDictionary]?
+            
+            do {
+                
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr!)'")
+                // return or throw?
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                
+                self.nonActiveQueueDict = parseJSON as [NSDictionary]
+                
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+        })
+        
+        task.resume()
+        
+    }
+
+    
     
     /*
      -------------------------
@@ -365,7 +442,7 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
             
             // Create a UIAlertAction object and add it to the alert controller
             alertController.addAction(UIAlertAction(title: "Confirm", style: .Default, handler: { (action: UIAlertAction!) in
-                
+                //TODO INVALIDATE TIMER.
                 let status = 0
                 //Update the driver status to False (logged out)
                 self.put("http://\(self.appDelegate.baseURL)/Ryde/api/user/setDriverStatus/\(self.appDelegate.FBid)/\(status)")
