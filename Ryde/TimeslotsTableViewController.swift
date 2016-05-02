@@ -18,11 +18,13 @@ class TimeslotsTableViewController: UITableViewController {
     
     var tsIDtoNumDrivers = [Int:Int]()
     
-    let semaphore = dispatch_semaphore_create(0);
-    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var numOfDrivers = 0
+    
+    var memberList = [NSDictionary]()
+    
+    var driverList = [NSDictionary]()
     
     override func viewDidLoad() {
         
@@ -32,25 +34,6 @@ class TimeslotsTableViewController: UITableViewController {
         
         
         getData()
-        
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-        for timeSlotDic in timeslotInfo {
-            
-            if let timeSlotList = timeSlotDic["timeslots"] as? [[String: AnyObject]]{
-
-                for timeSlotObj in timeSlotList  {
-                    
-                    let tsID = timeSlotObj["id"] as! Int
-                    
-                    getTSDrivers(tsID)
-                    
-                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                    
-                    tsIDtoNumDrivers[tsID] = numOfDrivers
-                }
-            }
-        }
         
     }
     
@@ -121,7 +104,6 @@ class TimeslotsTableViewController: UITableViewController {
                 print("Error could not parse JSON: \(jsonStr!)")
             }
             
-            dispatch_semaphore_signal(self.semaphore);
             
         })
         
@@ -188,26 +170,33 @@ class TimeslotsTableViewController: UITableViewController {
                 dispatch_async(dispatch_get_main_queue(), {
                     self.tableView.reloadData()
                 })
+                
+                for timeSlotDic in self.timeslotInfo {
+                    
+                    if let timeSlotList = timeSlotDic["timeslots"] as? [[String: AnyObject]]{
+                        
+                        for timeSlotObj in timeSlotList  {
+                            
+                            let tsID = timeSlotObj["id"] as! Int
+                            
+                            self.getTSDrivers(tsID)
+                            
+                            self.tsIDtoNumDrivers[tsID] = self.numOfDrivers
+                        }
+                    }
+                }
+
+                
             }
             else {
                 // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 print("Error could not parse JSON: \(jsonStr!)")
             }
-            
-            dispatch_semaphore_signal(self.semaphore);
-        })
+                    })
         
         task.resume()
     }
-    
-    // MARK: - Create New Timeslot
-    
-    @IBAction func createNewTimeslot(sender: UIBarButtonItem) {
-        
-        performSegueWithIdentifier("detailTimeslot", sender: self)
-    }
-    
     
     
     // MARK: - Table view data source
@@ -368,17 +357,30 @@ class TimeslotsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        performSegueWithIdentifier("detailTimeslot", sender: self)
+        performSegueWithIdentifier("EditTimeslot", sender: self)
+    }
+    
+    //MARK: - Unwind action
+    
+    @IBAction func unwindToTimeslots(segue: UIStoryboardSegue) {
+        
     }
     
     // MARK - Prepare for Segue
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "detailTimeslot" {
-            
+        if segue.identifier == "EditTimeslot" {
             let dest = segue.destinationViewController as! DetailTimeslotViewController
-            
+            dest.groupInfo = self.groupInfo
+            dest.memberList = self.memberList
+            dest.add = false
+        }
+        else if (segue.identifier == "CreateTimeslot") {
+            let dest = segue.destinationViewController as! DetailTimeslotViewController
+            dest.groupInfo = self.groupInfo
+            dest.memberList = self.memberList
+            dest.add = true
         }
     }
 

@@ -864,6 +864,7 @@ class EditGroupDetailsViewController: UIViewController {
             
             let dest = segue.destinationViewController as! TimeslotsTableViewController
             dest.groupInfo = self.groupInfo
+            dest.memberList = self.initialMemberList
             
         }
     }
