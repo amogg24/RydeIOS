@@ -70,6 +70,7 @@ class RiderRequestGroupTableViewController: UITableViewController {
         
         //Adds a navigation button to bring up alert to add TAD
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Join TAD", style: .Plain, target: self, action:#selector(self.joinTAD))
+        self.view.backgroundColor = UIColor.init(patternImage: UIImage(named: "BackgroundMain")!)
     }
     
     override func viewWillAppear(animated: Bool) {
