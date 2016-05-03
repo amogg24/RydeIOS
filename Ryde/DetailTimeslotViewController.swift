@@ -31,6 +31,7 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
     var timeslotInfo : NSDictionary?
     var memberList = [NSDictionary]()
     var add = false
+    var activeTextField = UITextField()
     
     //MARK: - Lifecycle Methods
     
@@ -41,12 +42,15 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
         
         //We are populating this view with a previously created timeslot
         if (!add) {
-            if let startDate = self.timeslotInfo!["start"] as? String {
-                self.startDateTextField.text = startDate
+            if let tsInfo = self.timeslotInfo {
+                if let startTime = tsInfo["startTime"] as? String {
+                    self.startDateTextField.text = startTime
+                }
+                if let endTime = tsInfo["endTime"] as? String {
+                    self.endDateTextField.text = endTime
+                }
             }
-            if let endDate = self.timeslotInfo!["end"] as? String {
-                self.endDateTextField.text = endDate
-            }
+            
         }
     }
     
@@ -137,20 +141,26 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
         //if we are dealing with the bithday textfield
         if (textField == startDateTextField || textField == endDateTextField)
         {
+            activeTextField = textField
             let datePicker:UIDatePicker = UIDatePicker()
             datePicker.datePickerMode = UIDatePickerMode.DateAndTime
             textField.inputView = datePicker
+            datePicker.addTarget(self, action: #selector(DetailTimeslotViewController.updateTextfield(_:textField:)), forControlEvents: UIControlEvents.ValueChanged)
             let components = NSDateComponents()
             components.setValue(1, forComponent: NSCalendarUnit.Year);
             let date: NSDate = NSDate()
             let expirationDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: NSCalendarOptions(rawValue: 0))
             datePicker.maximumDate = expirationDate
             datePicker.minimumDate = NSDate()
-            let dFormatter = NSDateFormatter();
-            dFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
-            dFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
-            textField.text = getDate(dFormatter.stringFromDate(NSDate()))
         }
+    }
+    
+    func updateTextfield(sender: UIDatePicker, textField: UITextField)
+    {
+        let dFormatter = NSDateFormatter();
+        dFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        dFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        activeTextField.text = getDate(dFormatter.stringFromDate(sender.date))
     }
     
     //MARK: date functions
