@@ -154,7 +154,8 @@ class DriverEditProfileViewController: UIViewController {
         self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")
         //self.dismissViewControllerAnimated(true, completion: nil);
         //
-        self.navigationController?.popViewControllerAnimated(true)
+        //self.navigationController?.popViewControllerAnimated(true)
+        performSegueWithIdentifier("unwindToMenu", sender: self)
         
     }
     

@@ -26,6 +26,7 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
     var carInfo = ""
     var phoneNumber = ""
     var email = ""
+    var id = Int()
     
     @IBOutlet var startLabel: UILabel!
     @IBOutlet var endLabel: UILabel!
@@ -515,5 +516,11 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
             menuVC.view.frame=CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height);
             sender.enabled = true
             }, completion:nil)
+    }
+    
+    //Update the userdata with the newly entered data
+    @IBAction func unwindToMenu(segue: UIStoryboardSegue)
+    {
+    
     }
 }

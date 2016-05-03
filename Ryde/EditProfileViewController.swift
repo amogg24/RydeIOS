@@ -126,26 +126,7 @@ class EditProfileViewController: UIViewController {
             return
         }
         
-        
-        let name = profileName.text
-        
-        let fullNameArr = name?.componentsSeparatedByString(" ")
-        
-        let JSONObject: [String : AnyObject] = [
-            
-            "lastName"  : fullNameArr![(fullNameArr?.count)!-1],
-            "firstName" : fullNameArr![0],
-            "fbTok"     : FBSDKAccessToken.currentAccessToken().userID,
-            "id"        : id,
-            "phoneNumber" : cellNumberTextField.text!,
-            "carMake"   : carMakeTextField.text!,
-            "carModel"  : carModelTextField.text!,
-            "carColor"  : carColorTextField.text!
-        ]
-        
-        // Sends a POST to the specified URL with the JSON conent
-        self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")      
-        performSegueWithIdentifier("Save", sender: self)
+        performSegueWithIdentifier("unwindToProfile", sender: self)
         
     }
     

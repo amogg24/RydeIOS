@@ -167,6 +167,47 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         performSegueWithIdentifier("editProfile", sender: self)
     }
     
+    
+    //Update the userdata with the newly entered data
+    @IBAction func unwindToProfile(segue: UIStoryboardSegue)
+    {
+        if segue.identifier == "unwindToProfile" {
+            let controller: EditProfileViewController = segue.sourceViewController as! EditProfileViewController
+            
+            carMakeString = controller.carMakeTextField.text!
+            carModelString = controller.carModelTextField.text!
+            carColorString = controller.carColorTextField.text!
+            self.carInfo = "\(self.carMakeString) \(self.carModelString) \(self.carColorString)"
+            
+            //Check if they have car data
+            if (self.carInfo == "  " || self.carInfo.isEmpty)
+            {
+                self.carInfoTextField.text! = "No Info Entered"
+            }
+            else{
+                self.carInfoTextField.text! = self.carInfo
+            }
+            
+            let name = profileName.text
+            
+            let fullNameArr = name?.componentsSeparatedByString(" ")
+            
+            let JSONObject: [String : AnyObject] = [
+                
+                "lastName"  : fullNameArr![(fullNameArr?.count)!-1],
+                "firstName" : fullNameArr![0],
+                "fbTok"     : FBSDKAccessToken.currentAccessToken().userID,
+                "id"        : id,
+                "phoneNumber" : cellNumberTextField.text!,
+                "carMake"   : carMakeString,
+                "carModel"  : carModelString,
+                "carColor"  : carColorString
+            ]
+            
+            // Sends a POST to the specified URL with the JSON conent
+            self.put(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/user/\(id)")
+        }
+    }
     /*
      -------------------------
      MARK: - Prepare for Segue
@@ -206,4 +247,61 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         
         performSegueWithIdentifier("logOut", sender: self)
     }
+    
+    
+    
+    // Put the new user data to the server
+    func put(params : Dictionary<String, AnyObject>, url : String) {
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "PUT"
+        
+        
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+        } catch {
+            print(error)
+            request.HTTPBody = nil
+        }
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            print("Response: \(response)")
+            let strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Body: \(strData)")
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr)'")
+                // return or throw?
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                // Okay, the parsedJSON is here, let's get the value for 'success' out of it
+                let success = parseJSON["success"] as? Int
+                print("Succes: \(success)")
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr)")
+            }
+        })
+        
+        task.resume()
+    }
+
 }
