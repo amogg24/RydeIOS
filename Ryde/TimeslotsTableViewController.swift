@@ -32,10 +32,21 @@ class TimeslotsTableViewController: UITableViewController {
         
         super.viewDidLoad()
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(TimeslotsTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = refreshControl
+        
         self.title = "\(groupInfo!["title"] as! String): Timeslot"
         
         getData()
         
+    }
+    
+    func handleRefresh(refreshControl : UIRefreshControl) {
+        
+        getData()
+        
+        refreshControl.endRefreshing()
     }
     
     // MARK - Get Data
@@ -269,7 +280,6 @@ class TimeslotsTableViewController: UITableViewController {
         
         let timeslotsForDate = self.timeslotInfo[section]
         let timeslotList = timeslotsForDate["timeslots"] as! [NSDictionary]
-        print(timeslotList)
         let timeslot = timeslotList[row]
         self.selectedTimeSlot = timeslot
         
@@ -279,7 +289,7 @@ class TimeslotsTableViewController: UITableViewController {
     //MARK: - Unwind action
     
     @IBAction func unwindToTimeslots(segue: UIStoryboardSegue) {
-        
+        getData()
     }
     
     // MARK - Prepare for Segue

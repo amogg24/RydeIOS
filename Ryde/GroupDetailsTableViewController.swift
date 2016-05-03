@@ -193,13 +193,12 @@ class GroupDetailsTableViewController: UITableViewController {
                     }
                 }
                 
-                if (self.admin) {
-                    self.editGroupButton.enabled = true
-                    self.editGroupButton.tintColor = self.view.tintColor
-                }
-                
                 // Okay, the parsedJSON is here, lets store its values into an array
                 dispatch_async(dispatch_get_main_queue(), {
+                    if (self.admin) {
+                        self.editGroupButton.enabled = true
+                        self.editGroupButton.tintColor = self.view.tintColor
+                    }
                     self.tableView.reloadData()
                 })
             }

@@ -1248,6 +1248,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="3lf-LV-79i">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <segue destination="Z5M-Uu-9Y0" kind="show" identifier="EditTimeslot" id="tpw-M6-pZ0"/>
                     </connections>
@@ -1265,14 +1268,14 @@
                         <viewControllerLayoutGuide type="bottom" id="o2d-pa-bsJ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="WWM-lX-dvJ">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="650"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginBG" translatesAutoresizingMaskIntoConstraints="NO" id="zbC-9M-SYS">
-                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="542"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zOe-be-6n1" customClass="TPKeyboardAvoidingScrollView">
-                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="542"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3C0-mt-Si3">
                                         <rect key="frame" x="256" y="178" width="89" height="21"/>
@@ -1292,9 +1295,11 @@
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IFf-gv-NNa">
                                         <rect key="frame" x="20" y="128" width="560" height="30"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="f5p-Td-bIK"/>
                                         </constraints>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
@@ -1336,9 +1341,11 @@
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wpf-h0-FFw">
                                         <rect key="frame" x="20" y="49" width="560" height="30"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="dcU-Dz-Ig8"/>
                                         </constraints>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
@@ -1392,21 +1399,41 @@
                                             <outlet property="delegate" destination="Z5M-Uu-9Y0" id="lbd-iW-gi4"/>
                                         </connections>
                                     </searchBar>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="weG-hI-Phb">
+                                        <rect key="frame" x="20" y="451" width="560" height="44"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="Eao-Hr-uEe"/>
+                                        </constraints>
+                                        <state key="normal" title="Delete Timeslot">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="deleteTimeslot:" destination="Z5M-Uu-9Y0" eventType="touchUpInside" id="u1y-3w-uoz"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="wpf-h0-FFw" firstAttribute="centerX" secondItem="zOe-be-6n1" secondAttribute="centerX" id="0VG-au-TSt"/>
                                     <constraint firstItem="rWs-bL-dY9" firstAttribute="top" secondItem="3C0-mt-Si3" secondAttribute="bottom" constant="8" id="2EY-bO-XKZ"/>
                                     <constraint firstAttribute="trailing" secondItem="wpf-h0-FFw" secondAttribute="trailing" constant="20" id="4cZ-z3-seA"/>
-                                    <constraint firstAttribute="bottom" secondItem="Lij-6y-fhS" secondAttribute="bottom" constant="20" id="6gb-X0-pEg"/>
                                     <constraint firstItem="3C0-mt-Si3" firstAttribute="top" secondItem="IFf-gv-NNa" secondAttribute="bottom" constant="20" id="9Be-hi-wKb"/>
                                     <constraint firstItem="Lij-6y-fhS" firstAttribute="top" secondItem="rWs-bL-dY9" secondAttribute="bottom" id="9UU-eA-obJ"/>
                                     <constraint firstItem="3C0-mt-Si3" firstAttribute="centerX" secondItem="zOe-be-6n1" secondAttribute="centerX" id="BIO-YB-0So"/>
                                     <constraint firstItem="NBA-bT-yQR" firstAttribute="centerX" secondItem="zOe-be-6n1" secondAttribute="centerX" id="Doq-li-hqp"/>
                                     <constraint firstItem="wpf-h0-FFw" firstAttribute="leading" secondItem="zOe-be-6n1" secondAttribute="leading" constant="20" id="GOe-jN-hxz"/>
                                     <constraint firstItem="rWs-bL-dY9" firstAttribute="leading" secondItem="zOe-be-6n1" secondAttribute="leading" constant="20" id="MdP-ah-JRK"/>
+                                    <constraint firstAttribute="trailing" secondItem="weG-hI-Phb" secondAttribute="trailing" constant="20" id="NjK-lJ-q9b"/>
+                                    <constraint firstItem="weG-hI-Phb" firstAttribute="top" secondItem="Lij-6y-fhS" secondAttribute="bottom" constant="20" id="SuZ-TL-FDc"/>
                                     <constraint firstItem="IFf-gv-NNa" firstAttribute="top" secondItem="NBA-bT-yQR" secondAttribute="bottom" constant="8" id="UjF-lt-DlU"/>
                                     <constraint firstItem="pEj-j7-oMr" firstAttribute="top" secondItem="zOe-be-6n1" secondAttribute="top" constant="20" id="Yff-bA-AYR"/>
                                     <constraint firstAttribute="trailing" secondItem="IFf-gv-NNa" secondAttribute="trailing" constant="20" id="bdb-iJ-2ro"/>
+                                    <constraint firstItem="weG-hI-Phb" firstAttribute="leading" secondItem="zOe-be-6n1" secondAttribute="leading" constant="20" id="cwa-zV-od7"/>
                                     <constraint firstItem="pEj-j7-oMr" firstAttribute="centerX" secondItem="zOe-be-6n1" secondAttribute="centerX" id="esJ-Yb-lh6"/>
                                     <constraint firstItem="NBA-bT-yQR" firstAttribute="top" secondItem="wpf-h0-FFw" secondAttribute="bottom" constant="20" id="hk8-ye-nYT"/>
                                     <constraint firstItem="rWs-bL-dY9" firstAttribute="centerX" secondItem="zOe-be-6n1" secondAttribute="centerX" id="j5N-X1-uPh"/>
@@ -1416,6 +1443,7 @@
                                     <constraint firstItem="Lij-6y-fhS" firstAttribute="leading" secondItem="zOe-be-6n1" secondAttribute="leading" constant="20" id="vWs-Nb-3tZ"/>
                                     <constraint firstAttribute="trailing" secondItem="rWs-bL-dY9" secondAttribute="trailing" constant="20" id="vbL-cg-T8T"/>
                                     <constraint firstItem="wpf-h0-FFw" firstAttribute="top" secondItem="pEj-j7-oMr" secondAttribute="bottom" constant="8" id="x2t-jb-Q0t"/>
+                                    <constraint firstAttribute="bottom" secondItem="weG-hI-Phb" secondAttribute="bottom" constant="20" id="xpB-FQ-ZNj"/>
                                     <constraint firstItem="IFf-gv-NNa" firstAttribute="centerX" secondItem="zOe-be-6n1" secondAttribute="centerX" id="yJq-qH-MWs"/>
                                 </constraints>
                             </scrollView>
@@ -1440,14 +1468,17 @@
                         </barButtonItem>
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="600"/>
+                    <size key="freeformSize" width="600" height="650"/>
                     <connections>
+                        <outlet property="deleteTimeslotButton" destination="weG-hI-Phb" id="Wbx-Dq-dvy"/>
                         <outlet property="endDateTextField" destination="IFf-gv-NNa" id="1ik-IQ-ruc"/>
                         <outlet property="groupMemberSearchBar" destination="rWs-bL-dY9" id="g33-if-yMT"/>
                         <outlet property="groupMemberTableView" destination="Lij-6y-fhS" id="IfE-AW-OnA"/>
                         <outlet property="scrollView" destination="zOe-be-6n1" id="arT-mC-m5K"/>
                         <outlet property="startDateTextField" destination="wpf-h0-FFw" id="Tx8-II-6wJ"/>
                         <segue destination="0zl-Sg-uBu" kind="unwind" identifier="UnwindToTimeslots-Add" unwindAction="unwindToTimeslots:" id="JPX-NV-ck5"/>
+                        <segue destination="0zl-Sg-uBu" kind="unwind" identifier="UnwindToTimeslots-Edit" unwindAction="unwindToTimeslots:" id="cse-dH-ms9"/>
+                        <segue destination="0zl-Sg-uBu" kind="unwind" identifier="UnwindToTimeslots-Delete" unwindAction="unwindToTimeslots:" id="hCn-kc-GZD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="04S-1e-VgR" userLabel="First Responder" sceneMemberID="firstResponder"/>
