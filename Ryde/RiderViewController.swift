@@ -61,7 +61,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     @IBOutlet var destinationButton: UIButton!
     
     // Dictionary to store the drivers timeslot
-    var timeslotDictionary = [NSDictionary]()
+    var timeslotDictionary = NSDictionary()
     
     // Store the timeslot id once retrieved
     var timeslotID = ""
@@ -79,9 +79,14 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Driver Phone Number
     var driverNumber:String = ""
     
+    var activeDriver = false
+    
     let semaphore = dispatch_semaphore_create(0);
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+
+    var startTime = ""
+    var endTime = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -282,8 +287,8 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Mark - Retrieve the driver's timeslot from the server
     
     func getDriverTimeslot() {
-        
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/driver/\(fbToken)")
+        ///Ryde/api/user/findActiveDriverTimeslot/\(fbToken)
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findActiveDriverTimeslot/JohnFBTok")
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
@@ -309,19 +314,22 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             //print("responseString = \(responseString!)")
             
             
-            let json: [NSDictionary]?
+            let json: NSDictionary?
             
             do {
                 
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? NSDictionary
                 
-            } catch let dataError{
+            }
+            catch let dataError{
                 
                 // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
                 print(dataError)
                 let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 print("Error could not parse JSON: '\(jsonStr!)'")
                 // return or throw?
+                self.activeDriver = false
+                dispatch_semaphore_signal(self.semaphore);
                 return
             }
             
@@ -329,7 +337,8 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             // check and make sure that json has a value using optional binding.
             if let parseJSON = json {
                 // Okay, the parsedJSON is here, lets store its values into an array
-                self.timeslotDictionary = parseJSON as [NSDictionary]
+                self.timeslotDictionary = parseJSON as NSDictionary
+                self.activeDriver = true
                 
             }
             else {
@@ -351,10 +360,10 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     @IBAction func driverLoginBtnPressed(sender: UIBarButtonItem) {
         self.getDriverTimeslot()
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        print(timeslotDictionary)
+        print("timeslot = \(timeslotDictionary)")
         
         
-        if (timeslotDictionary.isEmpty == false){         // login successful, user is currently a driver
+        if (activeDriver){         // login successful, user is currently a driver
             self.performSegueWithIdentifier("DriverLogin", sender: self)
             
             
@@ -480,6 +489,45 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         task.resume()
     }
     
+    func convertTime(startHour : Int, startMin : Int, endHour : Int, endMin : Int){
+        var sTimeStamp = ""
+        var sHour = 0
+        var eTimeStamp = ""
+        var eHour = 0
+        
+        if (startHour > 0 && startHour < 12){
+            sTimeStamp = "a.m."
+            sHour = startHour
+        } else if (startHour > 12 &&  startHour < 24){
+            sTimeStamp = "p.m."
+            sHour = startHour - 12
+        } else if (startHour == 0){
+            sTimeStamp = "a.m."
+            sHour = 12
+        } else if (startHour == 12){
+            sTimeStamp = "p.m."
+            sHour = startHour
+        }
+        
+        if (endHour > 0 && endHour < 12){
+            eTimeStamp = "a.m."
+            eHour = endHour
+        } else if (endHour > 12 &&  endHour < 24){
+            eTimeStamp = "p.m."
+            eHour = endHour - 12
+        } else if (endHour == 0){
+            eTimeStamp = "a.m."
+            eHour = 12
+        } else if (endHour == 12){
+            eTimeStamp = "p.m."
+            eHour = endHour
+        }
+        
+        startTime = String(format: "\(sHour):%02d \(sTimeStamp)", startMin)
+        endTime = String(format: "\(eHour):%02d \(eTimeStamp)", endMin)
+        
+    }
+    
     /*
      -------------------------
      MARK: - Prepare For Segue
@@ -510,46 +558,27 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             // Obtain the object reference of the destination view controller
             let driverMainViewController: DriverMainViewController = segue.destinationViewController as! DriverMainViewController
             
-            let tempStartTime = timeslotDictionary[0]["startTime"] as! String
-            let tempEndTime = timeslotDictionary[0]["endTime"] as! String
-            let tsID = timeslotDictionary[0]["id"] as! Int
+            let tempStartTime = timeslotDictionary["startTime"] as! String
+            let tempEndTime = timeslotDictionary["endTime"] as! String
+            let tsID = timeslotDictionary["id"] as! Int
             
-            //TODO: Format start and end time
-            /**
-             let dateFormatter = NSDateFormatter()
-             let startTime = dateFormatter.dateFromString(tempStartTime)
-             let endTime = dateFormatter.dateFromString(tempEndTime)
-             dateFormatter.dateFormat = "hh:mm" //format style. Browse online to get a format that fits your needs.
-             
-             let formatedStartTime = dateFormatter.stringFromDate(startTime!)
-             let formatedEndTime = dateFormatter.stringFromDate(endTime!)
-             **/
-            
-            //Convert the Start Time
+            //Get the Start Time
             let dateStartArray = tempStartTime.componentsSeparatedByString("T")
-            let dateStart = dateStartArray[0] // First
             let timeAndZoneStart = dateStartArray[1]
-            
             let timeStartArray = timeAndZoneStart.componentsSeparatedByString(":")
-            print("Start: \(timeStartArray[0])")
             
-            let timeStart = "\(timeStartArray[0]):\(timeStartArray[1])"
-            driverMainViewController.startTime = timeStart
-            
-            
-            //Convert the End time
+            //Get the End time
             let dateEndArray = tempEndTime.componentsSeparatedByString("T")
-            let dateEnd = dateEndArray[0] // First
             let timeAndZoneEnd = dateEndArray[1]
-            
             let timeEndArray = timeAndZoneEnd.componentsSeparatedByString(":")
-            print("Start: \(timeEndArray[0])")
-            
-            let timeEnd = "\(timeEndArray[0]):\(timeEndArray[1])"
-            driverMainViewController.endTime = timeEnd
+
+            //Convert the time
+            convertTime(Int(timeStartArray[0])!, startMin: Int(timeStartArray[1])!, endHour: Int(timeEndArray[0])!, endMin: Int(timeEndArray[1])!)
+            driverMainViewController.endTime = endTime
+            driverMainViewController.startTime = startTime
             driverMainViewController.timeSlotID = tsID
             
-            timeslotDictionary.removeAll() //Clear dictionary so it must be reloaded if the user logs out
+            activeDriver = false //Clear dictionary so it must be reloaded if the user logs out
         } else if segue.identifier == "homeShowCurrentRide" {
             // Obtain the object reference of the destination view controller
             let currentRideViewController: CurrentRideViewController = segue.destinationViewController as! CurrentRideViewController
