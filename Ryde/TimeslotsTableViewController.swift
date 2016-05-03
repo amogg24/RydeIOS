@@ -16,7 +16,7 @@ class TimeslotsTableViewController: UITableViewController {
     
     var timeslotInfo = [NSDictionary]()
     
-    var tsIDtoNumDrivers = [Int:Int]()
+//    var tsIDtoNumDrivers = [Int:Int]()
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -26,12 +26,13 @@ class TimeslotsTableViewController: UITableViewController {
     
     var driverList = [NSDictionary]()
     
+    var selectedTimeSlot : NSDictionary?
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
         self.title = "\(groupInfo!["title"] as! String): Timeslot"
-        
         
         getData()
         
@@ -109,95 +110,6 @@ class TimeslotsTableViewController: UITableViewController {
         
         task.resume()
     }
-    
-    // MARK - Get Data
-    
-    func getTSDrivers(tsID: Int) {
-        
-        // Fetch All Timeslots (if any) for THIS group
-        
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/findDriversForTimeslot/\(tsID)")
-        
-        print(url!)
-        
-        // Creaste URL Request
-        let request = NSMutableURLRequest(URL:url!);
-        
-        // Set request HTTP method to GET. It could be POST as well
-        request.HTTPMethod = "GET"
-        
-        // If needed you could add Authorization header value
-        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
-        
-        // Execute HTTP Request
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            
-            // Check for error
-            if error != nil
-            {
-                print("error=\(error)")
-                return
-            }
-            
-            // Print out response string
-            //            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            //            print("responseString = \(responseString!)")
-            
-            
-            let json: [NSDictionary]?
-            
-            do {
-                
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
-                
-            } catch let dataError{
-                
-                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
-                print(dataError)
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: '\(jsonStr!)'")
-                // return or throw?
-                return
-            }
-            
-            // The JSONObjectWithData constructor didn't return an error. But, we should still
-            // check and make sure that json has a value using optional binding.
-            if let parseJSON = json {
-                // Okay, the parsedJSON is here, lets store its values into an array
-                
-                self.numOfDrivers = parseJSON.count
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.tableView.reloadData()
-                })
-                
-                for timeSlotDic in self.timeslotInfo {
-                    
-                    if let timeSlotList = timeSlotDic["timeslots"] as? [[String: AnyObject]]{
-                        
-                        for timeSlotObj in timeSlotList  {
-                            
-                            let tsID = timeSlotObj["id"] as! Int
-                            
-                            self.getTSDrivers(tsID)
-                            
-                            self.tsIDtoNumDrivers[tsID] = self.numOfDrivers
-                        }
-                    }
-                }
-
-                
-            }
-            else {
-                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
-                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                print("Error could not parse JSON: \(jsonStr!)")
-            }
-                    })
-        
-        task.resume()
-    }
-    
     
     // MARK: - Table view data source
     
@@ -286,19 +198,15 @@ class TimeslotsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("timeslotCell", forIndexPath: indexPath)
         
         if let timeSlotList = timeslotInfo[indexPath.section]["timeslots"] as? [[String: AnyObject]]{
-
-            
-            
-            
             
             var AMPMLabelStart = "AM"
             var AMPMLabelEnd = "AM"
 
             let timeSlotDic = (timeSlotList)[indexPath.row]
             
-            let id = timeSlotDic["id"] as! Int
+//            let id = timeSlotDic["id"] as! Int
             
-            cell.detailTextLabel?.text = "Driver(s): \(tsIDtoNumDrivers[id]!)"
+//            cell.detailTextLabel?.text = "Driver(s): \(tsIDtoNumDrivers[id]!)"
 
             
             var startTime = timeSlotDic["startTime"]!.componentsSeparatedByString("T")[1].componentsSeparatedByString("-")[0]
@@ -356,6 +264,14 @@ class TimeslotsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let row = indexPath.row
+        let section = indexPath.section
+        
+        let timeslotsForDate = self.timeslotInfo[section]
+        let timeslotList = timeslotsForDate["timeslots"] as! [NSDictionary]
+        print(timeslotList)
+        let timeslot = timeslotList[row]
+        self.selectedTimeSlot = timeslot
         
         performSegueWithIdentifier("EditTimeslot", sender: self)
     }
@@ -374,6 +290,7 @@ class TimeslotsTableViewController: UITableViewController {
             let dest = segue.destinationViewController as! DetailTimeslotViewController
             dest.groupInfo = self.groupInfo
             dest.memberList = self.memberList
+            dest.timeslotInfo = self.selectedTimeSlot
             dest.add = false
         }
         else if (segue.identifier == "CreateTimeslot") {
