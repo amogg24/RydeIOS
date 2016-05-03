@@ -196,7 +196,7 @@ class EditGroupDetailsViewController: UIViewController {
                 
                 if let memberID = initialMember["id"] {
                     
-                    self.deleteGroupUser("http://\(self.appDelegate.baseURL)/Ryde/api/groupuser/\(memberID)/\(id)")
+                    self.deleteGroupUser("http://\(self.appDelegate.baseURL)/Ryde/api/removeUserFromGroup//\(memberID)/\(id)")
                 }
             }
             

@@ -19,6 +19,7 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
     @IBOutlet var cellNumberTextField: UILabel!
     @IBOutlet var carInfoTextField: UILabel!
     @IBOutlet var rydesGivenLabel: UILabel!
+    @IBOutlet var profileScrollView: UIScrollView!
     
     //Global Strings
     var carMakeString = ""
@@ -47,12 +48,14 @@ class ProfileViewController: UIViewController, FBSDKLoginButtonDelegate  {
         //Set FB button to bottom of screen
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         let screenWidth = screenSize.width * 0.5
-        let screenHeight = screenSize.height * 0.9
-        let a = CGPointMake(screenWidth, screenHeight)
+        let labelAbove = carInfoTextField.frame.origin.y + 350
+//        print("Label above")
+//        print(labelAbove)
+        let a = CGPointMake(screenWidth, labelAbove)
         let fbButton = FBSDKLoginButton()
         fbButton.center = self.view.convertPoint(a, fromCoordinateSpace: self.view)
         fbButton.delegate = self
-        self.view.addSubview(fbButton)
+        self.profileScrollView.addSubview(fbButton)
         
         
         //Set the ryde counters

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import FBSDKCoreKit
 
 class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationManagerDelegate   {
     
@@ -61,7 +62,16 @@ class DriverMainViewController: UIViewController, SlideMenuDelegate, CLLocationM
         // schedules task for every n second
         updateTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector:  "updateQueueLabel", userInfo: nil, repeats: true)
         
-        headerLabel.text = "Welcome " + driverName
+        headerLabel.text = "Welcome!"
+        
+        // Grab data from FB
+        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, name, email"])
+        graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
+            
+            // Set Name
+            self.headerLabel.text = "Welcome " + (result.valueForKey("name") as? String)!.componentsSeparatedByString(" ")[0]
+        })
+        
         startLabel.text = "Start Time: " + startTime
         endLabel.text = "End Time: " + endTime
         let queueSize = String(nonActiveQueueDict.count)
