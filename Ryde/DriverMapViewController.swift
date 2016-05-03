@@ -59,7 +59,6 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
         super.viewDidLoad()
         destinationButton.hidden = true
         addressView.hidden = true
-        driverButton.titleLabel!.text = "Ride picked"
         
         //hide back button and add slide menu
         self.navigationItem.setHidesBackButton(true, animated:true);
