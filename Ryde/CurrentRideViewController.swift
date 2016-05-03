@@ -216,6 +216,7 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
                 {
                     if status == "notInQueue"
                     {
+                        self.appDelegate.rydesTakenCount += 1
                         print("notInQueue")
                     }
                     else if status == "nonActive"
