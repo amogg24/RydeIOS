@@ -15,7 +15,7 @@ protocol HandleMapSearch {
     func cancelSearch()
 }
 
-class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, HandleMapSearch {
+class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate, HandleMapSearch, UISearchControllerDelegate, UISearchBarDelegate {
 
     // The label showcasing the current address of the User
     @IBOutlet var address: UILabel!
@@ -163,8 +163,12 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         
         searchBar.placeholder = "Enter Destination"
         
+        let frame = CGRect(x: 0, y: -2, width: 100, height: 30)
+        resultSearchController!.searchBar.backgroundImage = UIImage()
+        resultSearchController!.searchBar.frame = frame
         
         addressView.addSubview((resultSearchController?.searchBar)!)
+
         
         searchBar.sizeToFit()
         
@@ -174,6 +178,17 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         locationSearchTable.mapView = mapView
         
         locationSearchTable.handleMapSearchDelegate = self
+        
+        self.resultSearchController!.delegate = self
+        self.resultSearchController!.active = true
+        self.resultSearchController!.delegate = self
+        
+    }
+    
+    // Mark - Present Search Controller right now
+    
+    func didPresentSearchController(searchController: UISearchController) {
+        self.resultSearchController!.searchBar.becomeFirstResponder()
     }
     
 

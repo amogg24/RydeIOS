@@ -307,6 +307,9 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
                 //Sends a POST to the specified URL with the JSON conent
                 self.post(JSONObject, url: "http://\(self.appDelegate.baseURL)/Ryde/api/ride/endRide/\(self.rideID)")
                 
+                //update counter
+                self.appDelegate.rydesGivenCount += 1
+                
                 self.navigationController?.popViewControllerAnimated(true)
             }))
             alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: nil))
