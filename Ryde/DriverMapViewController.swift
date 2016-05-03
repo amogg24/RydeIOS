@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKMapViewDelegate,CLLocationManagerDelegate, UITextFieldDelegate, HandleMapSearch{
+class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKMapViewDelegate,CLLocationManagerDelegate, UITextFieldDelegate, HandleMapSearch, UISearchControllerDelegate, UISearchBarDelegate{
     
     //needed fields
     var riderName = "Blake Duncan"
@@ -30,10 +30,10 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
     
     @IBOutlet var headerLabel: UILabel!
     @IBOutlet var riderNameLabel: UILabel!
-    @IBOutlet var driverButton: UIButton!
     @IBOutlet var webView: UIWebView!
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var callButton: UIButton!
+    @IBOutlet var driverButton: UIButton!
     
     //google maps fields
     var mapsHtmlFilePath: String?
@@ -57,6 +57,9 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        destinationButton.hidden = true
+        addressView.hidden = true
+        driverButton.titleLabel!.text = "Ride picked"
         
         //hide back button and add slide menu
         self.navigationItem.setHidesBackButton(true, animated:true);
@@ -122,7 +125,7 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
     
     func pickupConfirmed(){
         headerLabel.text = "Drop Off"
-        driverButton.setTitle("Ride Over", forState: .Normal)
+        self.driverButton.setTitle("Ride Over", forState: .Normal)
         hasRider = true
         callButton.hidden = true
         cancelButton.hidden = true
@@ -147,12 +150,18 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
         webView.loadRequest(request)
         } else {
             let alertController = UIAlertController(title: "No rider desitnation entered",
-                                                    message: "Rider did not enter a destination. You can enter one manually",
+                                                    message: "Would you like to enter a destination?",
                                                     preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Enter Destiniation", style: .Default, handler: { (action: UIAlertAction!) in
+                
+                self.destinationButton.hidden = false
+                self.addressView.hidden = false
+                
+            }))
             
             // Create a UIAlertAction object and add it to the alert controller
-            
-            alertController.addAction(UIAlertAction(title: "Okay", style: .Default, handler: nil))
+            alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: nil))
+
             
             // Present the alert controller by calling the presentViewController method
             presentViewController(alertController, animated: true, completion: nil)
@@ -161,24 +170,32 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
     
     @IBAction func changeDestination(sender: UIButton) {
         
-        let driverLocationSearch = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! LocationSearchTable
-        resultSearchController = UISearchController(searchResultsController: driverLocationSearch)
-        resultSearchController?.searchResultsUpdater = driverLocationSearch
+        let locationSearchTable = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! LocationSearchTable
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable
         let searchBar = resultSearchController!.searchBar
         
         searchBar.placeholder = "Enter Destination"
         
+        let frame = CGRect(x: 0, y: -1, width: 100, height: 30)
+        resultSearchController!.searchBar.backgroundImage = UIImage()
+        resultSearchController!.searchBar.frame = frame
         
         addressView.addSubview((resultSearchController?.searchBar)!)
+        
         
         searchBar.sizeToFit()
         
         resultSearchController?.hidesNavigationBarDuringPresentation = false
         resultSearchController?.dimsBackgroundDuringPresentation = true
         definesPresentationContext = true
-        driverLocationSearch.mapView = mapView
+        locationSearchTable.mapView = mapView
         
-        driverLocationSearch.handleMapSearchDelegate = self
+        locationSearchTable.handleMapSearchDelegate = self
+        
+        self.resultSearchController!.delegate = self
+        self.resultSearchController!.active = true
+        self.resultSearchController!.delegate = self
     }
     
     // Mark - Destination Pin Drop
@@ -208,6 +225,9 @@ class DriverMapViewController: DriverBaseViewController, UIWebViewDelegate,  MKM
         
         destinationButton.setTitle(destination, forState: UIControlState.Normal)
         loadMapView(2)
+        self.destinationButton.hidden = true
+        self.addressView.hidden = true
+
         
         //        The following code drops a pin where the user searched but we dont want that. Just in case im leaving it here.
         
