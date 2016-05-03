@@ -50,6 +50,8 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
     // Timer to schedule tasks
     var updateTask: NSTimer?
     
+    var queueStatus:String = "active"
+    
     let semaphore = dispatch_semaphore_create(0);
     
     // Mapkit showing the anotations
@@ -181,6 +183,13 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
         self.getRideInfo(postUrl)
         driverNameLabel.text = "Driver Name: " + driverName
         driverCarLabel.text = "Driver's Car: " + carinfo
+        
+        if queueStatus != "active"
+        {
+            self.tabBarController?.tabBar.hidden = false
+            self.updateTask?.invalidate()
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        }
     }
     
     // Get Function for Checking if user has already request a ride
@@ -216,15 +225,18 @@ class CurrentRideViewController: UIViewController, RiderSlideMenuDelegate, MKMap
                 {
                     if status == "notInQueue"
                     {
+                        self.queueStatus = status
                         print("notInQueue")
                     }
                     else if status == "nonActive"
                     {
+                        self.queueStatus = status
                         //segue back to queue?
                         print("nonActive")
                     }
                     else if status == "active"
                     {
+                        self.queueStatus = status
                         if  let rideJSON = parseJSON["ride"] as? NSDictionary
                         {
                             if let driverJSON = rideJSON["driverUserId"] as? NSDictionary

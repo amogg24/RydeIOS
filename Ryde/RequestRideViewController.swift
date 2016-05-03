@@ -38,6 +38,15 @@ class RequestRideViewController: UIViewController {
     // Status of ride
     var rideStatus: String = "nonActive"
     
+    // Driver name
+    var driverName:String = ""
+    
+    // Driver car info
+    var carinfo: String = ""
+    
+    // Driver Phone Number
+    var driverNumber:String = ""
+    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet var queueLabel: UILabel!
@@ -198,6 +207,33 @@ class RequestRideViewController: UIViewController {
                 if let status = parseJSON["queueStatus"] as? String
                 {
                     self.rideStatus = status
+                    if status == "active"
+                    {
+                        if  let rideJSON = parseJSON["ride"] as? NSDictionary
+                        {
+                            if let driverJSON = rideJSON["driverUserId"] as? NSDictionary
+                            {
+                                if let firstName = driverJSON["firstName"] as? String{
+                                    self.driverName = firstName
+                                }
+                                if let lastName = driverJSON["lastName"] as? String{
+                                    self.driverName = self.driverName + " " + lastName
+                                }
+                                if let carMake = driverJSON["carMake"] as? String{
+                                    self.carinfo = carMake
+                                }
+                                if let carModel = driverJSON["carModel"] as? String{
+                                    self.carinfo = self.carinfo + " " + carModel
+                                }
+                                if let carColor = driverJSON["carColor"] as? String{
+                                    self.carinfo = self.carinfo + ", " + carColor
+                                }
+                                if let driverPhoneNumber = driverJSON["phoneNumber"] as? String{
+                                    self.driverNumber = driverPhoneNumber
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else {
@@ -230,6 +266,9 @@ class RequestRideViewController: UIViewController {
             currentRiderViewController.startLongitude = self.startLongitude
             currentRiderViewController.destLat = self.destLat
             currentRiderViewController.destLong = self.destLong
+            currentRiderViewController.driverName = self.driverName
+            currentRiderViewController.driverNumber = self.driverNumber
+            currentRiderViewController.carinfo = self.carinfo
         }
     }
     
