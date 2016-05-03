@@ -13,6 +13,7 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
     
     //MARK: - IBOutlets
     
+    @IBOutlet var deleteTimeslotButton: UIButton!
     @IBOutlet var startDateTextField: UITextField!
     @IBOutlet var endDateTextField: UITextField!
     @IBOutlet var groupMemberTableView: UITableView!
@@ -22,7 +23,7 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
     //MARK: - Fields
     
     var searchBarResults = [NSDictionary]()
-    var selectedGroupMembers = [String]()
+    var selectedGroupMembers = [NSDictionary]()
     var newTimeslot = NSDictionary()
     var activeSearchBar: UISearchBar?
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -30,6 +31,8 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
     var groupInfo : NSDictionary?
     var timeslotInfo : NSDictionary?
     var memberList = [NSDictionary]()
+    var driverList = [NSDictionary]()
+    var initialDriverList = [NSDictionary]()
     var add = false
     var activeTextField = UITextField()
     
@@ -43,11 +46,28 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
         //We are populating this view with a previously created timeslot
         if (!add) {
             if let tsInfo = self.timeslotInfo {
+                
+                let df = NSDateFormatter()
+                
                 if let startTime = tsInfo["startTime"] as? String {
-                    self.startDateTextField.text = startTime
+                    df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                    let startTimeNoMinus = startTime[startTime.startIndex..<startTime.endIndex.advancedBy(-6)]
+                    let startDate = df.dateFromString(startTimeNoMinus)
+                    df.dateFormat = "MM/dd/yy hh:mm a"
+                    self.startDateTextField.text = getDate(df.stringFromDate(startDate!))
+                    
                 }
                 if let endTime = tsInfo["endTime"] as? String {
-                    self.endDateTextField.text = endTime
+                    df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                    let endTimeNoMinus = endTime[endTime.startIndex..<endTime.endIndex.advancedBy(-6)]
+                    df.dateFromString(endTimeNoMinus)
+                    let endDate = df.dateFromString(endTimeNoMinus)
+                    df.dateFormat = "MM/dd/yy hh:mm a"
+                    self.endDateTextField.text = getDate(df.stringFromDate(endDate!))
+                }
+                if let timeslotID = tsInfo["id"] {
+                    let tID = String(timeslotID)
+                    getGroupDrivers(tID)
                 }
             }
             
@@ -57,9 +77,28 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
     override func viewWillAppear(animated: Bool) {
         self.searchBar(self.groupMemberSearchBar, textDidChange: "")
         
+        if (add) {
+            deleteTimeslotButton.hidden = true
+        }
+        else {
+            deleteTimeslotButton.hidden = false
+        }
+        
     }
     
     //MARK: - IBActions
+    
+    @IBAction func deleteTimeslot(sender: UIButton) {
+        let alertController = UIAlertController(title: "Are you sure?", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        let okAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.Destructive, handler: { (action:UIAlertAction) -> Void in
+            self.deleteTimeslot()
+        })
+        alertController.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
+        })
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
     
     @IBAction func saveTimeslot(sender: UIBarButtonItem) {
         
@@ -71,18 +110,8 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
             self.presentViewController(alertController, animated: true, completion: nil)
         }
         else if (selectedGroupMembers.count == 0) {
-            let alertController = UIAlertController(title: "No Drivers selected!", message: "Would you like to select drivers at a later time and continue anyways?", preferredStyle: UIAlertControllerStyle.Alert)
-            let okAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
-                if (self.add) {
-                    self.createTimeslot()
-                }
-                else {
-                    self.updateTimeslot()
-                }
-            })
-            alertController.addAction(okAction)
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in
-            })
+            let alertController = UIAlertController(title: "No Drivers selected!", message: "You must select at least one group member to drive during a timeslot", preferredStyle: UIAlertControllerStyle.Alert)
+            let cancelAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: { (action:UIAlertAction) -> Void in })
             alertController.addAction(cancelAction)
             self.presentViewController(alertController, animated: true, completion: nil)
         }
@@ -97,14 +126,335 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
 
     }
     
+    func deleteTimeslot() {
+        print("DELETING TIMESLOT")
+        
+        if let tID = timeslotInfo!["id"] {
+            let timeslotID = String(tID)
+            let url = "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/\(timeslotID)"
+            
+            print(url)
+            
+            let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+            let session = NSURLSession.sharedSession()
+            request.HTTPMethod = "DELETE"
+            
+            let task = session.dataTaskWithRequest(request, completionHandler: {(data, response, error) in
+                guard let _ = data
+                    else {
+                        print("error calling DELETE on group user")
+                        return
+                }
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.performSegueWithIdentifier("UnwindToTimeslots-Delete", sender: nil)
+                })
+            })
+            task.resume()
+        }
+    }
+    
+    func getGroupDrivers(id: String) {
+        print("RETRIEVE TIMESLOTS DRIVERS")
+        
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/findDriversForTimeslot/\(id)")
+        
+        print(url)
+        
+        // Creaste URL Request
+        let request = NSMutableURLRequest(URL:url!);
+        
+        // Set request HTTP method to GET. It could be POST as well
+        request.HTTPMethod = "GET"
+        
+        // If needed you could add Authorization header value
+        //request.addValue("Token token=884288bae150b9f2f68d8dc3a932071d", forHTTPHeaderField: "Authorization")
+        
+        // Execute HTTP Request
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            // Check for error
+            if error != nil
+            {
+                print("error=\(error)")
+                return
+            }
+            
+            let json: [NSDictionary]?
+            
+            do {
+                
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? [NSDictionary]
+                
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print(dataError)
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: '\(jsonStr!)'")
+                // return or throw?
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                print(parseJSON)
+                self.driverList = parseJSON as [NSDictionary]
+                // Okay, the parsedJSON is here, lets store its values into an array
+                for driver in self.driverList {
+                        self.selectedGroupMembers.append(driver)
+                }
+                
+                self.initialDriverList = self.driverList
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.groupMemberTableView.reloadData()
+                })
+            }
+            else {
+                // Woa, okay the json object was nil, something went worng. Maybe the server isn't running?
+                let jsonStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                print("Error could not parse JSON: \(jsonStr!)")
+            }
+            
+            
+        })
+        
+        task.resume()
+
+    }
+    
     //MARK: - database operations
     
     func createTimeslot() {
+        print("CREATING TIMESLOT")
         
+        if let groupID = groupInfo!["id"] {
+            let gID = String(groupID)
+            
+            let url = "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/createTimeslotForGroup/\(gID)"
+            
+            print(url)
+            
+            let df = NSDateFormatter()
+            df.dateFormat = "MM/dd/yy hh:mm a"
+            
+            let df2 = NSDateFormatter()
+            df2.dateFormat = "yyyy-MM-dd'T'hh:mm:ss'-04:00'"
+            
+            if let startDate = df.dateFromString(startDateTextField.text!) {
+                let formattedStartDate = df2.stringFromDate(startDate)
+                if let endDate = df.dateFromString(endDateTextField.text!) {
+                    let formattedEndDate = df2.stringFromDate(endDate)
+                    
+                    let timeslotJSONObject = [
+                        "startTime" : formattedStartDate,
+                        "endTime" : formattedEndDate
+                    ]
+                    
+                    let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+                    let session = NSURLSession.sharedSession()
+                    request.HTTPMethod = "POST"
+                    
+                    do {
+                        request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(timeslotJSONObject, options: [])
+                    } catch {
+                        print(error)
+                        request.HTTPBody = nil
+                    }
+                    
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    
+                    let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+                        
+                        let json: NSDictionary?
+                        
+                        do {
+                            json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+                        } catch let dataError{
+                            
+                            // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                            print("error: \(dataError)")
+                            return
+                        }
+                        
+                        // The JSONObjectWithData constructor didn't return an error. But, we should still
+                        // check and make sure that json has a value using optional binding.
+                        if let parseJSON = json {
+                            // Okay, the parsedJSON is here, let's see what we sent
+                            if let timeslotID = parseJSON["id"] {
+                                let timeslotIDString = String(timeslotID)
+                                
+                                for member in self.selectedGroupMembers {
+                                    if let memberID = member["id"] {
+                                        let memberIDString = String(memberID)
+                                        self.putDriverForTimeslot(memberIDString, timeslotID: timeslotIDString)
+                                    }
+                                }
+                                
+                                print("parseJSON \(parseJSON)")
+                                
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    self.performSegueWithIdentifier("UnwindToTimeslots-Add", sender: nil)
+                                })
+                            }
+
+                        }
+                    })
+                    
+                    task.resume()
+                    
+                }
+            }
+        }
+    }
+    
+    func putDriverForTimeslot(memberID: String, timeslotID: String) {
+        print("ADDING DRIVER TO TIMESLOT")
+        
+        let url = "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/assignDriverForTimeslot/\(memberID)/\(timeslotID)"
+        
+        print(url)
+
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "PUT"
+
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+            
+            let json: NSDictionary?
+            
+            do {
+                json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+            } catch let dataError{
+                
+                // Did the JSONObjectWithData constructor return an error? If so, log the error to the console
+                print("error: \(dataError)")
+                return
+            }
+            
+            // The JSONObjectWithData constructor didn't return an error. But, we should still
+            // check and make sure that json has a value using optional binding.
+            if let parseJSON = json {
+                // Okay, the parsedJSON is here, let's see what we sent
+                print("parseJSON \(parseJSON)")
+            }
+        })
+        
+        task.resume()
+
     }
     
     func updateTimeslot() {
+        print("UPDATING TIMESLOT")
         
+        if let tID = timeslotInfo!["id"] {
+            let timeslotID = String(tID)
+            let passcode = String(timeslotInfo!["passcode"])
+            let url = "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/\(timeslotID)"
+            
+            print(url)
+            
+            let df = NSDateFormatter()
+            df.dateFormat = "MM/dd/yy hh:mm a"
+            
+            let df2 = NSDateFormatter()
+            df2.dateFormat = "yyyy-MM-dd'T'hh:mm:ss'-04:00'"
+            
+            if let startDate = df.dateFromString(startDateTextField.text!) {
+                let formattedStartDate = df2.stringFromDate(startDate)
+                if let endDate = df.dateFromString(endDateTextField.text!) {
+                    let formattedEndDate = df2.stringFromDate(endDate)
+                    
+                    let timeslotJSONObject = [
+                        "id" : timeslotID,
+                        "startTime" : formattedStartDate,
+                        "endTime" : formattedEndDate,
+                        "passcode" : passcode
+                    ]
+                    
+                    let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+                    let session = NSURLSession.sharedSession()
+                    request.HTTPMethod = "PUT"
+                    
+                    do {
+                        request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(timeslotJSONObject, options: [])
+                    } catch {
+                        print(error)
+                        request.HTTPBody = nil
+                    }
+                    
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    
+                    let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+                        
+                        if (error == nil) {
+                            let timeslotIDString = String(timeslotID)
+                            
+                            let initialDriverSet = Set(self.initialDriverList)
+                            let selectedGroupMemberSet = Set(self.selectedGroupMembers)
+                            
+                            let removedDriverStatusSet = initialDriverSet.subtract(selectedGroupMemberSet)
+                            
+                            for removedDriver in removedDriverStatusSet {
+                                if let driverID = removedDriver["id"] {
+                                    let driverIDString = String(driverID)
+                                    self.deleteDriverForTimeslot(driverIDString, timeslotID: timeslotIDString)
+                                }
+                            }
+                            
+                            let addedDriverStatusSet = selectedGroupMemberSet.subtract(initialDriverSet)
+                            
+                            for addedDriver in addedDriverStatusSet {
+                                if let driverID = addedDriver["id"] {
+                                    let driverIDString = String(driverID)
+                                    self.putDriverForTimeslot(driverIDString, timeslotID: timeslotIDString)
+                                }
+                            }
+                            
+                            
+                            dispatch_async(dispatch_get_main_queue(), {
+                                self.performSegueWithIdentifier("UnwindToTimeslots-Edit", sender: nil)
+                            })
+                        }
+                        else {
+                            print(error)
+                        }
+
+                    })
+                    
+                    task.resume()
+                    
+                }
+            }
+        }
+
+    }
+    
+    func deleteDriverForTimeslot(driverID: String, timeslotID: String) {
+        print("DELETING DRIVER FOR TIMESLOT")
+        
+        let url = "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/removeDriverForTimeslot/\(driverID)/\(timeslotID)"
+        
+        print(url)
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "PUT"
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: {(data, response, error) in
+            guard let _ = data
+                else {
+                    print("error calling DELETE on group user")
+                    return
+            }
+        })
+        task.resume()
     }
     
     
@@ -141,9 +491,16 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
         //if we are dealing with the bithday textfield
         if (textField == startDateTextField || textField == endDateTextField)
         {
+            let df = NSDateFormatter()
+            df.dateFormat = "MM/dd/yy hh:mm a"
             activeTextField = textField
+            let thisDate = df.dateFromString(activeTextField.text!)
+
             let datePicker:UIDatePicker = UIDatePicker()
             datePicker.datePickerMode = UIDatePickerMode.DateAndTime
+            if let defaultDate = thisDate {
+                datePicker.setDate(defaultDate, animated: false)
+            }
             textField.inputView = datePicker
             datePicker.addTarget(self, action: #selector(DetailTimeslotViewController.updateTextfield(_:textField:)), forControlEvents: UIControlEvents.ValueChanged)
             let components = NSDateComponents()
@@ -158,8 +515,7 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
     func updateTextfield(sender: UIDatePicker, textField: UITextField)
     {
         let dFormatter = NSDateFormatter();
-        dFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
-        dFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        dFormatter.dateFormat = "MM/dd/yy hh:mm a"
         activeTextField.text = getDate(dFormatter.stringFromDate(sender.date))
     }
     
@@ -242,8 +598,7 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
             }
         }
         
-        let memberID = String(memberRow["id"]!)
-        if let _ = selectedGroupMembers.indexOf(memberID) {
+        if let _ = selectedGroupMembers.indexOf(memberRow) {
             //remove the item at the found index
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
@@ -261,20 +616,18 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
         let cell = groupMemberTableView.dequeueReusableCellWithIdentifier("memberCell") as UITableViewCell!
         
         let memberRow = searchBarResults[row]
-        let memberID = String(memberRow["id"]!)
         
-        if let foundIndex = selectedGroupMembers.indexOf(memberID) {
+        if let foundIndex = selectedGroupMembers.indexOf(memberRow) {
             //remove the item at the found index
             cell.accessoryType = UITableViewCellAccessoryType.None
             selectedGroupMembers.removeAtIndex(foundIndex)
         }
         else {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-            selectedGroupMembers.append(memberID)
+            selectedGroupMembers.append(memberRow)
         }
         
         tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
-    
     
 }
