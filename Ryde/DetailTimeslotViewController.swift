@@ -354,7 +354,7 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
         
         if let tID = timeslotInfo!["id"] {
             let timeslotID = String(tID)
-            let passcode = String(timeslotInfo!["passcode"])
+            let passcode = String(timeslotInfo!["passcode"]!)
             let url = "http://\(self.appDelegate.baseURL)/Ryde/api/timeslot/\(timeslotID)"
             
             print(url)
