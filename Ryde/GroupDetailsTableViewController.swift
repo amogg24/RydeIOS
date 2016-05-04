@@ -29,6 +29,11 @@ class GroupDetailsTableViewController: UITableViewController {
     // Mark - IBActions
     
     @IBAction func unwindToGroupDetailsViewController(sender: UIStoryboardSegue) {
+        self.editGroupButton.enabled = false
+        self.editGroupButton.tintColor = UIColor.clearColor()
+        
+        getGroupUsers()
+        getGroupAdmins()
         
     }
     
@@ -36,10 +41,25 @@ class GroupDetailsTableViewController: UITableViewController {
     
     @IBOutlet var editGroupButton: UIBarButtonItem!
     
+    func handleRefresh(refreshControl : UIRefreshControl) {
+        
+        self.editGroupButton.enabled = false
+        self.editGroupButton.tintColor = UIColor.clearColor()
+        
+        getGroupUsers()
+        getGroupAdmins()
+        
+        refreshControl.endRefreshing()
+    }
+    
     // Mark - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(TimeslotsTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = refreshControl
         
         self.navigationController!.view.backgroundColor = UIColor.init(patternImage: UIImage(named: "BackgroundMain")!)
         
