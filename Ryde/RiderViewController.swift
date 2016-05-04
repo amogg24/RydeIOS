@@ -287,8 +287,7 @@ class RiderViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     // Mark - Retrieve the driver's timeslot from the server
     
     func getDriverTimeslot() {
-        ///Ryde/api/user/findActiveDriverTimeslot/\(fbToken)
-        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findActiveDriverTimeslot/JohnFBTok")
+        let url = NSURL(string: "http://\(self.appDelegate.baseURL)/Ryde/api/user/findActiveDriverTimeslot/\(fbToken)")
         
         // Creaste URL Request
         let request = NSMutableURLRequest(URL:url!);
