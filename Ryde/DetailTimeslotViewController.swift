@@ -363,7 +363,7 @@ class DetailTimeslotViewController: UIViewController, UITableViewDelegate, UITab
             df.dateFormat = "MM/dd/yy hh:mm a"
             
             let df2 = NSDateFormatter()
-            df2.dateFormat = "yyyy-MM-dd'T'hh:mm:ss'-04:00'"
+            df2.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'-04:00'"
             
             if let startDate = df.dateFromString(startDateTextField.text!) {
                 let formattedStartDate = df2.stringFromDate(startDate)
