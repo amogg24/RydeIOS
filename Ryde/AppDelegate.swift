@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var locationManager: CLLocationManager?
 
-    var baseURL = "jupiter.cs.vt.edu"
+    var baseURL = "venus.cs.vt.edu"
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
