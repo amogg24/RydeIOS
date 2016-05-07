@@ -1,2 +1,2 @@
 # Ryde
-Repo for the iOS Application
+Repo for our senior design project: Ryde
